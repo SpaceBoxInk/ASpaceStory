@@ -10,6 +10,7 @@
 #pragma once
 
 #include <string>
+#include <fstream>
 
 class VPrimitif
 {
@@ -39,7 +40,7 @@ private:
 public:
   void show();
 private:
-  char mouvement();
+  char getInput();
 //=====================>Getters&Setters<======================
 public:
 
