@@ -1,13 +1,13 @@
 /**
- * CPersonnage.cpp
+ * MTerrain.cpp
  *
  * Early optimization is the root of all evil
- *
- *  Created on: 10 nov. 2017
+ * 
+ *  Created on: 11 nov. 2017
  *      Author: nihil
  */
 
-#include "CPersonnage.hpp"
+#include "MTerrain.hpp"
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -17,16 +17,14 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-CPersonnage::CPersonnage(VPrimitif* vuePrincipale) :
-    vuePrincipale(vuePrincipale)
+MTerrain::MTerrain()
 {
-  this->vuePrincipale->show();
 }
 
-CPersonnage::~CPersonnage()
+MTerrain::~MTerrain()
 {
-  delete vuePrincipale;
 }
+
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------
