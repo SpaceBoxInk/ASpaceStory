@@ -65,53 +65,52 @@ void VPrimitif::printTile(char type)
 
 void VPrimitif::show()
 {
-  //char input;
+  char input;
   int nbTot = 0;
   int line = 0;
   int nb;
   char type;
-  ifstream fichier("src/ressources/niveaux/test.nbg");
-  if (fichier)  // si l'ouverture a réussi
+  ifstream fichier;
+  do
   {
-    // instructions
-    cout.width(2);
-    cout << endl << right << line++;
-    while (!fichier.eof())
+    fichier.open("src/ressources/niveaux/test.nbg");
+    if (fichier)  // si l'ouverture a réussi
     {
-      fichier >> type >> nb;
-      for (int a = 0; a < nb; ++a, ++nbTot)
+      // instructions
+      cout.width(2);
+      cout << endl << right << line++;
+      while (!fichier.eof())
       {
-        if (nbTot == TAILLE_MAX)
+        fichier >> type >> nb;
+        for (int a = 0; a < nb; ++a, ++nbTot)
         {
-          cout.width(2);
-          cout << endl << right << line;
-          nbTot = 0;
-          ++line;
+          if (nbTot == TAILLE_MAX)
+          {
+            cout.width(2);
+            cout << endl << right << line;
+            nbTot = 0;
+            ++line;
+          }
+          printTile(type);
         }
-        printTile(type);
+        type = 0;
+        nb = 0;
       }
-      type = 0;
-      nb = 0;
-    }
-    cout << endl;
+      cout << endl;
 
-    fichier.close();  // on ferme le fichier
-  }
-  else
-// sinon
-    cerr << "Impossible d'ouvrir le fichier !" << endl;
-//  do
-//  {
-//    for (int i = 0; i < 100; ++i)
-//    {
-//      cout << marron << montagne << blanc;
-//    }
-//    cout << endl;
-//
-//    // mouvements
-//		input = getInput();
-//    clearScreen();
-//	} while (input != '!');
+      fichier.close();  // on ferme le fichier
+    }
+    else
+    {
+      cerr << "Impossible d'ouvrir le fichier !" << endl;
+    }
+
+    // mouvements
+    nbTot = 0;
+    line = 0;
+    input = getInput();
+    clearScreen();
+  } while (input != '!');
 }
 
 char VPrimitif::getInput()
