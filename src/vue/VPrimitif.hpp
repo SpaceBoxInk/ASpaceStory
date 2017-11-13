@@ -11,6 +11,7 @@
 
 #include <string>
 #include <fstream>
+#include "../model/MCoordonnees.hpp"
 
 class VPrimitif
 {
@@ -29,6 +30,8 @@ private:
   static std::string const vert;
   static std::string const marron;
   static std::string const blanc;
+
+  MCoordonnees positionJoueur;
 //=======================>Constructors<=======================
 public:
   VPrimitif();
@@ -39,13 +42,13 @@ private:
 
 //=========================>Methods<==========================
 public:
-  void show();
+  void show(MCoordonnees positionJoueur);
 private:
   void printTile(char type);
-  char getInput();
+  void sendInput();
 //=====================>Getters&Setters<======================
 public:
-
+  MCoordonnees getPosition() const;
 private:
 
 };

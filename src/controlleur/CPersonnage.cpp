@@ -20,7 +20,10 @@
 CPersonnage::CPersonnage(VPrimitif* vuePrincipale) :
     vuePrincipale(vuePrincipale)
 {
-  this->vuePrincipale->show();
+  do
+  {
+    this->vuePrincipale->show(vuePrincipale->getPosition());
+  } while (true);
 }
 
 CPersonnage::~CPersonnage()
