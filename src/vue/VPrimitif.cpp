@@ -51,46 +51,54 @@ void clearScreen()
   system("clear");
 }
 
+void VPrimitif::printTile(char type)
+{
+  switch (type) {
+  case 'm':
+    cout << marron << montagne << blanc;
+    break;
+  case 'h':
+    cout << vert << terrainHerbe << blanc;
+    break;
+  }
+}
+
 void VPrimitif::show()
 {
   //char input;
-  string line;
+  int nbTot = 0;
+  int line = 0;
   int nb;
   char type;
-  string end;
-  ifstream fichier("/Users/lucadeslot/Documents/test.txt");
+  ifstream fichier("src/ressources/niveaux/test.nbg");
   if (fichier)  // si l'ouverture a réussi
   {
     // instructions
+    cout.width(2);
+    cout << endl << right << line++;
     while (!fichier.eof())
     {
-      fichier >> type;
-      if (type == 'm')
+      fichier >> type >> nb;
+      for (int a = 0; a < nb; ++a, ++nbTot)
       {
-        fichier >> nb;
-        for (int a = 0; a < nb; a++)
+        if (nbTot == TAILLE_MAX)
         {
-          cout << marron << montagne << blanc;
+          cout.width(2);
+          cout << endl << right << line;
+          nbTot = 0;
+          ++line;
         }
+        printTile(type);
       }
-      else if (type == 'h')
-      {
-        fichier >> nb;
-        for (int a = 0; a < nb; a++)
-        {
-          cout << vert << terrainHerbe << blanc;
-        }
-      }
-      else
-      {
-        cout << endl;
-      }
+      type = 0;
+      nb = 0;
     }
+    cout << endl;
 
     fichier.close();  // on ferme le fichier
   }
   else
-    // sinon
+// sinon
     cerr << "Impossible d'ouvrir le fichier !" << endl;
 //  do
 //  {
@@ -113,8 +121,9 @@ char VPrimitif::getInput()
   cout << c << endl;
   clear(cin);
   return c;
-  // TODO : do something
+// TODO : do something
 }
+
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------

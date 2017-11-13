@@ -19,6 +19,7 @@ private:
   static char constexpr perso = '*';
   static char constexpr terrainHerbe = '.';
   static char constexpr montagne = '#';
+  static int constexpr TAILLE_MAX = 100;
 
   static std::string const escC;
   static std::string const endC;
@@ -40,6 +41,7 @@ private:
 public:
   void show();
 private:
+  void printTile(char type);
   char getInput();
 //=====================>Getters&Setters<======================
 public:
