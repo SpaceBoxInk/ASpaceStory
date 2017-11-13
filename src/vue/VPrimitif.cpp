@@ -53,37 +53,45 @@ void clearScreen()
 
 void VPrimitif::show()
 {
-	//char input;
-	string line;
-	int nb;
-	char type;
-	string end;
-	ifstream fichier(
-			"/Users/lucadeslot/Documents/test.txt");
-	if (fichier)  // si l'ouverture a réussi
-	{
-		// instructions
-		while (!fichier.eof()) {
-			fichier >> type;
-				if (type == 'm') {
-				fichier >> nb;
-				for (int a = 0; a < nb; a++) {
-						cout << marron << montagne << blanc;
-						}
-			} else if (type == 'h') {
-				fichier >> nb;
-				for (int a = 0; a < nb; a++) {
-					cout << vert << terrainHerbe << blanc;
-				}
-			} else {
-				cout << endl;
-			}
-			}
+  //char input;
+  string line;
+  int nb;
+  char type;
+  string end;
+  ifstream fichier("/Users/lucadeslot/Documents/test.txt");
+  if (fichier)  // si l'ouverture a réussi
+  {
+    // instructions
+    while (!fichier.eof())
+    {
+      fichier >> type;
+      if (type == 'm')
+      {
+        fichier >> nb;
+        for (int a = 0; a < nb; a++)
+        {
+          cout << marron << montagne << blanc;
+        }
+      }
+      else if (type == 'h')
+      {
+        fichier >> nb;
+        for (int a = 0; a < nb; a++)
+        {
+          cout << vert << terrainHerbe << blanc;
+        }
+      }
+      else
+      {
+        cout << endl;
+      }
+    }
 
-		fichier.close();  // on ferme le fichier
-	} else
-		// sinon
-		cerr << "Impossible d'ouvrir le fichier !" << endl;
+    fichier.close();  // on ferme le fichier
+  }
+  else
+    // sinon
+    cerr << "Impossible d'ouvrir le fichier !" << endl;
 //  do
 //  {
 //    for (int i = 0; i < 100; ++i)
