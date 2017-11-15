@@ -42,7 +42,7 @@ void Observer::doEventActions(EventName eventName, Content content,
     {
       try
       {
-        auto f = any_cast<EventAction<Content>>(actions[i]);
+        auto const& f = any_cast<EventAction<Content const&>>(actions[i]);
         f(content, observed);
       }
       catch (std::bad_any_cast& e)
@@ -57,3 +57,4 @@ void Observer::doEventActions(EventName eventName, Content content,
 //------------------------------------------------------------
 
 #endif // OBSERVER_HPP
+
