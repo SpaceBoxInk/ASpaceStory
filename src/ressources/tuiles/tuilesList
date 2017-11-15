@@ -1,3 +1,8 @@
 # nom : fichierImage symbole(pour les .nbg) placeDispo(0-1) 
 herbe : herbe.png h 1.0
 montagne : montagne.png m 0.0
+cheminTerre : cheminTerre.png = 1.0
+eau : eau.png ~ 0.0
+terre : terre.png t 1.0
+buisson : buisson.png b 0.0
+pierre : pierre.png p 0.0
