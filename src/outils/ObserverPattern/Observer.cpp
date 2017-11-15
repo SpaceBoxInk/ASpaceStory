@@ -6,10 +6,11 @@
  *  @date 11 nov. 2017
  *  @author nihil
  */
-#ifdef OBSERVER_HPP
 #include <iostream>
 #include <typeinfo>
+#include <any>
 
+#ifdef OBSERVER_HPP
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
@@ -22,25 +23,37 @@
 //=========================>Methods<==========================
 //------------------------------------------------------------
 template<class EventName, class Content>
-void Observer<EventName, Content>::addAction(EventName eventName,
-    actionMethod<EventName, Content> method)
+void Observer::addAction(EventName eventName,
+    EventAction<Content> actionMethod)
 {
-  actions.insert(std::make_pair(eventName, method));
+  using namespace std;
+  names.push_back(eventName);
+  actions.push_back(actionMethod);
 }
 
 template<class EventName, class Content>
-void Observer<EventName, Content>::doEventActions(EventName eventName, Content content,
-    Observed<EventName, Content> const& observed) const
+void Observer::doEventActions(EventName eventName, Content content,
+    Observed const& observed) const
 {
   using namespace std;
-  auto actionsForEvent = actions.equal_range(eventName);
-  for (auto i = actionsForEvent.first; i != actionsForEvent.second; ++i)
+  for (uint i = 0; i < names.size(); ++i)
   {
-    i->second(content, observed);
+    if (names[i] == eventName)
+    {
+      try
+      {
+        auto f = any_cast<EventAction<Content>>(actions[i]);
+        f(content, observed);
+      }
+      catch (std::bad_any_cast& e)
+      {
+        throw BadActionMethod(typeid(Content).name(), actions[i].type().name());
+      }
+    }
   }
 }
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
 
-#endif
+#endif // OBSERVER_HPP

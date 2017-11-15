@@ -22,7 +22,6 @@
  * @brief  it's the Observed of the Observer pattern
  * this class is a attempt to send event to #Observed subscribed to it
  */
-template<class EventName, class Content>
 class Observed
 {
 //========================>Attributes<========================
@@ -30,7 +29,7 @@ private:
   /**
    * @brief the list of observers subscribed to this #Observed
    */
-  std::vector<Observer<EventName, Content> const*> observers;
+  std::vector<Observer const*> observers;
 
   /**
    * @brief the state of this #Observed
@@ -51,13 +50,13 @@ public:
    *
    * @param observer the observer to add to the #observers subsciption list
    */
-  void addObserver(Observer<EventName, Content> const* observer);
+  void addObserver(Observer const* observer);
 
   /**
    * delete the specified #Observer from the subscribe list #observers
    * @param observer the #Observer to delete
    */
-  void deleteObserver(Observer<EventName, Content> const* observer);
+  void deleteObserver(Observer const* observer);
 
   /**
    * delete all observers for this #Observed object
@@ -74,6 +73,7 @@ protected:
    * @param eventName the event name which will called associated eventAction
    * @param content the content of the event
    */
+  template<class EventName, class Content>
   void notifyObserver(EventName eventName, Content content);
 private:
 
@@ -104,6 +104,51 @@ private:
 
 };
 
-#include "Observed.cpp"
+template<class EventName, class Content>
+void Observed::notifyObserver(EventName eventName, Content content)
+{
+  if (hasChanged())
+  {
+    for (Observer const* obs : observers)
+    {
+      obs->doEventActions(eventName, content, *this);
+    }
+  }
+  clearChanged();
+}
+
+inline void Observed::addObserver(Observer const* observer)
+{
+  observers.push_back(observer);
+}
+
+inline void Observed::deleteObserver(Observer const* observer)
+{
+  observers.erase(std::find(observers.begin(), observers.end(), observer));
+}
+
+inline int Observed::countObservers() const
+{
+  return observers.size();
+}
+
+//------------------------------------------------------------
+//=====================>Getters&Setters<======================
+//------------------------------------------------------------
+
+inline bool Observed::hasChanged() const
+{
+  return changed;
+}
+
+inline void Observed::setChanged()
+{
+  changed = true;
+}
+
+inline void Observed::clearChanged()
+{
+  changed = false;
+}
 
 #endif
