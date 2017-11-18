@@ -9,11 +9,13 @@
 
 #pragma once
 
-#include <string>
-#include <fstream>
-#include "../model/MCoordonnees.hpp"
+#include "../outils/ObserverPattern/Observed.hpp"
 
-class VPrimitif
+#include <string>
+
+class MCoordonnees;
+
+class VPrimitif : public Observed
 {
 //========================>Attributes<========================
 private:
@@ -31,10 +33,9 @@ private:
   static std::string const marron;
   static std::string const blanc;
 
-  MCoordonnees positionJoueur;
 //=======================>Constructors<=======================
 public:
-  VPrimitif();
+  VPrimitif() = default;
   // TODO: rule of five ? copyandswap
   virtual ~VPrimitif();
 
@@ -48,7 +49,7 @@ private:
   void sendInput();
 //=====================>Getters&Setters<======================
 public:
-  MCoordonnees getPosition() const;
+
 private:
 
 };

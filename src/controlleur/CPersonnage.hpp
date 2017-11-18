@@ -9,13 +9,15 @@
 
 #pragma once
 
+#include "../model/MCoordonnees.hpp"
+#include "../outils/ObserverPattern/Observer.hpp"
 #include "../vue/VPrimitif.hpp"
 
 /**
  * le controlleur pour gérer les déplacements, les intéractions
  * du personnage (comme il est indépendant des niveaux)
  */
-class CPersonnage
+class CPersonnage : Observer
 {
 //========================>Attributes<========================
 private:
@@ -24,6 +26,10 @@ private:
    */
   VPrimitif* vuePrincipale;
 
+  /**
+   * TEMP : move to player
+   */
+  MCoordonnees positionJoueur;
 //=======================>Constructors<=======================
 public:
   CPersonnage(VPrimitif* vuePrincipale);
@@ -36,6 +42,7 @@ private:
 public:
 
 private:
+  void setEventMethods();
 
 //=====================>Getters&Setters<======================
 public:

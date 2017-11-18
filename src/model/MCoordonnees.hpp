@@ -26,12 +26,12 @@ private:
   int x;
   int y;
 };
-typedef struct Mouvement
+struct Mouvement
 {
   static MCoordonnees const HAUT;
   static MCoordonnees const BAS;
   static MCoordonnees const DROITE;
   static MCoordonnees const GAUCHE;
-} Mouvement;
+};
 
 #endif /* SRC_MODEL_MCOORDONNEES_HPP_ */

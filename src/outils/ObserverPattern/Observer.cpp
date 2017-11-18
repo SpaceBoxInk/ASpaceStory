@@ -36,13 +36,14 @@ void Observer::doEventActions(EventName eventName, Content content,
     Observed const& observed) const
 {
   using namespace std;
+  using opAny::operator ==;
   for (uint i = 0; i < names.size(); ++i)
   {
     if (names[i] == eventName)
     {
       try
       {
-        auto const& f = any_cast<EventAction<Content const&>>(actions[i]);
+        auto const& f = any_cast<EventAction<Content>>(actions[i]);
         f(content, observed);
       }
       catch (std::bad_any_cast& e)

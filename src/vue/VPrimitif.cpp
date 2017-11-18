@@ -8,7 +8,14 @@
  */
 
 #include "VPrimitif.hpp"
+
+#include "../model/MCoordonnees.hpp"
+
+#include <cstdlib>
+#include <ios>
 #include <iostream>
+#include <fstream>
+#include <limits>
 
 using namespace std;
 
@@ -28,12 +35,6 @@ std::string const VPrimitif::blanc = escC + "0" + endC;
 //------------------------------------------------------------
 //=======================>Constructors<=======================
 //------------------------------------------------------------
-
-VPrimitif::VPrimitif() :
-    positionJoueur(2, 2)
-{
-
-}
 
 VPrimitif::~VPrimitif()
 {
@@ -93,6 +94,7 @@ void VPrimitif::show(MCoordonnees positionJoueur)
           cout << endl << right << line;
           nbTot = 0;
         }
+
         if (MCoordonnees(x, y) == positionJoueur)
         {
           cout << perso;
@@ -125,34 +127,11 @@ void VPrimitif::sendInput()
 {
   char c;
   cin >> c;
-  cout << c << endl;
   clear(cin);
-  switch (c) {
-  case '!':
-    exit(0);
-    break;
-  case 'z':
-    positionJoueur.deplacer(Mouvement::HAUT);
-    break;
-  case 'd':
-    positionJoueur.deplacer(Mouvement::DROITE);
-    break;
-  case 's':
-    positionJoueur.deplacer(Mouvement::BAS);
-    break;
-  case 'q':
-    positionJoueur.deplacer(Mouvement::GAUCHE);
-    break;
-  default:
-    break;
-  }
-// TODO : do something notify
+  setChanged();
+  notifyObservers(string("keyEvent"), c);
 }
 
-MCoordonnees VPrimitif::getPosition() const
-{
-  return positionJoueur;
-}
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------

@@ -33,33 +33,38 @@ class Observed;
  * @endcode
  */
 template<class Content>
-using EventAction = std::function<void(Content const&, Observed const&)>;
+using EventAction = std::function<void(Content, Observed const&)>;
 
-template<class T>
-bool operator==(std::any l, T r)
+namespace opAny
 {
-  try
+
+  template<class T>
+  bool operator==(std::any l, T r)
   {
-    if constexpr(std::is_pointer<T>::value)
+    try
     {
-      return *r == *std::any_cast<T>(l);
+      if constexpr(std::is_pointer<T>::value)
+      {
+        return *r == *std::any_cast<T>(l);
+      }
+      else
+      {
+        return r == std::any_cast<T>(l);
+      }
     }
-    else
+    catch (std::bad_any_cast& e)
     {
-      return r == std::any_cast<T>(l);
+      return false;
     }
   }
-  catch (std::bad_any_cast& e)
-  {
-    return false;
-  }
-}
 
-template<class T>
-bool operator!=(std::any l, T r)
-{
-return !(l == r);
-}
+  template<class T>
+  bool operator!=(std::any l, T r)
+  {
+    return !(l == r);
+  }
+
+}  // namespace opAny
 
 /**
  * @class BadActionMethod
