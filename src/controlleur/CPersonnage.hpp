@@ -13,6 +13,8 @@
 #include "../outils/ObserverPattern/Observer.hpp"
 #include "../vue/VPrimitif.hpp"
 
+class MTerrain;
+
 /**
  * le controlleur pour gérer les déplacements, les intéractions
  * du personnage (comme il est indépendant des niveaux)
@@ -30,9 +32,11 @@ private:
    * TEMP : move to player
    */
   MCoordonnees positionJoueur;
+
+  MTerrain* terrain;
 //=======================>Constructors<=======================
 public:
-  CPersonnage(VPrimitif* vuePrincipale);
+  CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain);
   // TODO: rule of five ? copyandswap
   virtual ~CPersonnage();
 

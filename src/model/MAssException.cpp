@@ -1,13 +1,14 @@
 /**
- * MTuile.cpp
+ * @file MAssException.cpp
  *
  * Early optimization is the root of all evil
- *
- *  Created on: 10 nov. 2017
- *      Author: nihil
+ * 
+ *  @date 23 nov. 2017
+ *  @author FederAndInk
+ *  @brief TODO complete
  */
 
-#include "MTuile.hpp"
+#include "MAssException.hpp"
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -17,15 +18,11 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MTuile::MTuile(MPartieCouche const* sol, MPartieCouche const* element,
-               MPartieCouche const* ciel)
+MAssException::MAssException()
 {
-  setPartieCouche(sol);
-  setPartieCouche(element);
-  setPartieCouche(ciel);
 }
 
-MTuile::~MTuile()
+MAssException::~MAssException()
 {
 }
 
@@ -36,11 +33,4 @@ MTuile::~MTuile()
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
-void MTuile::setPartieCouche(MPartieCouche const* couche)
-{
-  if (couche)
-  {
-    couches[(int)couche->getType()] = *couche;
-  }
-}
 

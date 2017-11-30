@@ -8,9 +8,13 @@
  */
 
 #include "CPersonnage.hpp"
+
+#include "../model/MParameters.hpp"
+#include "../model/MTerrain.hpp"
 #include "../vue/VPrimitif.hpp"
 
 int main(int argc, char **argv)
 {
-  CPersonnage(new VPrimitif());
+  MParameters::load(argv[0]);
+  CPersonnage(new VPrimitif(), new MTerrain());
 }

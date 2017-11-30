@@ -75,7 +75,7 @@ void VPrimitif::show(MCoordonnees positionJoueur)
   int nb;
   char type;
   ifstream fichier;
-  fichier.open("src/ressources/niveaux/test.nbg");
+  fichier.open("src/ressources/niveaux/level1/test.nbg");
   if (fichier)  // si l'ouverture a réussi
   {
     // instructions

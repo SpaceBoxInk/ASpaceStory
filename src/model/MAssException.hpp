@@ -1,41 +1,30 @@
 /**
- * MTerrain.hpp
+ * @file MAssException.hpp
  *
  * Early optimization is the root of all evil
- *
- *  Created on: 11 nov. 2017
- *      Author: nihil
+ * 
+ *  @date 23 nov. 2017
+ *  @author FederAndInk
+ *  @brief TODO complete
  */
 
 #pragma once
 
-#include "MTuile.hpp"
-
-#include <map>
-
-class MCoordonnees;
-
-class MTerrain
+class MAssException
 {
 //========================>Attributes<========================
 private:
-  static std::map<u_int8_t, MPartieCouche> solsType;
-  static std::map<u_int8_t, MPartieCouche> elementsType;
-  static std::map<u_int8_t, MPartieCouche> cielsType;
-  static MCoordonnees tailleMax;
-
 
 //=======================>Constructors<=======================
 public:
-  MTerrain();
+  MAssException();
   // TODO: rule of five ? copyandswap
-  virtual ~MTerrain();
+  virtual ~MAssException();
 
 private:
 
 //=========================>Methods<==========================
 public:
-  static void loadTypes();
 
 private:
 

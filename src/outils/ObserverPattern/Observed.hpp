@@ -12,6 +12,8 @@
 
 #include "Observer.hpp"
 
+#include <algorithm>
+#include <iterator>
 #include <vector>
 
 /**
@@ -75,6 +77,13 @@ protected:
    */
   template<class EventName, class Content>
   void notifyObservers(EventName eventName, Content content);
+
+  /**
+   *
+   * @param eventName the event name which will called associated eventAction
+   */
+  template<class EventName>
+  void notifyObservers(EventName eventName);
 private:
 
 //=====================>Getters&Setters<======================
@@ -112,6 +121,19 @@ void Observed::notifyObservers(EventName eventName, Content content)
     for (Observer const* obs : observers)
     {
       obs->doEventActions(eventName, content, *this);
+    }
+  }
+  clearChanged();
+}
+
+template<class EventName>
+void Observed::notifyObservers(EventName eventName)
+{
+  if (hasChanged())
+  {
+    for (Observer const* obs : observers)
+    {
+      obs->doEventActions(eventName, *this);
     }
   }
   clearChanged();

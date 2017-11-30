@@ -1,61 +1,53 @@
 /**
- * MTerrain.cpp
+ * @file MPartieCouche.cpp
  *
  * Early optimization is the root of all evil
  *
- *  Created on: 11 nov. 2017
- *      Author: nihil
+ *  @date 23 nov. 2017
+ *  @author FederAndInk
+ *  @brief TODO complete
  */
 
-#include "MTerrain.hpp"
-#include "MCoordonnees.hpp"
-#include "MParameters.hpp"
 #include "MPartieCouche.hpp"
-
-#include <sys/types.h>
-#include <fstream>
-#include <string>
 
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
-std::map<u_int8_t, MPartieCouche> MTerrain::solsType;
-std::map<u_int8_t, MPartieCouche> MTerrain::elementsType;
-std::map<u_int8_t, MPartieCouche> MTerrain::cielsType;
 
-MCoordonnees MTerrain::tailleMax(40, 20);
 //------------------------------------------------------------
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MTerrain::MTerrain()
+MPartieCouche::MPartieCouche(MTypeCouche type, std::string name, float placeDispo)
 {
 }
 
-MTerrain::~MTerrain()
+MPartieCouche::~MPartieCouche()
 {
 }
 
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------
-void MTerrain::loadTypes()
+
+bool MPartieCouche::isTypeOf(MTypeCouche type) const
 {
-    std::ifstream fichierTerrain;
-    MTypeCouche type = MTypeCouche::SOL;
-    std::string name;
-    int ID;
-    float placeDispo;
-
-    fichierTerrain.open(MParameters::getSolsPath());
-    MPartieCouche(type, name, placeDispo);
-    fichierTerrain.close();
-
-    fichierTerrain.open(MParameters::getElementsPath());
-
+  return getType() == type;
 }
-
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
+MTypeCouche const& MPartieCouche::getType() const
+{
+  return type;
+}
 
+std::string const& MPartieCouche::getName() const
+{
+  return name;
+}
+
+float MPartieCouche::getPlaceDispo() const
+{
+  return placeDispo;
+}

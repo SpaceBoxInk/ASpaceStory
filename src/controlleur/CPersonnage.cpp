@@ -8,10 +8,11 @@
  */
 
 #include "CPersonnage.hpp"
-
-#include "../model/MCoordonnees.hpp"
+#include "../model/MTerrain.hpp"
 
 #include <cstdlib>
+#include <string>
+
 
 using namespace std;
 
@@ -23,10 +24,11 @@ using namespace std;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-CPersonnage::CPersonnage(VPrimitif* vuePrincipale) :
-    vuePrincipale(vuePrincipale), positionJoueur(5, 4)
+CPersonnage::CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain) :
+    vuePrincipale(vuePrincipale), positionJoueur(5, 4), terrain(terrain)
 {
   setEventMethods();
+
 
   do
   {

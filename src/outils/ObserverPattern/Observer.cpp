@@ -27,9 +27,17 @@ void Observer::addAction(EventName eventName,
     EventAction<Content> actionMethod)
 {
   using namespace std;
-  names.push_back(eventName);
+  actionNames.push_back(eventName);
   actions.push_back(actionMethod);
 }
+
+template<class EventName>
+void Observer::addAction(EventName eventName, SingleEventAction actionMethod)
+{
+  singleActionNames.push_back(eventName);
+  singleActions.push_back(actionMethod);
+}
+
 
 template<class EventName, class Content>
 void Observer::doEventActions(EventName eventName, Content content,
@@ -37,9 +45,9 @@ void Observer::doEventActions(EventName eventName, Content content,
 {
   using namespace std;
   using opAny::operator ==;
-  for (uint i = 0; i < names.size(); ++i)
+  for (uint i = 0; i < actionNames.size(); ++i)
   {
-    if (names[i] == eventName)
+    if (actionNames[i] == eventName)
     {
       try
       {
@@ -53,6 +61,29 @@ void Observer::doEventActions(EventName eventName, Content content,
     }
   }
 }
+
+template<class EventName>
+void Observer::doEventActions(EventName eventName, Observed const & observed) const
+{
+  using namespace std;
+  using opAny::operator ==;
+  for (uint i = 0; i < singleActionNames.size(); ++i)
+  {
+    if (singleActionNames[i] == eventName)
+    {
+      try
+      {
+        auto const& f = any_cast<SingleEventAction>(singleActions[i]);
+        f(observed);
+      }
+      catch (std::bad_any_cast& e)
+      {
+        throw "Sending SingleEvent failed";
+      }
+    }
+  }
+}
+
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
