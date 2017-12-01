@@ -45,7 +45,7 @@ void Observer::doEventActions(EventName eventName, Content content,
 {
   using namespace std;
   using opAny::operator ==;
-  for (uint i = 0; i < actionNames.size(); ++i)
+  for (uint32_t i = 0; i < actionNames.size(); ++i)
   {
     if (actionNames[i] == eventName)
     {
@@ -67,7 +67,7 @@ void Observer::doEventActions(EventName eventName, Observed const & observed) co
 {
   using namespace std;
   using opAny::operator ==;
-  for (uint i = 0; i < singleActionNames.size(); ++i)
+  for (uint32_t i = 0; i < singleActionNames.size(); ++i)
   {
     if (singleActionNames[i] == eventName)
     {

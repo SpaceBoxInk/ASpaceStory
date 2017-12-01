@@ -19,9 +19,9 @@ class MTerrain
 {
 //========================>Attributes<========================
 private:
-  static std::map<u_int8_t, MPartieCouche> solsType;
-  static std::map<u_int8_t, MPartieCouche> elementsType;
-  static std::map<u_int8_t, MPartieCouche> cielsType;
+  static std::map<uint8_t, MPartieCouche> solsType;
+  static std::map<uint8_t, MPartieCouche> elementsType;
+  static std::map<uint8_t, MPartieCouche> cielsType;
   static MCoordonnees tailleMax;
 
   std::vector<MTuile> tuiles;
@@ -36,13 +36,14 @@ private:
 //=========================>Methods<==========================
 public:
   static void loadTypes();
+  void loadCouche(std::string const& fichier, MTypeCouche const& type);
+
   MTuile& operator()(int x, int y);
-
 private:
-
+  static void loadSpecificPath(std::string fichier, MTypeCouche const& type);
 //=====================>Getters&Setters<======================
 public:
 
 private:
-
+  static std::map<uint8_t, MPartieCouche>& getTypeList(MTypeCouche const& typeCouche);
 };
