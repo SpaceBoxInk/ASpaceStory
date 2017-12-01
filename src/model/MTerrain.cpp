@@ -41,20 +41,23 @@ MTerrain::~MTerrain()
 //------------------------------------------------------------
 void MTerrain::loadTypes()
 {
-    std::ifstream fichierTerrain;
-    MTypeCouche type = MTypeCouche::SOL;
-    std::string name;
-    int ID;
-    float placeDispo;
+  std::ifstream fichierTerrain;
+  MTypeCouche type = MTypeCouche::SOL;
+  std::string name;
+  int ID;
+  float placeDispo;
 
-    fichierTerrain.open(MParameters::getSolsPath());
-    MPartieCouche(type, name, placeDispo);
-    fichierTerrain.close();
+  fichierTerrain.open(MParameters::getSolsPath());
+  MPartieCouche(type, name, placeDispo);
+  fichierTerrain.close();
 
-    fichierTerrain.open(MParameters::getElementsPath());
-
+  fichierTerrain.open(MParameters::getElementsPath());
 }
 
+MTuile& MTerrain::operator ()(int x, int y)
+{
+  return tuiles[x * tailleMax.getX() + y];
+}
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------

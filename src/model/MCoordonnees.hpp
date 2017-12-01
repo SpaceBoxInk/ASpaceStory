@@ -22,6 +22,9 @@ public:
 
   void deplacer(MCoordonnees const& m);
 
+  int getX() const;
+  int getY() const;
+
 private:
   int x;
   int y;
@@ -33,5 +36,15 @@ struct Mouvement
   static MCoordonnees const DROITE;
   static MCoordonnees const GAUCHE;
 };
+
+inline int MCoordonnees::getX() const
+{
+  return x;
+}
+
+inline int MCoordonnees::getY() const
+{
+  return y;
+}
 
 #endif /* SRC_MODEL_MCOORDONNEES_HPP_ */

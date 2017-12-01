@@ -24,7 +24,7 @@ private:
   static std::map<u_int8_t, MPartieCouche> cielsType;
   static MCoordonnees tailleMax;
 
-
+  std::vector<MTuile> tuiles;
 //=======================>Constructors<=======================
 public:
   MTerrain();
@@ -36,6 +36,7 @@ private:
 //=========================>Methods<==========================
 public:
   static void loadTypes();
+  MTuile& operator()(int x, int y);
 
 private:
 
