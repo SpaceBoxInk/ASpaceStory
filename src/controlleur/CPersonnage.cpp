@@ -56,16 +56,16 @@ void CPersonnage::setEventMethods()
       exit(0);
       break;
       case 'z':
-      positionJoueur.deplacer(Mouvement::HAUT);
+      positionJoueur.deplacerDe(Mouvement::HAUT);
       break;
       case 'd':
-      positionJoueur.deplacer(Mouvement::DROITE);
+      positionJoueur.deplacerDe(Mouvement::DROITE);
       break;
       case 's':
-      positionJoueur.deplacer(Mouvement::BAS);
+      positionJoueur.deplacerDe(Mouvement::BAS);
       break;
       case 'q':
-      positionJoueur.deplacer(Mouvement::GAUCHE);
+      positionJoueur.deplacerDe(Mouvement::GAUCHE);
       break;
       default:
       break;

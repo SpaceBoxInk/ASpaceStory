@@ -46,7 +46,7 @@ bool MCoordonnees::operator ==(MCoordonnees const & other)
   return (other.x == this->x) and (other.y == this->y);
 }
 
-void MCoordonnees::deplacer(MCoordonnees const& m)
+void MCoordonnees::deplacerDe(MCoordonnees const& m)
 {
   *this += m;
 }

@@ -19,9 +19,9 @@
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
-std::map<u_int8_t, MPartieCouche> MTerrain::solsType;
-std::map<u_int8_t, MPartieCouche> MTerrain::elementsType;
-std::map<u_int8_t, MPartieCouche> MTerrain::cielsType;
+std::map<uint8_t, MPartieCouche> MTerrain::solsType;
+std::map<uint8_t, MPartieCouche> MTerrain::elementsType;
+std::map<uint8_t, MPartieCouche> MTerrain::cielsType;
 
 MCoordonnees MTerrain::tailleMax(40, 20);
 //------------------------------------------------------------
@@ -36,24 +36,70 @@ MTerrain::~MTerrain()
 {
 }
 
-//------------------------------------------------------------
-//=========================>Methods<==========================
-//------------------------------------------------------------
 void MTerrain::loadTypes()
 {
-    std::ifstream fichierTerrain;
-    MTypeCouche type = MTypeCouche::SOL;
-    std::string name;
-    int ID;
-    float placeDispo;
+  loadSpecificPath(MParameters::getSolsPath(), MTypeCouche::SOL);
+  loadSpecificPath(MParameters::getSolsPath(), MTypeCouche::ELEMENT);
+  loadSpecificPath(MParameters::getSolsPath(), MTypeCouche::CIEL);
+}
 
-    fichierTerrain.open(MParameters::getSolsPath());
-    MPartieCouche(type, name, placeDispo);
-    fichierTerrain.close();
+void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
+{
+  std::ifstream fichierType;
+  std::string name;
+  std::string imgFile;
+  uint8_t ID;
+  float placeDispo;
 
-    fichierTerrain.open(MParameters::getElementsPath());
+  fichierType.open(fichier);
+  if (fichierType)
+  {
+    while (!fichierType.eof())
+    {
+      fichierType >> name;
+      fichierType >> imgFile; // passer les ':'
+      fichierType >> imgFile;
+      fichierType >> ID;
+      fichierType >> placeDispo;
+      getTypeList(type).insert( { ID, MPartieCouche(type, name, placeDispo) });
+    }
+    fichierType.close();
+  }
+}
+
+void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
+{
+  std::ifstream fichierTerrain(fichier, std::ios::binary);
+  char input;
+  if (fichierTerrain)
+  {
+    while (fichierTerrain.read(&input, 1))
+    {
+
+      uint8_t ID = (uint8_t)input;
+      // MTuile tuile = (getTypeList(type)[ID]);
+
+    }
+  }
+  uint8_t ID; // elem fichier
 
 }
+
+std::map<uint8_t, MPartieCouche>& MTerrain::getTypeList(MTypeCouche const& typeCouche)
+{
+  switch (typeCouche) {
+  case MTypeCouche::SOL:
+    return solsType;
+    break;
+  case MTypeCouche::ELEMENT:
+    return elementsType;
+    break;
+  default:
+    return cielsType;
+    break;
+  }
+}
+
 
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================

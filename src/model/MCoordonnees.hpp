@@ -20,7 +20,7 @@ public:
   MCoordonnees const& operator+=(MCoordonnees const& other);
   bool operator ==(MCoordonnees const & other);
 
-  void deplacer(MCoordonnees const& m);
+  void deplacerDe(MCoordonnees const& m);
 
 private:
   int x;
