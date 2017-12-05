@@ -31,6 +31,7 @@ private:
 //=======================>Constructors<=======================
 public:
   MPartieCouche(MTypeCouche type, std::string name, float placeDispo);
+  MPartieCouche(MPartieCouche const&) = default;
   // TODO: rule of five ? copyandswap
   virtual ~MPartieCouche();
 

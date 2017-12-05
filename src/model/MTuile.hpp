@@ -17,13 +17,12 @@ class MTuile
 {
 //========================>Attributes<========================
 private:
-  std::vector<MPartieCouche> couches;
+  std::vector<MPartieCouche*> couches;
 
 
 //=======================>Constructors<=======================
 public:
-  MTuile(MPartieCouche const* sol, MPartieCouche const* element = nullptr,
-         MPartieCouche const* ciel = nullptr);
+  MTuile(MPartieCouche* sol, MPartieCouche* element = nullptr, MPartieCouche* ciel = nullptr);
   // TODO: rule of five ? copyandswap
   virtual ~MTuile();
 
@@ -36,7 +35,8 @@ private:
 
 //=====================>Getters&Setters<======================
 public:
+  void deletePartieCouche(MTypeCouche typeCouche);
+  void setPartieCouche(MPartieCouche* couche);
 
 private:
-  void setPartieCouche(MPartieCouche const* couche);
 };

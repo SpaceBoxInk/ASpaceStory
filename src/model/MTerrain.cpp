@@ -78,15 +78,16 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
   char input;
   if (fichierTerrain)
   {
+    int i = 0;
+    uint8_t ID;
     while (fichierTerrain.read(&input, 1))
     {
-
-      uint8_t ID = (uint8_t)input;
-      // MTuile tuile = (getTypeList(type)[ID]);
-
+      ID = (uint8_t)input;
+      tuiles[i].setPartieCouche(new MPartieCouche(getTypeList(type).find(ID)->second));
+      // MTuile tuile = ();
+      ++i;
     }
   }
-  uint8_t ID; // elem fichier
 
 }
 

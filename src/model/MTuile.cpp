@@ -17,8 +17,7 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MTuile::MTuile(MPartieCouche const* sol, MPartieCouche const* element,
-               MPartieCouche const* ciel)
+MTuile::MTuile(MPartieCouche* sol, MPartieCouche* element, MPartieCouche* ciel)
 {
   setPartieCouche(sol);
   setPartieCouche(element);
@@ -27,6 +26,10 @@ MTuile::MTuile(MPartieCouche const* sol, MPartieCouche const* element,
 
 MTuile::~MTuile()
 {
+  for (int i = 0; i < couches.size(); ++i)
+  {
+    deletePartieCouche((MTypeCouche)i);
+  }
 }
 
 //------------------------------------------------------------
@@ -36,11 +39,24 @@ MTuile::~MTuile()
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
-void MTuile::setPartieCouche(MPartieCouche const* couche)
+void MTuile::deletePartieCouche(MTypeCouche typeCouche)
+{
+  if (couches[(int)typeCouche])
+  {
+    delete couches[(int)typeCouche];
+    couches[(int)typeCouche] = nullptr;
+  }
+}
+
+/**
+ *
+ * @param couche la couche de la tuile à set
+ */
+void MTuile::setPartieCouche(MPartieCouche* couche)
 {
   if (couche)
   {
-    couches[(int)couche->getType()] = *couche;
+    couches[(int)couche->getType()] = couche;
   }
 }
 
