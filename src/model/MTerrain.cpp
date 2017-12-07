@@ -8,13 +8,17 @@
  */
 
 #include "MTerrain.hpp"
+
+#include <_types/_uint8_t.h>
+#include <fstream>
+#include <iterator>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include "MCoordonnees.hpp"
 #include "MParameters.hpp"
 #include "MPartieCouche.hpp"
-
-#include <sys/types.h>
-#include <fstream>
-#include <string>
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -75,20 +79,23 @@ void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
 void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
 {
   std::ifstream fichierTerrain(fichier, std::ios::binary);
-  char input;
   if (fichierTerrain)
   {
-    int i = 0;
     uint8_t ID;
-    while (fichierTerrain.read(&input, 1))
+    std::vector<uint8_t> vecteurControle;
+    vecteurControle.insert(vecteurControle.begin(),
+                           std::istream_iterator<uint8_t>(fichierTerrain),
+                           std::istream_iterator<uint8_t>());
+    if (vecteurControle.size() <= (unsigned int)(tailleMax.getX() * tailleMax.getY()))
     {
-      ID = (uint8_t)input;
+      for (unsigned int i = 0; i < vecteurControle.size(); ++i)
+    {
+        ID = vecteurControle[i];
       tuiles[i].setPartieCouche(new MPartieCouche(getTypeList(type).find(ID)->second));
-      // MTuile tuile = ();
       ++i;
     }
+    }
   }
-
 }
 
 std::map<uint8_t, MPartieCouche>& MTerrain::getTypeList(MTypeCouche const& typeCouche)
