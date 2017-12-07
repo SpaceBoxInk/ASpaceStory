@@ -39,3 +39,6 @@
 *.out
 *.app
 /Debug/
+/Tests/
+/Debug Gcov/
+/ASpaceStory.xml

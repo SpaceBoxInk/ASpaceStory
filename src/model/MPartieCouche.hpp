@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <array>
 #include <string>
 
 enum class MTypeCouche
@@ -17,10 +18,22 @@ enum class MTypeCouche
   SOL,
   ELEMENT,
   CIEL,
+  SIZE
 };
+
+constexpr char const* to_string(MTypeCouche coucheT)
+{
+  std::array<char const*, 4> names { "Sol", "Element", "Ciel", "SIZE" };
+  return names[(int)coucheT];
+}
+
 
 class MPartieCouche
 {
+//========================>Constants<=========================
+public:
+  static float constexpr PLACE_MAX = 1;
+
 //========================>Attributes<========================
 private:
   MTypeCouche type;
@@ -30,7 +43,7 @@ private:
 
 //=======================>Constructors<=======================
 public:
-  MPartieCouche(MTypeCouche type, std::string name, float placeDispo);
+  MPartieCouche(MTypeCouche type, std::string name, std::string fichierImg, float placeDispo);
   MPartieCouche(MPartieCouche const&) = default;
   // TODO: rule of five ? copyandswap
   virtual ~MPartieCouche();
@@ -47,8 +60,18 @@ private:
 public:
   MTypeCouche const& getType() const;
   std::string const& getName() const;
+  std::string const& getFichierImg() const;
   float getPlaceDispo() const;
 
+  void setFichierImg(std::string const & fichierImg);
 private:
 
 };
+//--------------------------------------------------------------
+//========================>Definitions<=========================
+//--------------------------------------------------------------
+
+inline void MPartieCouche::setFichierImg(std::string const & fichierImg)
+{
+  this->fichierImg = fichierImg;
+}

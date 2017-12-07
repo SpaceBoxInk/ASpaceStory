@@ -2,16 +2,12 @@
 #include "MParameters.hpp"
 
 #include <bits/exception.h>
+#include <fstream>
 #include <iostream>
 
+std::map<std::string, std::string> MParameters::conf;
 std::string MParameters::rootPath;
-std::string MParameters::resourcesPath;
-std::string MParameters::levelPath;
-std::string MParameters::tuileInfoPath;
-std::string MParameters::solsInfo;
-std::string MParameters::elementsInfo;
-std::string MParameters::cielsInfo;
-
+std::map<char, Mouvement> MParameters::mouvKeys;
 
 bool MParameters::checkConfFile(std::string path)
 {
@@ -53,7 +49,6 @@ void MParameters::load(std::string exePath)
   rootPath = exePath.substr(0, exePath.rfind('/') + 1);
   setRootPath();
 
-  std::map < std::string, std::string > conf;
   // load file
   std::ifstream file;
   try
@@ -82,30 +77,50 @@ void MParameters::load(std::string exePath)
   file.close();
   //=========================================================================================
   // set configurations
-  resourcesPath = conf["resourcesPath"];
-  tuileInfoPath = conf["tuileInfoPath"];
-  levelPath = conf["levelPath"];
-  solsInfo = conf["solsInfo"];
-  elementsInfo = conf["elementsInfo"];
-  cielsInfo = conf["cielsInfo"];
+  mouvKeys[conf["upKey"][0]] = Mouvement::HAUT;
+  mouvKeys[conf["downKey"][0]] = Mouvement::BAS;
+  mouvKeys[conf["leftKey"][0]] = Mouvement::GAUCHE;
+  mouvKeys[conf["rightKey"][0]] = Mouvement::DROITE;
 }
 
 std::string MParameters::getSolsPath()
 {
-  return getTuilePath() + solsInfo;
+  return getTuilePath() + "/" + conf["solsInfo"];
 }
 
 std::string MParameters::getElementsPath()
 {
-  return getTuilePath() + elementsInfo;
+  return getTuilePath() + "/" + conf["elementsInfo"];
 }
 
 std::string MParameters::getCielsPath()
 {
-  return getTuilePath() + cielsInfo;
+  return getTuilePath() + "/" + conf["cielsInfo"];
 }
 
 std::string MParameters::getTuilePath()
 {
-  return rootPath + resourcesPath + tuileInfoPath;
+  return rootPath + "/" + conf["tuileInfoPath"];;
 }
+
+std::string MParameters::getLevelPath()
+{
+  return rootPath + "/" + conf["levelPath"];
+}
+
+Mouvement MParameters::getMouvFromKey(char key)
+{
+  return mouvKeys.at(key);
+}
+
+bool MParameters::isMouvKey(char key)
+try
+{
+  mouvKeys.at(key);
+  return true;
+}
+catch (...)
+{
+  return false;
+}
+

@@ -8,7 +8,8 @@
 #ifndef SRC_MODEL_MCOORDONNEES_HPP_
 #define SRC_MODEL_MCOORDONNEES_HPP_
 
-struct Mouvement;
+#include <string>
+
 
 class MCoordonnees
 {
@@ -18,25 +19,38 @@ public:
   MCoordonnees operator+(MCoordonnees const& other) const;
   MCoordonnees const& operator=(MCoordonnees const& other);
   MCoordonnees const& operator+=(MCoordonnees const& other);
-  bool operator ==(MCoordonnees const & other);
+  bool operator ==(MCoordonnees const & other) const;
+  bool operator <(MCoordonnees const & other) const;
 
   void deplacerDe(MCoordonnees const& m);
 
   int getX() const;
   int getY() const;
 
+  std::string str() const;
+
 private:
   int x;
   int y;
 };
-struct Mouvement
+
+enum class Mouvement
 {
-  static MCoordonnees const HAUT;
-  static MCoordonnees const BAS;
-  static MCoordonnees const DROITE;
-  static MCoordonnees const GAUCHE;
+  HAUT,
+  BAS,
+  DROITE,
+  GAUCHE,
+  SIZE
 };
 
+namespace MouvementT
+{
+  MCoordonnees operator *(Mouvement m);
+}
+
+//==============================================================
+//========================>Definitions<=========================
+//==============================================================
 inline int MCoordonnees::getX() const
 {
   return x;

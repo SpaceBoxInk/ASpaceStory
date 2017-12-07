@@ -9,12 +9,8 @@
 
 #include "VPrimitif.hpp"
 
-#include "../model/MCoordonnees.hpp"
-
 #include <cstdlib>
-#include <ios>
 #include <iostream>
-#include <fstream>
 #include <limits>
 
 using namespace std;
@@ -28,13 +24,21 @@ std::string const VPrimitif::endC = "m";
 std::string const VPrimitif::sepC = ";";
 std::string const VPrimitif::foregroundRgb = "38;2;";
 
-std::string const VPrimitif::vert = escC + "32" + endC;
-std::string const VPrimitif::marron = escC + foregroundRgb + "107;73;54" + endC;
+std::map<char, std::string> const VPrimitif::colors = { { '.', escC + "32" + endC }, { '#',
+    escC + foregroundRgb + "107;73;54" + endC }, { '~', escC + "34" + endC }, { '=', escC
+    + foregroundRgb + "107;73;74" + endC } };
+
 std::string const VPrimitif::blanc = escC + "0" + endC;
 
 //------------------------------------------------------------
 //=======================>Constructors<=======================
 //------------------------------------------------------------
+
+VPrimitif::VPrimitif(MCoordonnees const& coordMax) :
+    TAILLE_MAX(coordMax)
+{
+
+}
 
 VPrimitif::~VPrimitif()
 {
@@ -56,13 +60,13 @@ void clearScreen()
 
 void VPrimitif::printTile(char type)
 {
-  switch (type) {
-  case 'm':
-    cout << marron << montagne << blanc;
-    break;
-  case 'h':
-    cout << vert << terrainHerbe << blanc;
-    break;
+  try
+  {
+    cout << colors.at(type) << type << blanc;
+  }
+  catch (exception& e)
+  {
+    cout << type;
   }
 }
 
@@ -72,53 +76,33 @@ void VPrimitif::show(MCoordonnees positionJoueur)
   int line = 0;
   int& x = nbTot;
   int& y = line;
-  int nb;
-  char type;
-  ifstream fichier;
-  fichier.open("src/ressources/niveaux/level1/test.nbg");
-  if (fichier)  // si l'ouverture a réussi
+
+  cout << '\n';
+  cout.width(2);
+  cout << right << line;
+  for (std::string const* img : imgSols)
   {
-    // instructions
-    cout.width(2);
-    cout << endl << right << line;
-    while (!fichier.eof())
+    if (nbTot == TAILLE_MAX.getX())
     {
-
-      fichier >> type >> nb;
-      for (int a = 0; a < nb; ++a, ++nbTot)
-      {
-        if (nbTot == TAILLE_MAX)
-        {
-          ++line;
-          cout.width(2);
-          cout << endl << right << line;
-          nbTot = 0;
-        }
-
-        if (MCoordonnees(x, y) == positionJoueur)
-        {
-          cout << perso;
-        }
-        else
-        {
-          printTile(type);
-        }
-      }
-      type = 0;
-      nb = 0;
+      ++line;
+      cout << '\n';
+      cout.width(2);
+      cout << right << line;
+      nbTot = 0;
     }
-    cout << endl;
 
-    fichier.close();  // on ferme le fichier
+    if (MCoordonnees(x, y) == positionJoueur)
+    {
+      cout << perso;
+    }
+    else
+    {
+      printTile(img->at(0));
+    }
+    ++nbTot;
   }
-  else
-  {
-    cerr << "Impossible d'ouvrir le fichier !" << endl;
-  }
-
-  // mouvements
-  nbTot = 0;
-  line = 0;
+  std::cout << endl;
+// mouvements
   sendInput();
   clearScreen();
 }
@@ -130,6 +114,26 @@ void VPrimitif::sendInput()
   clear(cin);
   setChanged();
   notifyObservers(string("keyEvent"), c);
+}
+
+void VPrimitif::setImg(MTypeCouche const& typeCouche,
+                       std::vector<std::string const*> const& imgs)
+{
+  // todo Clear string pointer !
+  switch (typeCouche) {
+  case MTypeCouche::SOL:
+    imgSols.clear();
+    imgSols = imgs;
+    break;
+  case MTypeCouche::ELEMENT:
+    imgElems.clear();
+    imgElems = imgs;
+    break;
+  case MTypeCouche::CIEL:
+    imgCiels.clear();
+    imgCiels = imgs;
+    break;
+  }
 }
 
 //------------------------------------------------------------

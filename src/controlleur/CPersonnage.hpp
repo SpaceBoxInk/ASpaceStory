@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "../model/MCoordonnees.hpp"
+#include "../model/MPersonnage.hpp"
 #include "../outils/ObserverPattern/Observer.hpp"
 #include "../vue/VPrimitif.hpp"
 
@@ -28,15 +28,12 @@ private:
    */
   VPrimitif* vuePrincipale;
 
-  /**
-   * TEMP : move to player
-   */
-  MCoordonnees positionJoueur;
+  MPersonnage* personnage;
 
   MTerrain* terrain;
 //=======================>Constructors<=======================
 public:
-  CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain);
+  CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain, MPersonnage* personnage);
   // TODO: rule of five ? copyandswap
   virtual ~CPersonnage();
 
@@ -54,6 +51,9 @@ public:
 private:
   void changeVue(VPrimitif* vTerrain);
 };
+//------------------------------------------------------------
+//=====================>Implementations<======================
+//------------------------------------------------------------
 
 /**
  *

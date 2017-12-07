@@ -9,9 +9,13 @@
 
 #pragma once
 
+#include "MPartieCouche.hpp"
 #include "MTuile.hpp"
 
-#include <map>
+#include <cstdint>
+#include <unordered_map>
+#include <string>
+#include <vector>
 
 class MCoordonnees;
 
@@ -19,12 +23,12 @@ class MTerrain
 {
 //========================>Attributes<========================
 private:
-  static std::map<uint8_t, MPartieCouche> solsType;
-  static std::map<uint8_t, MPartieCouche> elementsType;
-  static std::map<uint8_t, MPartieCouche> cielsType;
+  static std::unordered_map<std::uint8_t, MPartieCouche> solsType;
+  static std::unordered_map<std::uint8_t, MPartieCouche> elementsType;
+  static std::unordered_map<std::uint8_t, MPartieCouche> cielsType;
   static MCoordonnees tailleMax;
 
-  std::vector<MTuile> tuiles;
+  std::vector<MTuile*> tuiles;
 //=======================>Constructors<=======================
 public:
   MTerrain();
@@ -36,14 +40,29 @@ private:
 //=========================>Methods<==========================
 public:
   static void loadTypes();
-  void loadCouche(std::string const& fichier, MTypeCouche const& type);
-
+  void loadCouche(std::string const & fichier, MTypeCouche const & type);
+  MTuile& operator()(MCoordonnees const& coord);
+  MTuile& operator()(int index);
   MTuile& operator()(int x, int y);
+
+  std::vector<MTuile*> getAdjacentes(MTuile const& tuile);
+
+  std::vector<std::string const*> getImagesList(MTypeCouche typeCouche);
+
+
+  MCoordonnees getCoords(int index);
 private:
   static void loadSpecificPath(std::string fichier, MTypeCouche const& type);
 //=====================>Getters&Setters<======================
 public:
+  static MCoordonnees getTailleMax();
 
 private:
-  static std::map<uint8_t, MPartieCouche>& getTypeList(MTypeCouche const& typeCouche);
+  static std::unordered_map<uint8_t, MPartieCouche>& getTypeList(
+      MTypeCouche const& typeCouche);
 };
+
+inline MCoordonnees MTerrain::getTailleMax()
+{
+  return tailleMax;
+}

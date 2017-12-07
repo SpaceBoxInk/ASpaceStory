@@ -1,7 +1,7 @@
-# nom : fichierImage symbole(pour les .nbg) placeDispo(0-1) 
+# nom : fichierImage index(pour les .nbg) placeDispo(0-1) 
 rien : dummy.png 0 0.0
-herbe : herbe.png 1 1.0
-cheminTerre : cheminTerre.png 2 1.0
-eau : eau.png 3 0.0
-terre : terre.png 4 1.0
-pierre : pierre.png 5 0.0
+herbe : . 1 1.0
+terre : # 2 1.0
+cheminTerre : = 3 1.0
+eau : ~ 4 0.0
+pierre : pierre.png 5 1.0

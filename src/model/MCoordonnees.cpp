@@ -7,11 +7,7 @@
 
 #include "MCoordonnees.hpp"
 
-// Constants
-MCoordonnees const Mouvement::HAUT(0, -1);
-MCoordonnees const Mouvement::BAS(0, 1);
-MCoordonnees const Mouvement::DROITE(1, 0);
-MCoordonnees const Mouvement::GAUCHE(-1, 0);
+#include <vector>
 
 // Methods
 /**
@@ -41,7 +37,7 @@ MCoordonnees const & MCoordonnees::operator +=(MCoordonnees const & other)
   return *this = other + *this;
 }
 
-bool MCoordonnees::operator ==(MCoordonnees const & other)
+bool MCoordonnees::operator ==(MCoordonnees const & other) const
 {
   return (other.x == this->x) and (other.y == this->y);
 }
@@ -50,3 +46,24 @@ void MCoordonnees::deplacerDe(MCoordonnees const& m)
 {
   *this += m;
 }
+
+std::string MCoordonnees::str() const
+{
+  using namespace std;
+  return "(" + to_string(x) + "; " + to_string(y) + ")";
+}
+
+namespace MouvementT
+{
+  MCoordonnees operator *(Mouvement m)
+  {
+    static std::vector<MCoordonnees> const mouvements = { MCoordonnees(0, -1), // HAUT
+    MCoordonnees(0, 1), // BAS
+    MCoordonnees(1, 0), // DROITE
+    MCoordonnees(-1, 0) // GAUCHE
+        };
+
+    return mouvements.at((int)m);
+  }
+}
+

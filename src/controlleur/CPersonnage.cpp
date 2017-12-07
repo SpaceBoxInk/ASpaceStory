@@ -8,11 +8,16 @@
  */
 
 #include "CPersonnage.hpp"
+
+#include "../model/MCoordonnees.hpp"
+#include "../model/MParameters.hpp"
 #include "../model/MTerrain.hpp"
+#include "../model/MTuile.hpp"
 
 #include <cstdlib>
 #include <string>
 
+class MParameters;
 
 using namespace std;
 
@@ -24,21 +29,20 @@ using namespace std;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-CPersonnage::CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain) :
-    vuePrincipale(vuePrincipale), positionJoueur(5, 4), terrain(terrain)
+CPersonnage::CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain, MPersonnage* personnage) :
+    vuePrincipale(vuePrincipale), personnage(personnage), terrain(terrain)
 {
   setEventMethods();
-
+  vuePrincipale->setImg(MTypeCouche::SOL, terrain->getImagesList(MTypeCouche::SOL));
 
   do
   {
-    this->vuePrincipale->show(positionJoueur);
+    this->vuePrincipale->show((MCoordonnees)*personnage->getTuile());
   } while (true);
 }
 
 CPersonnage::~CPersonnage()
 {
-  delete vuePrincipale;
 }
 
 //------------------------------------------------------------
@@ -50,26 +54,17 @@ void CPersonnage::setEventMethods()
 
   // action when keyboard input
   addAction<string, char>("keyEvent", [this](char const& inputChar, Observed const&)
-  { switch (inputChar)
+  {
+    if (inputChar == '!')
     {
-      case '!':
       exit(0);
-      break;
-      case 'z':
-      positionJoueur.deplacerDe(Mouvement::HAUT);
-      break;
-      case 'd':
-      positionJoueur.deplacerDe(Mouvement::DROITE);
-      break;
-      case 's':
-      positionJoueur.deplacerDe(Mouvement::BAS);
-      break;
-      case 'q':
-      positionJoueur.deplacerDe(Mouvement::GAUCHE);
-      break;
-      default:
-      break;
-    }});
+    }
+    if (MParameters::isMouvKey(inputChar))
+    {
+      personnage->deplacer(*terrain, MParameters::getMouvFromKey(inputChar));
+    }
+
+  });
 }
 
 //------------------------------------------------------------

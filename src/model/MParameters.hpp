@@ -9,9 +9,10 @@
 
 #pragma once
 
-#include <string>
+#include "MCoordonnees.hpp"
+
 #include <map>
-#include <fstream>
+#include <string>
 
 /**
  * Enum for languages
@@ -30,15 +31,11 @@ class MParameters
 //========================>Constant<========================
 private:
 
-  static std::string rootPath;
-  static std::string resourcesPath;
-  static std::string levelPath;
-  static std::string tuileInfoPath;
-
-  static std::string solsInfo;
-  static std::string elementsInfo;
-  static std::string cielsInfo;
+  static std::map<std::string, std::string> conf;
   static auto constexpr configFile = "SbiAss.conf";
+  static std::string rootPath;
+
+  static std::map<char, Mouvement> mouvKeys;
 
 //========================>Methods<========================
 private:
@@ -51,9 +48,14 @@ public:
 
   static std::string getConfPath();
   static std::string getTuilePath();
+  static std::string getLevelPath();
+
   static std::string getSolsPath();
   static std::string getElementsPath();
   static std::string getCielsPath();
+
+  static Mouvement getMouvFromKey(char key);
+  static bool isMouvKey(char key);
 
   static void load(std::string exePath);
 };
