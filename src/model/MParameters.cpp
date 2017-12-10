@@ -85,27 +85,37 @@ void MParameters::load(std::string exePath)
 
 std::string MParameters::getSolsPath()
 {
-  return getTuilePath() + "/" + conf["solsInfo"];
+  return getTuilePath() + conf["solsInfo"];
 }
 
 std::string MParameters::getElementsPath()
 {
-  return getTuilePath() + "/" + conf["elementsInfo"];
+  return getTuilePath() + conf["elementsInfo"];
 }
 
 std::string MParameters::getCielsPath()
 {
-  return getTuilePath() + "/" + conf["cielsInfo"];
+  return getTuilePath() + conf["cielsInfo"];
 }
 
 std::string MParameters::getTuilePath()
 {
-  return rootPath + "/" + conf["tuileInfoPath"];;
+  return rootPath + conf["tuileInfoPath"] + "/";
 }
 
 std::string MParameters::getLevelPath()
 {
-  return rootPath + "/" + conf["levelPath"];
+  return rootPath + conf["levelPath"] + "/";
+}
+
+std::string MParameters::getMainScriptFolder()
+{
+  return conf["mainScriptFolder"] + "/";
+}
+
+std::string MParameters::getMainScript()
+{
+  return conf["mainScript"];
 }
 
 Mouvement MParameters::getMouvFromKey(char key)
@@ -123,4 +133,3 @@ catch (...)
 {
   return false;
 }
-

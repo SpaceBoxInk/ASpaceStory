@@ -11,6 +11,8 @@
 
 #include "terrainTest.hpp"
 
+#include "../src/model/MParameters.hpp"
+
 #include <cute/cute_runner.h>
 #include <cute/cute_suite.h>
 #include <cute/cute_xml_file.h>
@@ -22,6 +24,10 @@
 
 bool runAllTests(int argc, char const *argv[])
 {
+  // setUp
+  MParameters::load(argv[0]);
+
+
   //TODO add your test here
   cute::xml_file_opener xmlfile(argc, argv);
   cute::xml_listener<cute::ide_listener<>> lis(xmlfile.out);

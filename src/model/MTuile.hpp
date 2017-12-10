@@ -18,10 +18,20 @@
 
 class MEntite;
 
+/**
+ * Représente une partie du #MTerrain,\
+ * et permet de stocker une entité,
+ * des objets, et des couches(sol, elements, ciel)
+ */
 class MTuile
 {
 //========================>Attributes<========================
 private:
+  /**
+   * pour representer le sol,
+   * l'endroit ou l'on se déplace (elements)
+   * et le ciel\
+   */
   std::array<MPartieCouche*, 3> couches;
   MCoordonnees position;
 
@@ -30,6 +40,10 @@ private:
 public:
   MTuile(MCoordonnees const& position, std::string nameCoucheSol, std::string fichierImg,
          float placeDispoSol);
+  /**
+   * constructeur de recopie supprimé\
+   * on ne veut pas pouvoir copier la tuile
+   */
   MTuile(MTuile const&) = delete;
   MTuile const& operator=(MTuile const&) = delete;
   // TODO: rule of five ? copyandswap
@@ -66,6 +80,12 @@ private:
 //=====================>Implementations<======================
 //------------------------------------------------------------
 
+/**
+ * Opérateur de cast
+ * permet de caster la tuile en position:\
+ * (#MPosition)tuile
+ * @return la position de la tuile
+ */
 inline MTuile::operator MCoordonnees() const
 {
   return getPosition();
@@ -81,21 +101,34 @@ inline MEntite const & MTuile::getEntite() const
   return *entite;
 }
 
+/**
+ *
+ * @retval @e true si une entité est sur la tuile
+ */
 inline bool MTuile::isEntitePresente()
 {
   return entite;
 }
 
+/**
+ *
+ * @param type le type de la couche voulu
+ * @return la couche du type spécifié (modifiable)
+ */
 inline MPartieCouche* MTuile::getPartieCouche(MTypeCouche type)
 {
   return couches.at((int)type);
 }
 
+/**
+ *
+ * @param type le type de la couche voulu
+ * @return la couche du type spécifié (NON modifiable)
+ */
 inline MPartieCouche const* MTuile::getPartieCouche(MTypeCouche type) const
 {
   return couches.at((int)type);
 }
-
 
 inline void MTuile::placeEntite(MEntite* entite)
 {

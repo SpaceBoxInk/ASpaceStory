@@ -50,6 +50,9 @@ public:
   static std::string getTuilePath();
   static std::string getLevelPath();
 
+  static std::string getMainScriptFolder();
+  static std::string getMainScript();
+
   static std::string getSolsPath();
   static std::string getElementsPath();
   static std::string getCielsPath();

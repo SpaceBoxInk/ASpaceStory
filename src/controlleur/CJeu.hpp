@@ -1,30 +1,35 @@
 /**
- * @file MPersonnage.hpp
+ * @file CJeu.hpp
  *
  * Early optimization is the root of all evil
  * DRY ! Don't repeat yourself
  *
- *  @date 3 déc. 2017
+ *  @date 8 déc. 2017
  *  @author FederAndInk
  *  @brief TODO complete
  */
 
 #pragma once
 
-#include "MEntite.hpp"
+#include "CLua.hpp"
+#include "CNiveau.hpp"
+#include "CPersonnage.hpp"
 
-#include <string>
 
-class MPersonnage : public MEntite
+class CJeu
 {
+  friend class CLua;
 //========================>Attributes<========================
 private:
-
+  VPrimitif vuePrincipale;
+  CNiveau cNiveau;
+  CPersonnage cPersonnage;
+  CLua cLua;
 //=======================>Constructors<=======================
 public:
-  MPersonnage(std::string const& nom, MTuile* tuile, float taille);
+  CJeu();
   // TODO: rule of five ? copyandswap
-  virtual ~MPersonnage();
+  virtual ~CJeu();
 
 private:
 
@@ -39,3 +44,7 @@ public:
 private:
 
 };
+//------------------------------------------------------------
+//=====================>Implementations<======================
+//------------------------------------------------------------
+

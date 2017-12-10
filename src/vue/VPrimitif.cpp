@@ -9,7 +9,11 @@
 
 #include "VPrimitif.hpp"
 
+#include "../model/MEvents.hpp"
+
+#include <bits/exception.h>
 #include <cstdlib>
+#include <ios>
 #include <iostream>
 #include <limits>
 
@@ -113,7 +117,7 @@ void VPrimitif::sendInput()
   cin >> c;
   clear(cin);
   setChanged();
-  notifyObservers(string("keyEvent"), c);
+  notifyObservers(MUserEvents::KEY_PRESSED, c);
 }
 
 void VPrimitif::setImg(MTypeCouche const& typeCouche,

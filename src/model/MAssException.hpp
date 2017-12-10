@@ -18,6 +18,9 @@
 
 class MTuile;
 
+/**
+ * Exception generique du jeu
+ */
 class MAssException
 {
 //========================>Attributes<========================
@@ -32,6 +35,9 @@ public:
   virtual std::string what() const noexcept;
 };
 
+/**
+ * Exception lorsque qu'une entité n'est pas présente à un endroit (#MTuile)
+ */
 class MExceptionEntiteNonPresente : public MAssException
 {
 private:
@@ -44,6 +50,9 @@ public:
   virtual std::string what() const noexcept override;
 };
 
+/**
+ * Lorsque l'on demande quelque chose (MTuile/MCoordonnees) qui est en dehors du MTerrain
+ */
 class MExceptionOutOfTerrain : public MAssException
 {
 private:
@@ -57,6 +66,9 @@ public:
   virtual std::string what() const noexcept override;
 };
 
+/**
+ * Lorsque qu'un certain #MTypeCouche est attendu et qu'un autre est donné
+ */
 class MExceptionInvalidTypeCouche : public MAssException
 {
 private:
@@ -70,6 +82,11 @@ public:
   virtual std::string what() const noexcept override;
 };
 
+/**
+ * Exception relative aux fichiers\
+ * format\
+ * ouverture
+ */
 class MExceptionFile : public MAssException
 {
 private:

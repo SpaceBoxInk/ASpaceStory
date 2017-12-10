@@ -21,6 +21,13 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
+/**
+ *
+ * @param position la position de la tuile sur le #MTerrain
+ * @param nameCoucheSol le nom de la couche sol de la tuile
+ * @param fichierImg le nom du fichier image de la COUCHE SOL
+ * @param placeDispoSol sa place disponible
+ */
 MTuile::MTuile(MCoordonnees const& position,
                std::string nameCoucheSol, std::string fichierImg,
                float placeDispoSol) :
@@ -37,6 +44,11 @@ MTuile::~MTuile()
   }
 }
 
+/**
+ *
+ * @return la place total disponible sur la TUILE\
+ * en fonction des différentes #MPartieCouche
+ */
 float MTuile::getPlaceDispo() const
 {
   if (entite)
@@ -56,6 +68,11 @@ float MTuile::getPlaceDispo() const
 //=========================>Methods<==========================
 //------------------------------------------------------------
 
+/**
+ *
+ * @param tuileOther la tuile à comparer avec this
+ * @retval @e true si tuileOther est à coté de la tuile this (diagonales non comprises)
+ */
 bool MTuile::isAdjacente(MTuile const & tuileOther)
 {
   using MouvementT::operator *;
@@ -70,6 +87,11 @@ bool MTuile::isAdjacente(MTuile const & tuileOther)
   return i < (int)Mouvement::SIZE;
 }
 
+/**
+ * déplace l'entite de la tuile this vers la tuile tuileDst
+ * @param tuileDst la tuile de destination de l'entité
+ * @retval @e true si l'entité à été déplacée
+ */
 bool MTuile::deplacerEntiteVers(MTuile& tuileDst)
 {
   if (!isEntitePresente())

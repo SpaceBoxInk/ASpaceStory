@@ -7,22 +7,15 @@
  *      Author: nihil
  */
 
-#include "CPersonnage.hpp"
+#include "CJeu.hpp"
 
 #include "../model/MParameters.hpp"
-#include "../model/MPersonnage.hpp"
-#include "../model/MTerrain.hpp"
-#include "../vue/VPrimitif.hpp"
 
 int main(int argc, char **argv)
 {
   MParameters::load(argv[0]);
 
-  MTerrain* terrain = new MTerrain();
-  CPersonnage(
-      new VPrimitif(terrain->getTailleMax()),
-      terrain,
-      new MPersonnage("Perso", &(*terrain)(2, 1), 0.9));
+  new CJeu();
 
   return 0;
 }

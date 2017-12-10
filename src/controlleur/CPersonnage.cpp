@@ -10,12 +10,13 @@
 #include "CPersonnage.hpp"
 
 #include "../model/MCoordonnees.hpp"
+#include "../model/MEvents.hpp"
 #include "../model/MParameters.hpp"
+#include "../model/MPartieCouche.hpp"
 #include "../model/MTerrain.hpp"
 #include "../model/MTuile.hpp"
 
 #include <cstdlib>
-#include <string>
 
 class MParameters;
 
@@ -29,20 +30,23 @@ using namespace std;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-CPersonnage::CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain, MPersonnage* personnage) :
-    vuePrincipale(vuePrincipale), personnage(personnage), terrain(terrain)
+CPersonnage::CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain) :
+    vuePrincipale(vuePrincipale), terrain(terrain)
 {
   setEventMethods();
-  vuePrincipale->setImg(MTypeCouche::SOL, terrain->getImagesList(MTypeCouche::SOL));
-
-  do
-  {
-    this->vuePrincipale->show((MCoordonnees)*personnage->getTuile());
-  } while (true);
 }
 
 CPersonnage::~CPersonnage()
 {
+}
+
+void CPersonnage::launchPersonnage()
+{
+  vuePrincipale->setImg(MTypeCouche::SOL, terrain->getImagesList(MTypeCouche::SOL));
+  do
+  {
+    this->vuePrincipale->show((MCoordonnees)*personnage->getTuile());
+  } while (true);
 }
 
 //------------------------------------------------------------
@@ -53,7 +57,8 @@ void CPersonnage::setEventMethods()
   vuePrincipale->addObserver(this);
 
   // action when keyboard input
-  addAction<string, char>("keyEvent", [this](char const& inputChar, Observed const&)
+  addAction<MUserEvents, char>(
+      MUserEvents::KEY_PRESSED, [this](char const& inputChar, Observed const&)
   {
     if (inputChar == '!')
     {

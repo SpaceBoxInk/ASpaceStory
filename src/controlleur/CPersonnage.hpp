@@ -13,6 +13,11 @@
 #include "../outils/ObserverPattern/Observer.hpp"
 #include "../vue/VPrimitif.hpp"
 
+#include <string>
+
+class MPersonnage;
+class MTuile;
+
 class MTerrain;
 
 /**
@@ -33,7 +38,7 @@ private:
   MTerrain* terrain;
 //=======================>Constructors<=======================
 public:
-  CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain, MPersonnage* personnage);
+  CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain);
   // TODO: rule of five ? copyandswap
   virtual ~CPersonnage();
 
@@ -41,7 +46,8 @@ private:
 
 //=========================>Methods<==========================
 public:
-
+  void launchPersonnage();
+  void setPersonnage(std::string nom, MTuile* tuile, float taille);
 private:
   void setEventMethods();
 
@@ -51,6 +57,12 @@ public:
 private:
   void changeVue(VPrimitif* vTerrain);
 };
+
+inline void CPersonnage::setPersonnage(std::string nom, MTuile* tuile, float taille)
+{
+  personnage = new MPersonnage(nom, tuile, taille);
+}
+
 //------------------------------------------------------------
 //=====================>Implementations<======================
 //------------------------------------------------------------
