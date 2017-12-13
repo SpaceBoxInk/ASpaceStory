@@ -15,7 +15,7 @@
 
 #include "../outils/ObserverPattern/Observed.hpp"
 
-#include <bits/stdint-uintn.h>
+#include <cstdint>
 #include <string>
 #include <unordered_map>
 #include <vector>

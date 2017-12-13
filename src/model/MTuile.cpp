@@ -105,6 +105,7 @@ bool MTuile::deplacerEntiteVers(MTuile& tuileDst)
     entite = nullptr;
     return true;
   }
+  // SEE : we can throw
   return false;
 }
 

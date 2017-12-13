@@ -38,6 +38,11 @@ MTerrain::MTerrain()
 
 MTerrain::~MTerrain()
 {
+  for (int i = tuiles.size() - 1; i >= 0; --i)
+  {
+    delete tuiles[i];
+    tuiles.pop_back();
+  }
 }
 
 //------------------------------------------------------------
@@ -106,7 +111,7 @@ std::unordered_map<uint8_t, MPartieCouche>& MTerrain::getTypeList(
 }
 
 /**
- * FIXME : complete comments
+ * FIXME : complete all comments
  * @param fichier
  * @param type
  */

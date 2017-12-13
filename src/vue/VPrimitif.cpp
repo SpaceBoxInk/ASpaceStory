@@ -58,8 +58,10 @@ void clear(istream& in)
 }
 void clearScreen()
 {
-  system("CLS");
-  system("clear");
+  if (!system("clear"))
+  {
+    system("CLS");
+  }
 }
 
 void VPrimitif::printTile(char type)

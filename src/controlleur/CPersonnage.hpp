@@ -32,10 +32,9 @@ private:
    * Vue principale TODO : faire vue principale, pour l'instant ce n'est que la vue du terrain
    */
   VPrimitif* vuePrincipale;
-
   MPersonnage* personnage;
-
   MTerrain* terrain;
+  bool quit;
 //=======================>Constructors<=======================
 public:
   CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain);

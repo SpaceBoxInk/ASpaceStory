@@ -61,9 +61,6 @@ private:
   void push(lua_State* l, lua_CFunction f);
   void push(lua_State* l, lua_Boolean b);
 
-  template<typename ... Ts>
-  void pushargs(lua_State *l, Ts ...args);
-
   template<class T>
   T getTableData(lua_State* l, char const* key, int paramNb = 1);
 //=====================>Getters&Setters<======================
@@ -129,10 +126,4 @@ T CLua::getTableData(lua_State* l, char const* key, int paramNb)
     std::cerr << "Or " << key << " does not exist in table " << '\n';
     return 0;
   }
-}
-
-template<typename ... Ts>
-inline void CLua::pushargs(lua_State* l, Ts ... args)
-{
-//( push (l , args ) , ...);
 }

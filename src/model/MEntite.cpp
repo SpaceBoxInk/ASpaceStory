@@ -10,6 +10,7 @@
  */
 
 #include "MEntite.hpp"
+#include "MAssException.hpp"
 #include "MTerrain.hpp"
 #include "MTuile.hpp"
 
@@ -48,18 +49,24 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
   // on peut avoir le deplacement (x, y) en fonction d'un element de l'enum ! :)
   using MouvementT::operator *;
 
-  // on prend la position de la tuile, puis on ajoute le deplacement
-  // cela permet d'avoir la position (x, y) de la tuile où se deplacer
-  // on demande au terrain d'avoir la tuile : operator()
-  // ~~~~~~~~~~~~~~~~~~~~~~~v-----------------------------------v~
-  MTuile& tuileDst = terrain(tuile->getPosition() + *deplacement);
-
-  if (isAccessible(tuileDst))
+  try
   {
-    if (tuile->deplacerEntiteVers(tuileDst))
+    // on prend la position de la tuile, puis on ajoute le deplacement
+    // cela permet d'avoir la position (x, y) de la tuile où se deplacer
+    // on demande au terrain d'avoir la tuile : operator()
+    // ~~~~~~~~~~~~~~~~~~~~~~~v-----------------------------------v~
+    MTuile& tuileDst = terrain(tuile->getPosition() + *deplacement);
+
+    if (isAccessible(tuileDst))
     {
-      tuile = &terrain(tuile->getPosition() + *deplacement);
+      if (tuile->deplacerEntiteVers(tuileDst))
+      {
+        tuile = &terrain(tuile->getPosition() + *deplacement);
+      }
     }
+  }
+  catch (MExceptionOutOfTerrain& e)
+  {
   }
 }
 

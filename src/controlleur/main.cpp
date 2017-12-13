@@ -15,7 +15,8 @@ int main(int argc, char **argv)
 {
   MParameters::load(argv[0]);
 
-  new CJeu();
+  CJeu* jeu = new CJeu();
+  delete jeu;
 
   return 0;
 }
