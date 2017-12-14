@@ -9,13 +9,22 @@
 
 #pragma once
 
+#include "../model/MPersonnage.hpp"
+#include "../outils/ObserverPattern/Observer.hpp"
 #include "../vue/VPrimitif.hpp"
+
+#include <string>
+
+class MPersonnage;
+class MTuile;
+
+class MTerrain;
 
 /**
  * le controlleur pour gérer les déplacements, les intéractions
  * du personnage (comme il est indépendant des niveaux)
  */
-class CPersonnage
+class CPersonnage : Observer
 {
 //========================>Attributes<========================
 private:
@@ -23,10 +32,12 @@ private:
    * Vue principale TODO : faire vue principale, pour l'instant ce n'est que la vue du terrain
    */
   VPrimitif* vuePrincipale;
-
+  MPersonnage* personnage;
+  MTerrain* terrain;
+  bool quit;
 //=======================>Constructors<=======================
 public:
-  CPersonnage(VPrimitif* vuePrincipale);
+  CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain);
   // TODO: rule of five ? copyandswap
   virtual ~CPersonnage();
 
@@ -34,8 +45,10 @@ private:
 
 //=========================>Methods<==========================
 public:
-
+  void launchPersonnage();
+  void setPersonnage(std::string nom, MTuile* tuile, float taille);
 private:
+  void setEventMethods();
 
 //=====================>Getters&Setters<======================
 public:
@@ -43,6 +56,15 @@ public:
 private:
   void changeVue(VPrimitif* vTerrain);
 };
+
+inline void CPersonnage::setPersonnage(std::string nom, MTuile* tuile, float taille)
+{
+  personnage = new MPersonnage(nom, tuile, taille);
+}
+
+//------------------------------------------------------------
+//=====================>Implementations<======================
+//------------------------------------------------------------
 
 /**
  *

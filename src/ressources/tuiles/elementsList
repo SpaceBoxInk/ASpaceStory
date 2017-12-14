@@ -1,0 +1,4 @@
+# nom : fichierImage index(pour les .nbg) placeDispo(0-1) 
+rien : dummy.png 0 0.0
+montagne : montagne.png 1 0.0
+buisson : buisson.png 2 0.0

@@ -7,10 +7,16 @@
  *      Author: nihil
  */
 
-#include "CPersonnage.hpp"
-#include "../vue/VPrimitif.hpp"
+#include "CJeu.hpp"
+
+#include "../model/MParameters.hpp"
 
 int main(int argc, char **argv)
 {
-  CPersonnage(new VPrimitif());
+  MParameters::load(argv[0]);
+
+  CJeu* jeu = new CJeu();
+  delete jeu;
+
+  return 0;
 }
