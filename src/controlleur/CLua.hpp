@@ -50,7 +50,8 @@ public:
 
 private:
   static int loadCouche(lua_State* l);
-  static int setScriptFolder(lua_State* l);
+  static int setScriptPath(lua_State* l);
+  static int getScriptPath(lua_State* l);
 
   static int addActionDeclenchement(lua_State* l);
   static int addActionPassage(lua_State* l);
@@ -63,7 +64,7 @@ private:
   static void push(lua_String str);
   static void push(lua_CFunction f);
   static void push(lua_Boolean b);
-
+  static int getTop();
   static void testArgs(int nbExcpected);
 
   template<class T>

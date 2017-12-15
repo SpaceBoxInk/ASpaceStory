@@ -57,7 +57,7 @@ void CNiveau::setScriptFolder(std::string levelFolder)
   this->levelFolder = levelFolder;
 }
 
-std::string CNiveau::getLevelFolder() const
+std::string CNiveau::getScriptFolder() const
 {
   return MParameters::getLevelPath() + levelFolder + "/";
 }
@@ -65,6 +65,11 @@ std::string CNiveau::getLevelFolder() const
 void CNiveau::setLevelMainFile(std::string levelMainFile)
 {
   this->levelMainFile = levelMainFile;
+}
+
+std::string CNiveau::getLevelMainFile()
+{
+  return levelMainFile;
 }
 
 std::string CNiveau::getScript() const

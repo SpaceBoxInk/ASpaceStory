@@ -58,7 +58,7 @@ int CLua::loadCouche(lua_State* l)
   std::string coucheFile = lua_tostring(l, 1);
   MTypeCouche couche = (MTypeCouche)lua_tointeger(l, 2);
 
-  coucheFile = cJeu->cNiveau.getLevelFolder() + coucheFile;
+  coucheFile = cJeu->cNiveau.getScriptFolder() + coucheFile;
   try
   {
     cJeu->cNiveau.getTerrain().loadCouche(coucheFile, couche);
@@ -70,12 +70,33 @@ int CLua::loadCouche(lua_State* l)
   return 0;
 }
 
-int CLua::setScriptFolder(lua_State* l)
+/**
+ * setScriptPath(folder, luaFile)
+ * set the current folder (and the luaFile to execute if 2 args are passed)
+ */
+int CLua::setScriptPath(lua_State* l)
 {
-  testArgs(1);
-  cJeu->cNiveau.setScriptFolder(lua_tostring(l, 1));
+  if (getTop() >= 1)
+  {
+    cJeu->cNiveau.setScriptFolder(lua_tostring(l, 1));
+  }
+  else if (getTop() == 2)
+  {
+    cJeu->cNiveau.setLevelMainFile(lua_tostring(l, 2));
+  }
 
   return 0;
+}
+
+/**
+ * return the current lua path and the current luaFile
+ */
+int CLua::getScriptPath(lua_State* l)
+{
+  testArgs(0);
+  push(cJeu->cNiveau.getScriptFolder().c_str());
+  push(cJeu->cNiveau.getLevelMainFile().c_str());
+  return 2;
 }
 
 int CLua::addActionDeclenchement(lua_State* l)
@@ -139,7 +160,8 @@ int CLua::addActionPassage(lua_State* l)
 
 void CLua::registerBaseFunctions()
 {
-  lua_register(lua, "setScriptFolder", setScriptFolder);
+  lua_register(lua, "setScriptPath", setScriptPath);
+  lua_register(lua, "getScriptPath", getScriptPath);
 }
 
 void CLua::registerTerrainFunctions()
@@ -175,6 +197,11 @@ void CLua::push(lua_String str)
 void CLua::push(lua_Number n)
 {
   lua_pushnumber(lua, n);
+}
+
+int CLua::getTop()
+{
+  return lua_gettop(lua);
 }
 
 void CLua::testArgs(int nbExcpected)
