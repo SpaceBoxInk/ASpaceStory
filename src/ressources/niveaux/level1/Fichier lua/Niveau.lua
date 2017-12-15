@@ -1,79 +1,55 @@
- require("Robot.lua")
- require("Perso.lua")
- require("Enigme.lua")
- require("Objet.lua")
+ loadfile("Robot.lua")
+ loadfile("Perso.lua")
+ loadfile("Enigme.lua")
+ loadfile("Objet.lua")
  
  
  
 -- Création niveau 1
- 
-  function newId(id,pos)
-  Id = {
-    id=id,
-    position = pos
-  }
-  return Id
- end
- 
-    Level1 = {
-    lvl = niveau,
-    couche0 = coucheNbg,
+       
+      --  Création des énigmes du niveau (positions, informations et tout ça)
     
-    
-    --  Création des énigmes du niveau (positions, informations et tout ça)
-  
-    enigme1 = newEnigme("enigme1","description","test.png",type,{1,2},objd,dec,res),
-   
-    
-    
-    --  Création des objets du niveau (positions, noms et tous les attributs)
-    
-    inventaireRobot = newInventaire(1),
-    
-    idNewPieceRobot1 = newId("piece1",{0,1}),
-    pieceRobot1 = newPieceRobot(idNewPieceRobot1),
-    newItem(pieceRobot1),
-    
-    idNewPieceRobot2 = newId("piece2",{1,1}),
-    pieceRobot2 = newPieceRobot(idNewPieceRobot2),
-    newItem(pieceRobot2),
-    
-    idNewPieceRobot3 = newId("piece3", {2,2}),
-    pieceRobot3 = newPieceRobot(idNewPieceRobot3),
-    newItem(pieceRobot3),
-    
-    idNewCoffre = newId("Coffre1",{4,5}),
-    coffre = newCoffre(idNewCoffre),
-    newElement(coffre),
-    
-    Tombe = {
-      enigme1,
-      position= {1,2},
-      imageTombe = ""
-    },
-    
-    newItem(Tombe)
-    
-    
-    setLvl = function(self,lvl)
-      self.lvl = niveau
-    end,
+      enigme1 = newEnigme("enigme1","description","test.png",type,{1,2},objd,dec,res)
      
-    getLvl = function(self) 
-      return self.lvl
-    end
-    
-    
-    }
-    
-    InitialisationNiveau(Level1)
---- creerPerso(nom, position) ,fonction en C++ qui permet de créer un perso à partir des données en Lua
+      
+      
+      --  Création des objets du niveau (positions, noms et tous les attributs)
+      
+      inventaireRobot = newInventaire(1)
+      
+      pieceRobot1 = newPieceRobot({"piece1",{0,1}})
+      pr1 = newItem(pieceRobot1) -- création d'un item pièce1
+      pr1:setAction()
+      
+      pieceRobot2 = newPieceRobot({"piece2",{1,1}})
+      pr2 = newItem(pieceRobot2) -- création d'un item piece 2
+      
+      pieceRobot3 = newPieceRobot({"piece3", {2,2}})
+      pr3 = newItem(pieceRobot3) -- creation d'un item piece 3
+      
+      coffre = newCoffre({"Coffre1",{4,5}})
+      c1 = newElement(coffre)-- création d'un element coffre
+      
+      Tombe = {
+        enigme = enigme1,
+        position= {1,2},
+        imageTombe = ""
+      }
+      
+      tombe = newElement(Tombe)
+      
+      newItem(tombe)
+      
+ 
 
   dire("... Où suis-je ? Je ne me souviens de rien...") -- le personnage se parle lui même quand il arrive
   dire("Il faut que je bouge...")
  -- GESTION DES CONDITIONS DANS LE NIVEAU
  
  -- Enigme: Evenement de la sortie
+ function RobotReussi()
+  if pieceRobot1.
+ end
  
   if enigmeF == false and Perso.x == positionDeSortieX and Perso.y == positionDeSortieY then -- positionDeSortie à fixer
     dire("*VISION* ... Je pense qu'il y a encore des choses à regarder")

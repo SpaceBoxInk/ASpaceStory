@@ -1,22 +1,23 @@
 require("Inventaire.lua")
 
 function newElement(nom)
-	return {
-	 nom = nom,
-	 actionInteraction = function ()
-	 	
-	 end,
-	 actionPassage = function ()
+  return {
+   nom = nom,
+   actionInteraction = function ()
+    
+   end,
+   
+   actionPassage = function ()
     
    end,
    
    setActionInteraction = function (self, action)
-   	self.actionInteraction = action
+    self.actionInteraction = action
    end,
    setActionPassage = function (self, action)
     self.actionPassage = action
    end
-	}
+  }
 end
 
 
@@ -27,11 +28,19 @@ function newItem(nom)
     
    end,
   
-   actionAttasue = function()
+   actionAttaque = function()
   
+   end,
+   
+   setActionUtilisation = function (self, action)
+    self.actionInteraction = action
+   end,
+   
+   setActionAttaque = function (self, action)
+    self.actionPassage = action
    end
-  
-  }
+   
+   } 
 end
 
 function newPieceRobot(nom,inventaire)
@@ -39,10 +48,8 @@ function newPieceRobot(nom,inventaire)
   
     nom = nom,
     type="pieceR",
-    estPris = function(actionUser) -- lorsque l'utilisateur/Joueur a effectué une interaction sur une piece, envoie un signal boolean (actionUser)
-    inventaire.nbDePiecesRobot = inventaire.nbDePiecesRobot + 1
-      return actionUser
-    end,
+    estPris = nil
+    
   }
   
   return PieceRobot
@@ -58,10 +65,3 @@ function newCoffre(nom,inventaire)
   return Coffre
   
 end
-
-TabletteProg = {
-
-    editeur = LanceEditeur(),
-
-}
-
