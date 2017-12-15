@@ -23,8 +23,8 @@
 //========================>static members<=========================
 //------------------------------------------------------------
 lua_State* CLua::lua = luaL_newstate();
-CJeu* CLua::cJeu;
 //------------------------------------------------------------
+CJeu* CLua::cJeu;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
@@ -54,6 +54,7 @@ CLua::~CLua()
  */
 int CLua::loadCouche(lua_State* l)
 {
+  testArgs(2);
   std::string coucheFile = lua_tostring(l, 1);
   MTypeCouche couche = (MTypeCouche)lua_tointeger(l, 2);
 
@@ -71,8 +72,68 @@ int CLua::loadCouche(lua_State* l)
 
 int CLua::setScriptFolder(lua_State* l)
 {
+  testArgs(1);
   cJeu->cNiveau.setScriptFolder(lua_tostring(l, 1));
 
+  return 0;
+}
+
+int CLua::addActionDeclenchement(lua_State* l)
+{
+  testArgs(4);
+  int x = lua_tointeger(l, 1);
+  int y = lua_tointeger(l, 2);
+  MTypeCouche couche = (MTypeCouche)lua_tointeger(l, 3);
+
+  if (lua_isfunction(l, -1))
+  {
+    // store function
+    int curIndex = luaL_ref(l, LUA_REGISTRYINDEX);
+
+    cJeu->cNiveau.getTerrain()(x, y).getPartieCouche(couche)->setActionDeclenchement(
+        [curIndex, l](std::string entite)
+        {
+          // get function previously stored in special lua table registry
+          lua_rawgeti(l, LUA_REGISTRYINDEX, curIndex);
+          if (lua_isfunction(l, -1))
+          {
+            push(entite.c_str());
+            // call function defined by lua
+            lua_call(l, 1, 0);
+          }
+        });
+
+  }
+  return 0;
+}
+
+int CLua::addActionPassage(lua_State* l)
+{
+  testArgs(4);
+  int x = lua_tointeger(l, 1);
+  int y = lua_tointeger(l, 2);
+  MTypeCouche couche = (MTypeCouche)lua_tointeger(l, 3);
+
+  if (lua_isfunction(l, -1))
+  {
+    // store function
+    int curIndex = luaL_ref(l, LUA_REGISTRYINDEX);
+
+    cJeu->cNiveau.getTerrain()(x, y).getPartieCouche(couche)->setActionPassage(
+        [curIndex, l](std::string entite)
+        {
+          // get function previously stored in special lua table registry
+          lua_rawgeti(l, LUA_REGISTRYINDEX, curIndex);
+          if (lua_isfunction(l, -1))
+          {
+            // pass entity name on 1st parameter
+            push(entite.c_str());
+            // call function defined by lua
+            lua_call(l, 1, 0);
+          }
+        });
+
+  }
   return 0;
 }
 
@@ -84,6 +145,8 @@ void CLua::registerBaseFunctions()
 void CLua::registerTerrainFunctions()
 {
   lua_register(lua, "loadCouche", loadCouche);
+  lua_register(lua, "addActionDeclenchement", addActionDeclenchement);
+  lua_register(lua, "addActionPassage", addActionPassage);
 }
 
 void CLua::executeScript(std::string script)
@@ -94,26 +157,43 @@ void CLua::executeScript(std::string script)
 ////////////////////////////////////////////////////////////////////////////////
 //-///////////////////////////Lua function Helpers///////////////////////////-//
 ////////////////////////////////////////////////////////////////////////////////
-void CLua::push(lua_State* l, lua_Boolean b)
+void CLua::push(lua_Boolean b)
 {
-  lua_pushboolean(l, b);
+  lua_pushboolean(lua, b);
 }
 
-void CLua::push(lua_State* l, lua_CFunction f)
+void CLua::push(lua_CFunction f)
 {
-  lua_pushcfunction(l, f);
+  lua_pushcfunction(lua, f);
 }
 
-void CLua::push(lua_State* l, lua_String str)
+void CLua::push(lua_String str)
 {
-  lua_pushstring(l, str);
+  lua_pushstring(lua, str);
 }
 
-void CLua::push(lua_State* l, lua_Number n)
+void CLua::push(lua_Number n)
 {
-  lua_pushnumber(l, n);
+  lua_pushnumber(lua, n);
 }
 
+void CLua::testArgs(int nbExcpected)
+{
+  try
+  {
+    if (lua_gettop(lua) != nbExcpected)
+    {
+      throw MExceptionLuaArguments("Expect 4 arguments for addActionDeclenchement",
+                                   lua_gettop(lua));
+    }
+  }
+  catch (MAssException& e)
+  {
+    std::cerr << e.what();
+    throw;
+  }
+
+}
 ////////////////////////////////////////////////////////////////////////////////
 
 //------------------------------------------------------------

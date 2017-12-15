@@ -109,6 +109,17 @@ bool MTuile::deplacerEntiteVers(MTuile& tuileDst)
   return false;
 }
 
+void MTuile::interagirTuile(MEntite* entite)
+{
+  for (int i = 0; i < (int)MTypeCouche::SIZE; ++i)
+  {
+    if (getPartieCouche((MTypeCouche)i))
+    {
+      getPartieCouche((MTypeCouche)i)->declenchementDe(entite);
+    }
+  }
+}
+
 float MTuile::getPlaceDispoOn(MTypeCouche const & typeCouche) const
 {
   if (couches.at((int)typeCouche))

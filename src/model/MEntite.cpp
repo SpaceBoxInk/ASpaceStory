@@ -35,6 +35,12 @@ MEntite::~MEntite()
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------
+MCoordonnees MEntite::getDirectionCoords()
+{
+  int dir = (direction / 90);
+  return MCoordonnees(dir % 2, (dir - 1) % 2);
+}
+
 /**
  * Deplace l'entite de deplacement sur le terrain\
  * eg: avec deplacement == Mouvement::HAUT,\
@@ -64,6 +70,18 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
         tuile = &terrain(tuile->getPosition() + *deplacement);
       }
     }
+  }
+  catch (MExceptionOutOfTerrain& e)
+  {
+  }
+}
+
+void MEntite::interagirTuile(MTerrain& terrain)
+{
+  try
+  {
+    MTuile& tuileInt = terrain(tuile->getPosition() + getDirectionCoords());
+    tuileInt.interagirTuile(this);
   }
   catch (MExceptionOutOfTerrain& e)
   {

@@ -16,6 +16,8 @@
 #include <string>
 #include <variant>
 
+struct lua_State;
+
 class MTuile;
 
 /**
@@ -96,6 +98,18 @@ public:
   MExceptionFile(std::string file, std::string desc);
   // TODO: rule of five ? copyandswap
   virtual ~MExceptionFile() = default;
+
+  virtual std::string what() const noexcept override;
+};
+
+class MExceptionLuaArguments : public MAssException
+{
+private:
+  std::string desc;
+public:
+  MExceptionLuaArguments(std::string desc, int nbArgs);
+  // TODO: rule of five ? copyandswap
+  virtual ~MExceptionLuaArguments() = default;
 
   virtual std::string what() const noexcept override;
 };

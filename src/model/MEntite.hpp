@@ -24,6 +24,13 @@ class MEntite
 private:
   std::string nom;
   MTuile* tuile;
+  /**
+   * en degrée,
+   * 0 : en haut,
+   * 90 : droite
+   * -90 : gauche
+   * 180 : bas
+   */
   int direction;
   float taille;
 //=======================>Constructors<=======================
@@ -36,7 +43,10 @@ private:
 
 //=========================>Methods<==========================
 public:
+  MCoordonnees getDirectionCoords();
+
   void deplacer(MTerrain& terrain, Mouvement const& deplacement);
+  void interagirTuile(MTerrain& terrain);
 
 private:
   bool isAccessible(MTuile const& tuile);
@@ -66,7 +76,7 @@ inline int MEntite::getDirection() const
 
 inline void MEntite::setDirection(int direction)
 {
-  this->direction = direction;
+  this->direction = direction % 360;
 }
 
 inline std::string const & MEntite::getNom() const

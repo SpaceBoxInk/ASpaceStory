@@ -59,6 +59,8 @@ public:
 
   bool isAdjacente(MTuile const& tuileOther);
   bool deplacerEntiteVers(MTuile& tuileDst);
+
+  void interagirTuile(MEntite* entite);
 private:
   float getPlaceDispoOn(MTypeCouche const& typeCouche) const;
 
@@ -133,5 +135,12 @@ inline MPartieCouche const* MTuile::getPartieCouche(MTypeCouche type) const
 inline void MTuile::placeEntite(MEntite* entite)
 {
   this->entite = entite;
+  for (int i = 0; i < (int)MTypeCouche::SIZE; ++i)
+  {
+    if (getPartieCouche((MTypeCouche)i))
+    {
+      getPartieCouche((MTypeCouche)i)->passageDe(entite);
+    }
+  }
 }
 

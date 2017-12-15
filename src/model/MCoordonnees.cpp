@@ -57,10 +57,10 @@ namespace MouvementT
 {
   MCoordonnees operator *(Mouvement m)
   {
-    static std::vector<MCoordonnees> const mouvements = { MCoordonnees(0, -1), // HAUT
-    MCoordonnees(0, 1), // BAS
-    MCoordonnees(1, 0), // DROITE
-    MCoordonnees(-1, 0) // GAUCHE
+    static std::vector<MCoordonnees> const mouvements = { MCoordonnees(0, -1), // HAUT 0 -> (0/90) % 2, (0/90-1)%2
+    MCoordonnees(0, 1), // BAS 180 -> (180/90) % 2, (180/90-1)
+    MCoordonnees(1, 0), // DROITE 90 -> (90/90) % 2, (90/90-1)
+    MCoordonnees(-1, 0) // GAUCHE -90 -> (dir/90) % 2,  (dir/90-1) %2
         };
 
     return mouvements.at((int)m);

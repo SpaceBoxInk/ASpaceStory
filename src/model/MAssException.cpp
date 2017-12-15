@@ -12,6 +12,13 @@
 #include "MPartieCouche.hpp"
 #include "MTuile.hpp"
 
+extern "C"
+{
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+}
+
 //------------------------------------------------------------
 //=======================>MAssException<======================
 //------------------------------------------------------------
@@ -94,4 +101,19 @@ MExceptionFile::MExceptionFile(std::string file, std::string desc) :
 std::string MExceptionFile::what() const noexcept
 {
   return "File " + file + " is not valid\nCauses : " + desc + '\n';
+}
+
+//------------------------------------------------------------
+//=====================>MExceptionFile<=======================
+//------------------------------------------------------------
+MExceptionLuaArguments::MExceptionLuaArguments(std::string desc, int nbArgs) :
+    desc(desc)
+{
+  this->desc = std::string("nb args:") + std::to_string(nbArgs) + std::string(":")
+      + "\n" + desc + "\n";
+}
+
+std::string MExceptionLuaArguments::what() const noexcept
+{
+  return desc;
 }
