@@ -17,7 +17,6 @@
 
 #include <vector>
 
-
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
@@ -44,9 +43,9 @@ void CNiveau::setEventMethods()
 {
   addAction<MTerrainEvents, MTypeCouche>(
       MTerrainEvents::COUCHE_LOADED, [this](MTypeCouche couche, Observed const& o)
-  {
-    vuePrincipale->setImg(couche,terrain.getImagesList(couche));
-  });
+      {
+        vuePrincipale->setImg(couche,terrain.getImagesList(couche));
+      });
 }
 
 //------------------------------------------------------------
@@ -65,6 +64,16 @@ std::string CNiveau::getLevelFolder() const
 void CNiveau::setLevelMainFile(std::string levelMainFile)
 {
   this->levelMainFile = levelMainFile;
+}
+
+MEntite* CNiveau::getEntite(std::string name)
+try
+{
+  return entites.at(name);
+}
+catch (...)
+{
+  return nullptr;
 }
 
 std::string CNiveau::getScript() const

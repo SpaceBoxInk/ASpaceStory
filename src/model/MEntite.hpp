@@ -49,8 +49,10 @@ public:
   std::string const & getNom() const;
 
   MTuile const * getTuile() const;
+  void setTuile(MTuile* tuile);
 
   float getTaille() const;
+  void setTaille(float taille);
 
 private:
 
@@ -82,4 +84,9 @@ inline MTuile const * MEntite::getTuile() const
 inline float MEntite::getTaille() const
 {
   return taille;
+}
+
+inline void MEntite::setTaille(float taille)
+{
+  this->taille = taille;
 }

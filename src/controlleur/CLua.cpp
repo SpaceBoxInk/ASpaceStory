@@ -35,6 +35,7 @@ CLua::CLua(CJeu* cJeu)
 
   registerBaseFunctions();
   registerTerrainFunctions();
+  registerEntiteFunctions();
 }
 
 CLua::~CLua()
@@ -76,6 +77,51 @@ int CLua::setScriptFolder(lua_State* l)
   return 0;
 }
 
+/**
+ * setPosition(string entiteName, int x, int y)
+ */
+int CLua::setPosition(lua_State* l)
+{
+  // FIXME : testNbArgs
+  std::string entiteName = lua_tostring(l, 1);
+  int x = lua_tonumber(l, 2);
+  int y = lua_tonumber(l, 3);
+
+  MEntite* e = cJeu->getEntite(entiteName);
+  if (e)
+  {
+    e->setTuile(&(cJeu->cNiveau.getTerrain()(x, y)));
+  }
+  else
+  {
+    throw MExceptionEntiteInexistante(entiteName);
+  }
+  return 0;
+}
+
+/**
+ * setTaille(string entiteName, int taille)
+ */
+int CLua::setTaille(lua_State* l)
+{
+  // FIXME : testNbArgs
+  std::string entiteName = lua_tostring(l, 1);
+  float taille = lua_tonumber(l, 2);
+
+  MEntite* e = cJeu->getEntite(entiteName);
+  if (e)
+  {
+    e->setTaille(taille);
+  }
+  return 0;
+}
+
+int CLua::getCurrentPerso(lua_State* l)
+{
+  lua_pushstring(l, cJeu->cPersonnage.getCurrentPerso()->getNom().c_str());
+  return 1;
+}
+
 void CLua::registerBaseFunctions()
 {
   lua_register(lua, "setScriptFolder", setScriptFolder);
@@ -84,6 +130,13 @@ void CLua::registerBaseFunctions()
 void CLua::registerTerrainFunctions()
 {
   lua_register(lua, "loadCouche", loadCouche);
+}
+
+void CLua::registerEntiteFunctions()
+{
+  lua_register(lua, "setTaille", setTaille);
+  lua_register(lua, "setPosition", setPosition);
+  lua_register(lua, "getCurrentPerso", getCurrentPerso);
 }
 
 void CLua::executeScript(std::string script)

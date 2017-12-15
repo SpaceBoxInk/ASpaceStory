@@ -24,6 +24,7 @@ class CNiveau : public Observer
 //========================>Attributes<========================
 private:
   MTerrain terrain;
+  std::map<std::string, MEntite*> entites;
   VPrimitif* vuePrincipale;
   /**
    * folder for level resources
@@ -45,6 +46,7 @@ private:
 
 //=========================>Methods<==========================
 public:
+  MEntite* getEntite(std::string name);
 private:
   void setEventMethods();
 //=====================>Getters&Setters<======================

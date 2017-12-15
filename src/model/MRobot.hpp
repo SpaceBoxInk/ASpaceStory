@@ -11,7 +11,13 @@
 
 #pragma once
 
-#include "MPersonnage.hpp"
+#include "MEntite.hpp"
+
+#include <string>
+
+class MTuile;
+
+class MPersonnage;
 
 class MRobot : public MEntite
 {
@@ -20,7 +26,7 @@ private:
   MPersonnage& proprietaire;
 //=======================>Constructors<=======================
 public:
-  MRobot();
+  MRobot(MPersonnage* proprietaire, std::string const& nom, MTuile* tuile, float taille);
   // TODO: rule of five ? copyandswap
   virtual ~MRobot();
 

@@ -35,7 +35,7 @@ private:
 
 //=========================>Methods<==========================
 public:
-
+  MEntite* getEntite(std::string name);
 private:
 
 //=====================>Getters&Setters<======================

@@ -100,3 +100,15 @@ public:
   virtual std::string what() const noexcept override;
 };
 
+class MExceptionEntiteInexistante : public MAssException
+{
+private:
+  std::string entite;
+public:
+  MExceptionEntiteInexistante(std::string entite);
+  // TODO: rule of five ? copyandswap
+  virtual ~MExceptionEntiteInexistante() = default;
+
+  virtual std::string what() const noexcept override;
+};
+

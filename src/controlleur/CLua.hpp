@@ -52,9 +52,15 @@ private:
   static int loadCouche(lua_State* l);
   static int setScriptFolder(lua_State* l);
 
+  static int setPosition(lua_State* l);
+  static int setTaille(lua_State* l);
+
+  static int getCurrentPerso(lua_State* l);
+
 //==================Register functions========================
   void registerBaseFunctions();
   void registerTerrainFunctions();
+  void registerEntiteFunctions();
 //======================Lua function helper===================
   void push(lua_State* l, lua_Number n);
   void push(lua_State* l, lua_String str);

@@ -95,3 +95,16 @@ std::string MExceptionFile::what() const noexcept
 {
   return "File " + file + " is not valid\nCauses : " + desc + '\n';
 }
+
+//------------------------------------------------------------
+//==============>MExceptionEntiteInexistante<=================
+//------------------------------------------------------------
+MExceptionEntiteInexistante::MExceptionEntiteInexistante(std::string entite) :
+    entite(entite)
+{
+}
+
+std::string MExceptionEntiteInexistante::what() const noexcept
+{
+  return "entite " + entite + "non présente !";
+}

@@ -23,9 +23,9 @@
 //------------------------------------------------------------
 
 MEntite::MEntite(std::string const& nom, MTuile* tuile, float taille) :
-    nom(nom), tuile(tuile), direction(0), taille(taille)
+    nom(nom), direction(0), taille(taille)
 {
-  tuile->placeEntite(this);
+  setTuile(tuile);
 }
 
 MEntite::~MEntite()
@@ -74,7 +74,16 @@ bool MEntite::isAccessible(MTuile const & tuile)
 {
   return this->tuile->isAdjacente(tuile);
 }
+
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
+void MEntite::setTuile(MTuile* tuile)
+{
+  this->tuile = tuile;
+  if (tuile)
+  {
+    tuile->placeEntite(this);
+  }
+}
 
