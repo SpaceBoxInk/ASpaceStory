@@ -73,6 +73,17 @@ void CPersonnage::setEventMethods()
         {
           personnage->deplacer(*terrain, MParameters::getMouvFromKey(inputChar));
         }
+        else if (MParameters::isActionKey(inputChar))
+        {
+          switch (MParameters::getActionFromKey(inputChar))
+          {
+            case MActionsKey::INTERACT_ENV_KEY:
+            personnage->interagirTuile(*terrain);
+            break;
+            default:
+            break;
+          }
+        }
 
       });
 }

@@ -54,7 +54,6 @@ private:
 //=====================>Getters&Setters<======================
 public:
   int getDirection() const;
-  void setDirection(int direction);
 
   std::string const & getNom() const;
 
@@ -63,6 +62,8 @@ public:
   float getTaille() const;
 
 private:
+  void setDirection(int direction);
+  void setDirection(Mouvement direction);
 
 };
 //------------------------------------------------------------
@@ -76,7 +77,13 @@ inline int MEntite::getDirection() const
 
 inline void MEntite::setDirection(int direction)
 {
+  // FIXME do something for negatives or fix direction to 4 positions
   this->direction = direction % 360;
+}
+
+inline void MEntite::setDirection(Mouvement direction)
+{
+  this->direction = MouvementT::getDirection(direction);
 }
 
 inline std::string const & MEntite::getNom() const
@@ -93,3 +100,4 @@ inline float MEntite::getTaille() const
 {
   return taille;
 }
+

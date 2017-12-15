@@ -55,6 +55,8 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
   // on peut avoir le deplacement (x, y) en fonction d'un element de l'enum ! :)
   using MouvementT::operator *;
 
+  // on set la direction peut importe si on peut aller sur la case
+  setDirection(deplacement);
   try
   {
     // on prend la position de la tuile, puis on ajoute le deplacement

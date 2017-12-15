@@ -79,12 +79,12 @@ bool MTuile::isAdjacente(MTuile const & tuileOther)
   using std::rel_ops::operator !=;
 
   int i = 0;
-  while (i < (int)Mouvement::SIZE
+  while (i < MouvementT::size()
       && *((Mouvement)i) + this->getPosition() != tuileOther.getPosition())
   {
     ++i;
   }
-  return i < (int)Mouvement::SIZE;
+  return i < MouvementT::size();
 }
 
 /**

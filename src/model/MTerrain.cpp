@@ -134,6 +134,7 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
         if (ID == 0 && type != MTypeCouche::SOL)
         {
           // le rien
+          tuiles[i]->deletePartieCouche(type);
           continue;
         }
         else if (ID == 0 && type == MTypeCouche::SOL)
@@ -212,7 +213,7 @@ std::vector<MTuile*> MTerrain::getAdjacentes(MTuile const & tuile)
   // we want to use operator(MCoordonnees)
   // (*this) : deref this,
   MTerrain& thisRef = *this;
-  for (int i = 0; i < (int)Mouvement::SIZE; ++i)
+  for (int i = 0; i < MouvementT::size(); ++i)
   {
     try
     {

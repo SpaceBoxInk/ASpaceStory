@@ -7,6 +7,7 @@
 
 #include "MCoordonnees.hpp"
 
+#include <array>
 #include <vector>
 
 // Methods
@@ -65,5 +66,12 @@ namespace MouvementT
 
     return mouvements.at((int)m);
   }
+
+  int getDirection(Mouvement m)
+  {
+    static std::array<int, MouvementT::size()> const directions = { 0, 180, 90, -90 };
+    return directions[int(m)];
+  }
+
 }
 
