@@ -11,9 +11,13 @@
 
 #pragma once
 
+#include <functional>
+#include <string>
+
+#include "MCompetence.hpp"
 #include "MCoordonnees.hpp"
 
-#include <string>
+class MInventaire;
 
 class MTerrain;
 class MTuile;
@@ -26,6 +30,10 @@ private:
   MTuile* tuile;
   int direction;
   float taille;
+  MCompetence competences;
+  MInventaire* inventaire;
+
+  std::function<void()> actionDefense;
 //=======================>Constructors<=======================
 public:
   MEntite(std::string const& nom, MTuile* tuile, float taille);
@@ -37,6 +45,7 @@ private:
 //=========================>Methods<==========================
 public:
   void deplacer(MTerrain& terrain, Mouvement const& deplacement);
+  void seDefendre(MEntite& attaquant, int degats);
 
 private:
   bool isAccessible(MTuile const& tuile);
@@ -45,12 +54,17 @@ private:
 public:
   int getDirection() const;
   void setDirection(int direction);
+  int defenseTotale() const;
+  void attaquer(MTerrain& terrain);
+  int forceTotale() const;
 
   std::string const & getNom() const;
 
   MTuile const * getTuile() const;
 
   float getTaille() const;
+
+  MCompetence const& getCompetences() const;
 
 private:
 

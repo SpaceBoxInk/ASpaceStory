@@ -52,6 +52,8 @@ private:
   static int loadCouche(lua_State* l);
   static int setScriptFolder(lua_State* l);
 
+  static int setDefense(lua_State* l);
+
 //==================Register functions========================
   void registerBaseFunctions();
   void registerTerrainFunctions();

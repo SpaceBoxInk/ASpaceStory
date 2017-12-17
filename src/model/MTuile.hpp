@@ -66,7 +66,7 @@ private:
 public:
   MCoordonnees const & getPosition() const;
   void deletePartieCouche(MTypeCouche typeCouche);
-  MEntite const& getEntite() const;
+  MEntite* getEntite();
   bool isEntitePresente();
   void placeEntite(MEntite* entite);
 
@@ -96,9 +96,9 @@ inline MCoordonnees const& MTuile::getPosition() const
   return position;
 }
 
-inline MEntite const & MTuile::getEntite() const
+inline MEntite* MTuile::getEntite()
 {
-  return *entite;
+  return entite;
 }
 
 /**

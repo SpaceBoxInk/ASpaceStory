@@ -76,6 +76,12 @@ int CLua::setScriptFolder(lua_State* l)
   return 0;
 }
 
+int CLua::setDefense(lua_State* l)
+{
+  // FIXME setDefense Lua
+  return 0;
+}
+
 void CLua::registerBaseFunctions()
 {
   lua_register(lua, "setScriptFolder", setScriptFolder);

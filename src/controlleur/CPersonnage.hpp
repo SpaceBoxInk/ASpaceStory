@@ -47,6 +47,7 @@ private:
 public:
   void launchPersonnage();
   void setPersonnage(std::string nom, MTuile* tuile, float taille);
+  void attaquer();
 private:
   void setEventMethods();
 
