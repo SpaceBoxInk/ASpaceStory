@@ -125,7 +125,6 @@ void VPrimitif::sendInput()
 void VPrimitif::setImg(MTypeCouche const& typeCouche,
                        std::vector<std::string const*> const& imgs)
 {
-  // todo Clear string pointer !
   switch (typeCouche) {
   case MTypeCouche::SOL:
     imgSols.clear();

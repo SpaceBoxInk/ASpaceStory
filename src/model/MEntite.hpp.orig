@@ -118,8 +118,10 @@ inline float MEntite::getTaille() const
   return taille;
 }
 
+<<<<<<< HEAD
+=======
 inline void MEntite::setTaille(float taille)
 {
   this->taille = taille;
 }
-
+>>>>>>> feature/robot

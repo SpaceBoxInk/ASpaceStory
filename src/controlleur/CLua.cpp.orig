@@ -91,6 +91,7 @@ int CLua::setScriptPath(lua_State* l)
 }
 
 /**
+<<<<<<< HEAD
  * return the current lua path and the current luaFile
  */
 int CLua::getScriptPath(lua_State* l)
@@ -126,10 +127,30 @@ int CLua::addActionDeclenchement(lua_State* l)
           }
         });
 
+=======
+ * setPosition(string entiteName, int x, int y)
+ */
+int CLua::setPosition(lua_State* l)
+{
+  // FIXME : testNbArgs
+  std::string entiteName = lua_tostring(l, 1);
+  int x = lua_tonumber(l, 2);
+  int y = lua_tonumber(l, 3);
+
+  MEntite* e = cJeu->getEntite(entiteName);
+  if (e)
+  {
+    e->setTuile(&(cJeu->cNiveau.getTerrain()(x, y)));
+  }
+  else
+  {
+    throw MExceptionEntiteInexistante(entiteName);
+>>>>>>> feature/robot
   }
   return 0;
 }
 
+<<<<<<< HEAD
 int CLua::addActionPassage(lua_State* l)
 {
   testArgs(4);
@@ -156,38 +177,7 @@ int CLua::addActionPassage(lua_State* l)
           }
         });
 
-  }
-  return 0;
-}
-
-int CLua::addActionDefense(lua_State* l)
-{
-  std::string entite = lua_tostring(l, 1);
-  return 0;
-}
-
-/**
- * setPosition(string entiteName, int x, int y)
- */
-int CLua::setPosition(lua_State* l)
-{
-  // FIXME : testNbArgs
-  std::string entiteName = lua_tostring(l, 1);
-  int x = lua_tonumber(l, 2);
-  int y = lua_tonumber(l, 3);
-
-  MEntite* e = cJeu->getEntite(entiteName);
-  if (e)
-  {
-    e->setTuile(&(cJeu->cNiveau.getTerrain()(x, y)));
-  }
-  else
-  {
-    throw MExceptionEntiteInexistante(entiteName);
-  }
-  return 0;
-}
-
+=======
 /**
  * setTaille(string entiteName, int taille)
  */
@@ -201,14 +191,22 @@ int CLua::setTaille(lua_State* l)
   if (e)
   {
     e->setTaille(taille);
+>>>>>>> feature/robot
   }
   return 0;
 }
 
+<<<<<<< HEAD
+int CLua::addActionDefense(lua_State* l)
+{
+  std::string entite = lua_tostring(l, 1);
+  return 0;
+=======
 int CLua::getCurrentPerso(lua_State* l)
 {
   lua_pushstring(l, cJeu->cPersonnage.getCurrentPerso()->getNom().c_str());
   return 1;
+>>>>>>> feature/robot
 }
 
 void CLua::registerBaseFunctions()

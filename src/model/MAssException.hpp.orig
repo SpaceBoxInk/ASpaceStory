@@ -102,6 +102,7 @@ public:
   virtual std::string what() const noexcept override;
 };
 
+<<<<<<< HEAD
 class MExceptionLuaArguments : public MAssException
 {
 private:
@@ -110,10 +111,7 @@ public:
   MExceptionLuaArguments(std::string desc, int nbArgs);
   // TODO: rule of five ? copyandswap
   virtual ~MExceptionLuaArguments() = default;
-
-  virtual std::string what() const noexcept override;
-};
-
+=======
 class MExceptionEntiteInexistante : public MAssException
 {
 private:
@@ -122,6 +120,7 @@ public:
   MExceptionEntiteInexistante(std::string entite);
   // TODO: rule of five ? copyandswap
   virtual ~MExceptionEntiteInexistante() = default;
+>>>>>>> feature/robot
 
   virtual std::string what() const noexcept override;
 };

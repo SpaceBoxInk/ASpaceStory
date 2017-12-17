@@ -38,10 +38,10 @@ CPersonnage::CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain) :
 
 CPersonnage::~CPersonnage()
 {
-  if (personnage)
+  if (currentPerso)
   {
-    delete personnage;
-    personnage = nullptr;
+    delete currentPerso;
+    currentPerso = nullptr;
   }
 }
 
@@ -50,7 +50,7 @@ void CPersonnage::launchPersonnage()
   vuePrincipale->setImg(MTypeCouche::SOL, terrain->getImagesList(MTypeCouche::SOL));
   do
   {
-    this->vuePrincipale->show((MCoordonnees)*personnage->getTuile());
+    this->vuePrincipale->show((MCoordonnees)*currentPerso->getTuile());
   } while (!quit);
 }
 
@@ -72,14 +72,14 @@ void CPersonnage::setEventMethods()
         }
         if (MParameters::isMouvKey(inputChar))
         {
-          personnage->deplacer(*terrain, MParameters::getMouvFromKey(inputChar));
+          currentPerso->deplacer(*terrain, MParameters::getMouvFromKey(inputChar));
         }
         else if (MParameters::isActionKey(inputChar))
         {
           switch (MParameters::getActionFromKey(inputChar))
           {
             case MActionsKey::INTERACT_ENV_KEY:
-            personnage->interagirTuile(*terrain);
+            currentPerso->interagirTuile(*terrain);
             break;
             default:
             break;
@@ -91,7 +91,7 @@ void CPersonnage::setEventMethods()
 
 void CPersonnage::attaquer()
 {
-  personnage->attaquer(*terrain);
+  currentPerso->attaquer(*terrain);
 }
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================

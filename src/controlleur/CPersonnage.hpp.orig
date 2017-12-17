@@ -49,11 +49,15 @@ private:
 //=========================>Methods<==========================
 public:
   void launchPersonnage();
-  bool setPersonnage(std::string nom);
+<<<<<<< HEAD
+  void setPersonnage(std::string nom, MTuile* tuile, float taille);
   void attaquer();
+=======
+  bool setPersonnage(std::string nom);
   MPersonnage* getPersonnage(std::string nom);
   MPersonnage* getCurrentPerso();
   void addPersonnage(std::string nom);
+>>>>>>> feature/robot
 private:
   void setEventMethods();
 

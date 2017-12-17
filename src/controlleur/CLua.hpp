@@ -58,9 +58,15 @@ private:
 
   static int addActionDefense(lua_State* l);
 
+  static int setPosition(lua_State* l);
+  static int setTaille(lua_State* l);
+
+  static int getCurrentPerso(lua_State* l);
+
 //==================Register functions========================
   void registerBaseFunctions();
   void registerTerrainFunctions();
+  void registerEntiteFunctions();
 //======================Lua function helper===================
   static void push(lua_Number n);
   static void push(lua_String str);

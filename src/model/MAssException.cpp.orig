@@ -104,6 +104,7 @@ std::string MExceptionFile::what() const noexcept
 }
 
 //------------------------------------------------------------
+<<<<<<< HEAD
 //=====================>MExceptionFile<=======================
 //------------------------------------------------------------
 MExceptionLuaArguments::MExceptionLuaArguments(std::string desc, int nbArgs) :
@@ -116,9 +117,7 @@ MExceptionLuaArguments::MExceptionLuaArguments(std::string desc, int nbArgs) :
 std::string MExceptionLuaArguments::what() const noexcept
 {
   return desc;
-}
-
-//------------------------------------------------------------
+=======
 //==============>MExceptionEntiteInexistante<=================
 //------------------------------------------------------------
 MExceptionEntiteInexistante::MExceptionEntiteInexistante(std::string entite) :
@@ -129,4 +128,5 @@ MExceptionEntiteInexistante::MExceptionEntiteInexistante(std::string entite) :
 std::string MExceptionEntiteInexistante::what() const noexcept
 {
   return "entite " + entite + "non présente !";
+>>>>>>> feature/robot
 }

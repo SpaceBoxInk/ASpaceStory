@@ -66,11 +66,11 @@ void CNiveau::setLevelMainFile(std::string levelMainFile)
   this->levelMainFile = levelMainFile;
 }
 
+<<<<<<< HEAD
 std::string CNiveau::getLevelMainFile()
 {
   return levelMainFile;
-}
-
+=======
 MEntite* CNiveau::getEntite(std::string name)
 try
 {
@@ -79,6 +79,7 @@ try
 catch (...)
 {
   return nullptr;
+>>>>>>> feature/robot
 }
 
 std::string CNiveau::getScript() const

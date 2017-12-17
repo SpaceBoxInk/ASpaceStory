@@ -1,33 +1,34 @@
 /**
- * @file MPersonnage.hpp
+ * @file MRobot.hpp
  *
  * Early optimization is the root of all evil
  * DRY ! Don't repeat yourself
  *
- *  @date 3 déc. 2017
+ *  @date 14 déc. 2017
  *  @author FederAndInk
  *  @brief TODO complete
  */
 
 #pragma once
 
-#include "MRobot.hpp"
+#include "MEntite.hpp"
 
 #include <string>
-#include <vector>
 
 class MTuile;
 
-class MPersonnage : public MEntite
+class MPersonnage;
+
+class MRobot : public MEntite
 {
 //========================>Attributes<========================
 private:
-  std::vector<MRobot> robots;
+  MPersonnage& proprietaire;
 //=======================>Constructors<=======================
 public:
-  MPersonnage(std::string const& nom);
+  MRobot(MPersonnage* proprietaire, std::string const& nom, MTuile* tuile, float taille);
   // TODO: rule of five ? copyandswap
-  virtual ~MPersonnage();
+  virtual ~MRobot();
 
 private:
 
@@ -42,3 +43,7 @@ public:
 private:
 
 };
+//------------------------------------------------------------
+//=====================>Implementations<======================
+//------------------------------------------------------------
+

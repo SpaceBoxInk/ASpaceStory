@@ -25,7 +25,11 @@
 //------------------------------------------------------------
 
 MEntite::MEntite(std::string const& nom, MTuile* tuile, float taille) :
-    nom(nom), direction(0), taille(taille), actionDefense(nullptr)
+<<<<<<< HEAD
+    nom(nom), tuile(tuile), direction(0), taille(taille), actionDefense(nullptr)
+=======
+    nom(nom), direction(0), taille(taille)
+>>>>>>> feature/robot
 {
   setTuile(tuile);
 }
@@ -106,6 +110,7 @@ bool MEntite::isAccessible(MTuile const & tuile)
   return this->tuile->isAdjacente(tuile);
 }
 
+<<<<<<< HEAD
 void MEntite::attaquer(MTerrain& terrain)
 try
 {
@@ -128,15 +133,11 @@ int MEntite::defenseTotale() const
 {
   return inventaire.getDefenseEquipement();
 }
+=======
+>>>>>>> feature/robot
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
-
-MCompetence const& MEntite::getCompetences() const
-{
-  return this->competences;
-}
-
 void MEntite::setTuile(MTuile* tuile)
 {
   this->tuile = tuile;
@@ -144,5 +145,10 @@ void MEntite::setTuile(MTuile* tuile)
   {
     tuile->placeEntite(this);
   }
+}
+
+MCompetence const& MEntite::getCompetences() const
+{
+  return this->competences;
 }
 
