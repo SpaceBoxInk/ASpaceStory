@@ -141,6 +141,13 @@ void MTuile::deletePartieCouche(MTypeCouche typeCouche)
   }
 }
 
+MPartieCouche* MTuile::mine(MEntite* entite)
+{
+  MPartieCouche* item = getPartieCouche(MTypeCouche::ELEMENT);
+  couches[(int)MTypeCouche::ELEMENT] = nullptr;
+  return item;
+}
+
 /**
  *
  * @param couche la couche de la tuile à set

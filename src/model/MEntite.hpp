@@ -47,6 +47,7 @@ public:
 
   void deplacer(MTerrain& terrain, Mouvement const& deplacement);
   void interagirTuile(MTerrain& terrain);
+  void mine(MTerrain& terrain);
 
 private:
   bool isAccessible(MTuile const& tuile);

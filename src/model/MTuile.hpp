@@ -61,6 +61,7 @@ public:
   bool deplacerEntiteVers(MTuile& tuileDst);
 
   void interagirTuile(MEntite* entite);
+  MPartieCouche* mine(MEntite* entite); // FIXME : to change by MItem !!!
 private:
   float getPlaceDispoOn(MTypeCouche const& typeCouche) const;
 

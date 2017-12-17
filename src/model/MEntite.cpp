@@ -78,16 +78,34 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
   }
 }
 
+/**
+ * interagi avec la tuile dans la #direction de l'entité\
+ * ex: appuie sur un bouton
+ * @param terrain le terrain ou est l'entité
+ */
 void MEntite::interagirTuile(MTerrain& terrain)
+try
 {
-  try
-  {
-    MTuile& tuileInt = terrain(tuile->getPosition() + getDirectionCoords());
-    tuileInt.interagirTuile(this);
-  }
-  catch (MExceptionOutOfTerrain& e)
-  {
-  }
+  MTuile& tuileInt = terrain(tuile->getPosition() + getDirectionCoords());
+  tuileInt.interagirTuile(this);
+}
+catch (MExceptionOutOfTerrain& e)
+{
+}
+
+/**
+ * mine la #MTuile devant l'entite (la couche 1 : #MTypeCouche::ELEMENT)
+ * @param terrain le terrain ou est l'entité
+ */
+void MEntite::mine(MTerrain& terrain)
+try
+{
+  MTuile& tuileInt = terrain(tuile->getPosition() + getDirectionCoords());
+  MPartieCouche* itemMined = tuileInt.mine(this); // FIXME change by MItem
+  // TODO : add to inventory
+}
+catch (MExceptionOutOfTerrain& e)
+{
 }
 
 bool MEntite::isAccessible(MTuile const & tuile)
