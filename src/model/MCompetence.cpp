@@ -38,12 +38,5 @@ void MCompetence::addVie(int vieAjoutee)
 
 void MCompetence::enleveVie(int vieEnlevee)
 {
-  if (this->vie - vieEnlevee > 0)
-  {
-    this->vie = this->vie - vieEnlevee;
-  }
-  else
-  {
-    //TODO: Maseltov que faire ?
-  }
+  this->vie = this->vie - vieEnlevee; // TODO : take in account the defense !
 }

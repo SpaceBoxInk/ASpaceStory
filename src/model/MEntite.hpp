@@ -28,6 +28,13 @@ class MEntite
 private:
   std::string nom;
   MTuile* tuile;
+  /**
+   * en degrée,
+   * 0 : en haut,
+   * 90 : droite
+   * -90 : gauche
+   * 180 : bas
+   */
   int direction;
   float taille;
   MCompetence competences;
@@ -44,8 +51,16 @@ private:
 
 //=========================>Methods<==========================
 public:
+  MCoordonnees getDirectionCoords();
+
   void deplacer(MTerrain& terrain, Mouvement const& deplacement);
+
+  void attaquer(MTerrain& terrain);
   void seDefendre(MEntite& attaquant, int degats);
+  void interagirTuile(MTerrain& terrain);
+
+  int defenseTotale() const;
+  int forceTotale() const;
 
 private:
   bool isAccessible(MTuile const& tuile);
@@ -53,10 +68,6 @@ private:
 //=====================>Getters&Setters<======================
 public:
   int getDirection() const;
-  void setDirection(int direction);
-  int defenseTotale() const;
-  void attaquer(MTerrain& terrain);
-  int forceTotale() const;
 
   std::string const & getNom() const;
 
@@ -67,6 +78,8 @@ public:
   MCompetence const& getCompetences() const;
 
 private:
+  void setDirection(int direction);
+  void setDirection(Mouvement direction);
 
 };
 //------------------------------------------------------------
@@ -80,7 +93,13 @@ inline int MEntite::getDirection() const
 
 inline void MEntite::setDirection(int direction)
 {
-  this->direction = direction;
+  // FIXME do something for negatives or fix direction to 4 positions
+  this->direction = direction % 360;
+}
+
+inline void MEntite::setDirection(Mouvement direction)
+{
+  this->direction = MouvementT::getDirection(direction);
 }
 
 inline std::string const & MEntite::getNom() const
@@ -97,3 +116,4 @@ inline float MEntite::getTaille() const
 {
   return taille;
 }
+

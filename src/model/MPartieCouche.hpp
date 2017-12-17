@@ -10,7 +10,10 @@
 
 #pragma once
 
+#include "MEntite.hpp"
+
 #include <array>
+#include <functional>
 #include <string>
 
 enum class MTypeCouche
@@ -41,6 +44,9 @@ private:
   std::string fichierImg;
   float placeDispo;
 
+  std::function<void(std::string entite)> actionPassage;
+  std::function<void(std::string entite)> actionDeclenchement;
+
 //=======================>Constructors<=======================
 public:
   MPartieCouche(MTypeCouche type, std::string name, std::string fichierImg, float placeDispo);
@@ -54,6 +60,8 @@ private:
 public:
 
   bool isTypeOf(MTypeCouche type) const;
+  void passageDe(MEntite* entite);
+  void declenchementDe(MEntite* entite);
 private:
 
 //=====================>Getters&Setters<======================
@@ -64,6 +72,12 @@ public:
   float getPlaceDispo() const;
 
   void setFichierImg(std::string const & fichierImg);
+
+  void setActionDeclenchement(std::function<void(std::string entite)> actionDeclenchement);
+  void setActionPassage(std::function<void(std::string entite)> actionPassage);
+  void unSetActionDeclenchement();
+  void unSetActionPassage();
+
 private:
 
 };
@@ -74,4 +88,26 @@ private:
 inline void MPartieCouche::setFichierImg(std::string const & fichierImg)
 {
   this->fichierImg = fichierImg;
+}
+
+inline void MPartieCouche::setActionDeclenchement(
+    std::function<void(std::string entite)> actionDeclenchement)
+{
+  this->actionDeclenchement = actionDeclenchement;
+}
+
+inline void MPartieCouche::setActionPassage(
+    std::function<void(std::string entite)> actionPassage)
+{
+  this->actionPassage = actionPassage;
+}
+
+inline void MPartieCouche::unSetActionDeclenchement()
+{
+  actionDeclenchement = nullptr;
+}
+
+inline void MPartieCouche::unSetActionPassage()
+{
+  actionPassage = nullptr;
 }

@@ -52,8 +52,10 @@ public:
   MTerrain& getTerrain();
 
   void setScriptFolder(std::string levelFolder);
-  std::string getLevelFolder() const;
+  std::string getScriptFolder() const;
   void setLevelMainFile(std::string levelMainFile);
+  std::string getLevelMainFile();
+
   std::string getScript() const;
 private:
 

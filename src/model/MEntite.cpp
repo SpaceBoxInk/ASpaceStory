@@ -10,7 +10,9 @@
  */
 
 #include "MEntite.hpp"
+
 #include "MAssException.hpp"
+#include "MInventaire.hpp"
 #include "MTerrain.hpp"
 #include "MTuile.hpp"
 
@@ -36,6 +38,12 @@ MEntite::~MEntite()
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------
+MCoordonnees MEntite::getDirectionCoords()
+{
+  int dir = (direction / 90);
+  return MCoordonnees(dir % 2, (dir - 1) % 2);
+}
+
 /**
  * Deplace l'entite de deplacement sur le terrain\
  * eg: avec deplacement == Mouvement::HAUT,\
@@ -50,6 +58,8 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
   // on peut avoir le deplacement (x, y) en fonction d'un element de l'enum ! :)
   using MouvementT::operator *;
 
+  // on set la direction peut importe si on peut aller sur la case
+  setDirection(deplacement);
   try
   {
     // on prend la position de la tuile, puis on ajoute le deplacement
@@ -74,27 +84,32 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
 void MEntite::seDefendre(MEntite& attaquant, int degats)
 {
   this->competences.enleveVie(degats - defenseTotale());
-  if (competences.getVie() != 0)
-  { // si l'entité est encore vivante
-    this->attaquer(attaquant);
-  }
-  else
-  {
-    // TODO: je sais pas
-  }
+  actionDefense();
 }
 
 int MEntite::defenseTotale() const
 {
-int defenseTotale = 0;
-for (MTypeEquipement i = MTypeEquipement::MAIN; i < MTypeEquipement::SIZE - 1; ++i)
-{
-  if (inventaire->estEquipe(i))
+  int defenseTotale = 0;
+  for (MTypeEquipement i = MTypeEquipement::MAIN; i < MTypeEquipement::SIZE - 1; ++i)
   {
+    if (inventaire->estEquipe(i))
+    {
       defenseTotale = defenseTotale + inventaire->getDefenseEquipement(i);
+    }
   }
+  return defenseTotale;
 }
-return defenseTotale;
+
+void MEntite::interagirTuile(MTerrain& terrain)
+{
+  try
+  {
+    MTuile& tuileInt = terrain(tuile->getPosition() + getDirectionCoords());
+    tuileInt.interagirTuile(this);
+  }
+  catch (MExceptionOutOfTerrain& e)
+  {
+  }
 }
 
 bool MEntite::isAccessible(MTuile const & tuile)
@@ -117,20 +132,19 @@ catch (MExceptionOutOfTerrain& e)
 
 int MEntite::forceTotale() const
 {
-int forceTotale = 0;
-for (MTypeEquipement i = MTypeEquipement::MAIN; i < MTypeEquipement::SIZE - 1; ++i)
-{
-  if (MEntite::inventaire->estEquipe(i))
+  int forceTotale = competences.getForce();
+  for (MTypeEquipement i = MTypeEquipement::MAIN; i < MTypeEquipement::SIZE - 1; ++i)
   {
-    forceTotale = forceTotale + MEntite::inventaire->getDegatEquipement(i);
+    if (inventaire->estEquipe(i))
+    {
+      forceTotale = forceTotale + inventaire->getDegatEquipement(i);
+    }
   }
-}
-return forceTotale;
+  return forceTotale;
 }
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
-
 
 MCompetence const& MEntite::getCompetences() const
 {

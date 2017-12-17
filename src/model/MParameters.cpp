@@ -8,6 +8,7 @@
 std::map<std::string, std::string> MParameters::conf;
 std::string MParameters::rootPath;
 std::map<char, Mouvement> MParameters::mouvKeys;
+std::map<char, MActionsKey> MParameters::keys;
 
 bool MParameters::checkConfFile(std::string path)
 {
@@ -33,6 +34,19 @@ void MParameters::setRootPath()
           throw "No config file found";
         }
 }
+
+char MParameters::getKeyFor(std::string const & action)
+{
+  if (conf[action] == "space")
+  {
+    return ' ';
+  }
+  else
+  {
+    return conf[action][0];
+  }
+}
+
 
 std::string const & MParameters::getRootPath()
 {
@@ -77,10 +91,12 @@ void MParameters::load(std::string exePath)
   file.close();
   //=========================================================================================
   // set configurations
-  mouvKeys[conf["upKey"][0]] = Mouvement::HAUT;
-  mouvKeys[conf["downKey"][0]] = Mouvement::BAS;
-  mouvKeys[conf["leftKey"][0]] = Mouvement::GAUCHE;
-  mouvKeys[conf["rightKey"][0]] = Mouvement::DROITE;
+  mouvKeys[getKeyFor("upKey")] = Mouvement::HAUT;
+  mouvKeys[getKeyFor("downKey")] = Mouvement::BAS;
+  mouvKeys[getKeyFor("leftKey")] = Mouvement::GAUCHE;
+  mouvKeys[getKeyFor("rightKey")] = Mouvement::DROITE;
+
+  keys[getKeyFor("interactEnvKey")] = MActionsKey::INTERACT_ENV_KEY;
 }
 
 std::string MParameters::getSolsPath()
@@ -123,10 +139,26 @@ Mouvement MParameters::getMouvFromKey(char key)
   return mouvKeys.at(key);
 }
 
+MActionsKey MParameters::getActionFromKey(char key)
+{
+  return keys.at(key);
+}
+
 bool MParameters::isMouvKey(char key)
 try
 {
   mouvKeys.at(key);
+  return true;
+}
+catch (...)
+{
+  return false;
+}
+
+bool MParameters::isActionKey(char key)
+try
+{
+  keys.at(key);
   return true;
 }
 catch (...)

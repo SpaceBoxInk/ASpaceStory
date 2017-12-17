@@ -50,7 +50,11 @@ public:
 
 private:
   static int loadCouche(lua_State* l);
-  static int setScriptFolder(lua_State* l);
+  static int setScriptPath(lua_State* l);
+  static int getScriptPath(lua_State* l);
+
+  static int addActionDeclenchement(lua_State* l);
+  static int addActionPassage(lua_State* l);
 
   static int setDefense(lua_State* l);
 
@@ -58,10 +62,12 @@ private:
   void registerBaseFunctions();
   void registerTerrainFunctions();
 //======================Lua function helper===================
-  void push(lua_State* l, lua_Number n);
-  void push(lua_State* l, lua_String str);
-  void push(lua_State* l, lua_CFunction f);
-  void push(lua_State* l, lua_Boolean b);
+  static void push(lua_Number n);
+  static void push(lua_String str);
+  static void push(lua_CFunction f);
+  static void push(lua_Boolean b);
+  static int getTop();
+  static void testArgs(int nbExcpected);
 
   template<class T>
   T getTableData(lua_State* l, char const* key, int paramNb = 1);
