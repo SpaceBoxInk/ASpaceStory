@@ -23,8 +23,9 @@
 //========================>static members<=========================
 //------------------------------------------------------------
 lua_State* CLua::lua = luaL_newstate();
-//------------------------------------------------------------
 CJeu* CLua::cJeu;
+
+//------------------------------------------------------------
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
@@ -158,9 +159,9 @@ int CLua::addActionPassage(lua_State* l)
   return 0;
 }
 
-int CLua::setDefense(lua_State* l)
+int CLua::addActionDefense(lua_State* l)
 {
-  // FIXME setDefense Lua
+  std::string entite = lua_tostring(l, 1);
   return 0;
 }
 

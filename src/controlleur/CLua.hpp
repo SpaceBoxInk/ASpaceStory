@@ -56,7 +56,7 @@ private:
   static int addActionDeclenchement(lua_State* l);
   static int addActionPassage(lua_State* l);
 
-  static int setDefense(lua_State* l);
+  static int addActionDefense(lua_State* l);
 
 //==================Register functions========================
   void registerBaseFunctions();

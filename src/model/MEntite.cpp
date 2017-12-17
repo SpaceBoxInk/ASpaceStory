@@ -25,10 +25,9 @@
 //------------------------------------------------------------
 
 MEntite::MEntite(std::string const& nom, MTuile* tuile, float taille) :
-    nom(nom), tuile(tuile), direction(0), taille(taille)
+    nom(nom), tuile(tuile), direction(0), taille(taille), actionDefense(nullptr)
 {
   tuile->placeEntite(this);
-  inventaire = new MInventaire();
 }
 
 MEntite::~MEntite()
@@ -84,20 +83,10 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
 void MEntite::seDefendre(MEntite& attaquant, int degats)
 {
   this->competences.enleveVie(degats - defenseTotale());
-  actionDefense();
-}
-
-int MEntite::defenseTotale() const
-{
-  int defenseTotale = 0;
-  for (MTypeEquipement i = MTypeEquipement::MAIN; i < MTypeEquipement::SIZE - 1; ++i)
+  if (actionDefense)
   {
-    if (inventaire->estEquipe(i))
-    {
-      defenseTotale = defenseTotale + inventaire->getDefenseEquipement(i);
-    }
+    actionDefense(attaquant.getNom(), degats);
   }
-  return defenseTotale;
 }
 
 void MEntite::interagirTuile(MTerrain& terrain)
@@ -132,15 +121,12 @@ catch (MExceptionOutOfTerrain& e)
 
 int MEntite::forceTotale() const
 {
-  int forceTotale = competences.getForce();
-  for (MTypeEquipement i = MTypeEquipement::MAIN; i < MTypeEquipement::SIZE - 1; ++i)
-  {
-    if (inventaire->estEquipe(i))
-    {
-      forceTotale = forceTotale + inventaire->getDegatEquipement(i);
-    }
-  }
-  return forceTotale;
+  return competences.getForce() + inventaire.getForceEquipement();
+}
+
+int MEntite::defenseTotale() const
+{
+  return inventaire.getDefenseEquipement();
 }
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================

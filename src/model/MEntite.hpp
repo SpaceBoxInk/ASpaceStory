@@ -11,13 +11,12 @@
 
 #pragma once
 
-#include <functional>
-#include <string>
-
 #include "MCompetence.hpp"
 #include "MCoordonnees.hpp"
+#include "MInventaire.hpp"
 
-class MInventaire;
+#include <functional>
+#include <string>
 
 class MTerrain;
 class MTuile;
@@ -38,9 +37,9 @@ private:
   int direction;
   float taille;
   MCompetence competences;
-  MInventaire* inventaire;
+  MInventaire inventaire;
 
-  std::function<void()> actionDefense;
+  std::function<void(std::string, int)> actionDefense;
 //=======================>Constructors<=======================
 public:
   MEntite(std::string const& nom, MTuile* tuile, float taille);

@@ -36,23 +36,24 @@ private:
 
 public:
 
-  //=======================>Constructors<=======================
-
+//=======================>Constructors<=======================
 public:
   MInventaire();
 
-  //=========================>Methods<==========================
-
-  //=====================>Getters&Setters<======================
-
+//=========================>Methods<==========================
+public:
+  int getForceEquipement() const;
+  int getDefenseEquipement() const;
+//=====================>Getters&Setters<======================
 public:
   int getDegatEquipement(MTypeEquipement typeEquip) const;
   int getDefenseEquipement(MTypeEquipement typeEquip) const;
   bool estEquipe(MTypeEquipement typeEquip) const;
 
-  //------------------------------------------------------------
-  //=====================>Implementations<======================
-  //------------------------------------------------------------
 };
+
+//------------------------------------------------------------
+//=====================>Implementations<======================
+//------------------------------------------------------------
 
 #endif /* SRC_MODEL_MINVENTAIRE_HPP_ */
