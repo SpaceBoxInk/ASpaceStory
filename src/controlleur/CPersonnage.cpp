@@ -54,7 +54,6 @@ void CPersonnage::launchPersonnage()
   } while (!quit);
 }
 
-
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------
@@ -81,6 +80,9 @@ void CPersonnage::setEventMethods()
             case MActionsKey::INTERACT_ENV_KEY:
             currentPerso->interagirTuile(*terrain);
             break;
+            case MActionsKey::ATTACK:
+            currentPerso->attaquer(*terrain);
+            break;
             default:
             break;
           }
@@ -89,10 +91,6 @@ void CPersonnage::setEventMethods()
       });
 }
 
-void CPersonnage::attaquer()
-{
-  currentPerso->attaquer(*terrain);
-}
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------

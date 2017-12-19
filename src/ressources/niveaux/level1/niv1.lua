@@ -1,8 +1,14 @@
 
 loadfile(getScriptPath() .. "testLoad.lua")();
 
-setTaille(getCurrentPerso(), 0.9);
-setPosition(getCurrentPerso(), 2, 2);
+setTaillePersonnage(getCurrentPerso(), 0.9);
+setPositionPersonnage(getCurrentPerso(), 2, 2);
+
+newEntity("test", 2, 1, 0.9)
+
+addActionDefense("test", function(entiteAtt, degat)
+	print("arg")
+end)
 
 addActionDeclenchement(10, 8, 0, function(entite)
   loadCouche("level1.2.nbg", 0)

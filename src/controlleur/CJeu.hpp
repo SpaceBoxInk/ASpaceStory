@@ -36,6 +36,7 @@ private:
 //=========================>Methods<==========================
 public:
   MEntite* getEntite(std::string name);
+  MPersonnage* getPersonnage(std::string name);
 private:
 
 //=====================>Getters&Setters<======================

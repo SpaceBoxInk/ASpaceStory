@@ -11,11 +11,13 @@
 
 #include "CNiveau.hpp"
 
+#include "../model/MAssException.hpp"
 #include "../model/MEvents.hpp"
 #include "../model/MPartieCouche.hpp"
 #include "../vue/VPrimitif.hpp"
 
-#include <vector>
+#include <utility>
+
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -74,11 +76,18 @@ std::string CNiveau::getLevelMainFile()
 MEntite* CNiveau::getEntite(std::string name)
 try
 {
-  return entites.at(name);
+  return &entites.at(name);
 }
 catch (...)
 {
   return nullptr;
+}
+
+void CNiveau::addEntite(std::string name, MTuile* tuile, float taille)
+{
+  auto [it, isInserted] = entites.try_emplace(name, name, tuile, taille);
+  if (!isInserted)
+    throw MExceptionEntiteDejaCreee(name);
 }
 
 std::string CNiveau::getScript() const

@@ -42,7 +42,7 @@ private:
   std::function<void(std::string, int)> actionDefense;
 //=======================>Constructors<=======================
 public:
-  MEntite(std::string const& nom, MTuile* tuile, float taille);
+  MEntite(std::string const& nom, MTuile* tuile = nullptr, float taille = 1);
   // TODO: rule of five ? copyandswap
   virtual ~MEntite();
 
@@ -50,8 +50,6 @@ private:
 
 //=========================>Methods<==========================
 public:
-  MCoordonnees getDirectionCoords();
-
   void deplacer(MTerrain& terrain, Mouvement const& deplacement);
 
   void attaquer(MTerrain& terrain);
@@ -78,6 +76,7 @@ public:
 
   MCompetence const& getCompetences() const;
 
+  void setActionDefense(std::function<void(std::string, int)> actionDefense);
 private:
   void setDirection(int direction);
   void setDirection(Mouvement direction);
@@ -92,10 +91,9 @@ inline int MEntite::getDirection() const
   return direction;
 }
 
-inline void MEntite::setDirection(int direction)
+inline void MEntite::setActionDefense(std::function<void(std::string, int)> actionDefense)
 {
-  // FIXME do something for negatives or fix direction to 4 positions
-  this->direction = direction % 360;
+  this->actionDefense = actionDefense;
 }
 
 inline void MEntite::setDirection(Mouvement direction)

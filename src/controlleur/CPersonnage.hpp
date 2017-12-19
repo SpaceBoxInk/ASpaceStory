@@ -9,13 +9,13 @@
 
 #pragma once
 
+#include "../model/MAssException.hpp"
 #include "../model/MPersonnage.hpp"
 #include "../outils/ObserverPattern/Observer.hpp"
 #include "../vue/VPrimitif.hpp"
 
 #include <map>
 #include <string>
-#include <utility>
 
 class MPersonnage;
 class MTuile;
@@ -92,7 +92,9 @@ inline MPersonnage* CPersonnage::getCurrentPerso()
 
 inline void CPersonnage::addPersonnage(std::string nom)
 {
-  personnages.emplace(nom, nom);
+auto [it, isInserted] = personnages.emplace(nom, nom);
+  if (!isInserted)
+    throw MExceptionEntiteDejaCreee(nom);
 }
 
 //------------------------------------------------------------

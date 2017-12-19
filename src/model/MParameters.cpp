@@ -97,6 +97,7 @@ void MParameters::load(std::string exePath)
   mouvKeys[getKeyFor("rightKey")] = Mouvement::DROITE;
 
   keys[getKeyFor("interactEnvKey")] = MActionsKey::INTERACT_ENV_KEY;
+  keys[getKeyFor("attackKey")] = MActionsKey::ATTACK;
 }
 
 std::string MParameters::getSolsPath()

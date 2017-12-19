@@ -23,13 +23,14 @@ extern "C"
 //=======================>MAssException<======================
 //------------------------------------------------------------
 
-MAssException::MAssException()
+MAssException::MAssException(std::string desc) :
+    desc(desc)
 {
 }
 
 std::string MAssException::what() const noexcept
 {
-  return "Exception from A Space Story game !\n";
+  return "Exception from A Space Story game !\nDescription : " + desc + "\n";
 }
 
 //------------------------------------------------------------
@@ -129,4 +130,14 @@ MExceptionEntiteInexistante::MExceptionEntiteInexistante(std::string entite) :
 std::string MExceptionEntiteInexistante::what() const noexcept
 {
   return "entite " + entite + "non présente !";
+}
+
+MExceptionEntiteDejaCreee::MExceptionEntiteDejaCreee(std::string entite) :
+    entite(entite)
+{
+}
+
+std::string MExceptionEntiteDejaCreee::what() const noexcept
+{
+  return "Entite " + entite + "déjà créée !!\n";
 }

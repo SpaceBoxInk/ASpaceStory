@@ -41,7 +41,12 @@ CJeu::~CJeu()
 MEntite* CJeu::getEntite(std::string name)
 {
   MEntite* ent = cNiveau.getEntite(name);
-  return ent ? ent : cPersonnage.getPersonnage(name);
+  return ent;
+}
+
+MPersonnage* CJeu::getPersonnage(std::string name)
+{
+  return cPersonnage.getPersonnage(name);
 }
 //------------------------------------------------------------
 //=========================>Methods<==========================

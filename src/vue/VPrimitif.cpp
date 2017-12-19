@@ -58,7 +58,7 @@ void clear(istream& in)
 }
 void clearScreen()
 {
-  if (!system("clear"))
+  if (system("clear"))
   {
     system("CLS");
   }

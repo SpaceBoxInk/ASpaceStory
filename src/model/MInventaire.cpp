@@ -9,26 +9,27 @@
 #include "MItem.hpp"
 
 
-MInventaire::MInventaire()
+MInventaire::MInventaire() :
+    equipement( { })
 {
-  // TODO : change that
-  MItem* a1 = new MItem();
-  MItem* a2 = new MItem();
-  MItem* a3 = new MItem();
-  MItem* a4 = new MItem();
-  MItem* a5 = new MItem();
-  equipement =
-  { a1, a2, a3, a4, a5};
 }
 
 int MInventaire::getDegatEquipement(MTypeEquipement typeEquip) const
 {
-  return this->equipement.at((int)typeEquip)->getDegats();
+  if (estEquipe(typeEquip))
+  {
+    return this->equipement.at((int)typeEquip)->getDegats();
+  }
+  return 0;
 }
 
 int MInventaire::getDefenseEquipement(MTypeEquipement typeEquip) const
 {
-  return this->equipement.at((int)typeEquip)->getProtection();
+  if (estEquipe(typeEquip))
+  {
+    return this->equipement.at((int)typeEquip)->getProtection();
+  }
+  return 0;
 }
 
 int MInventaire::getForceEquipement() const
@@ -59,7 +60,7 @@ int MInventaire::getDefenseEquipement() const
 
 bool MInventaire::estEquipe(MTypeEquipement typeEquip) const
 {
-  return this->equipement.at((int)typeEquip);
+  return typeEquip < MTypeEquipement::SIZE && this->equipement.at((int)typeEquip);
 }
 
 //===========================================================
@@ -77,8 +78,8 @@ MTypeEquipement operator -(MTypeEquipement lh, int rh)
   return (MTypeEquipement)((int)lh - rh);
 }
 
-MTypeEquipement operator ++(MTypeEquipement equip)
+MTypeEquipement operator ++(MTypeEquipement& equip)
 {
-  return (MTypeEquipement)((int)equip + 1);
+  return equip = (MTypeEquipement)((int)equip + 1);
 }
 

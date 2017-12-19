@@ -11,7 +11,6 @@
 #pragma once
 
 #include "MCoordonnees.hpp"
-#include "MPartieCouche.hpp"
 
 #include <string>
 #include <variant>
@@ -19,6 +18,8 @@
 struct lua_State;
 
 class MTuile;
+enum class MTypeCouche
+;
 
 /**
  * Exception generique du jeu
@@ -27,10 +28,10 @@ class MAssException
 {
 //========================>Attributes<========================
 private:
-
+  std::string desc;
 //=======================>Constructors<=======================
 public:
-  MAssException();
+  MAssException(std::string desc = "");
   // TODO: rule of five ? copyandswap
   virtual ~MAssException() = default;
 
@@ -74,8 +75,8 @@ public:
 class MExceptionInvalidTypeCouche : public MAssException
 {
 private:
-  MTypeCouche expectedType;
-  MTypeCouche type;
+  MTypeCouche const& expectedType;
+  MTypeCouche const& type;
 public:
   MExceptionInvalidTypeCouche(MTypeCouche expectedType, MTypeCouche type);
   // TODO: rule of five ? copyandswap
@@ -122,6 +123,18 @@ public:
   MExceptionEntiteInexistante(std::string entite);
   // TODO: rule of five ? copyandswap
   virtual ~MExceptionEntiteInexistante() = default;
+
+  virtual std::string what() const noexcept override;
+};
+
+class MExceptionEntiteDejaCreee : public MAssException
+{
+private:
+  std::string entite;
+public:
+  MExceptionEntiteDejaCreee(std::string entite);
+  // TODO: rule of five ? copyandswap
+  virtual ~MExceptionEntiteDejaCreee() = default;
 
   virtual std::string what() const noexcept override;
 };

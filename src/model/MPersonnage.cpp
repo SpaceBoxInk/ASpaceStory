@@ -22,7 +22,7 @@ class MTuile;
 //------------------------------------------------------------
 
 MPersonnage::MPersonnage(std::string const& nom) :
-    MEntite(nom, nullptr, 0)
+    MEntite(nom)
 {
 
 }

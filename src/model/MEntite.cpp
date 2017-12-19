@@ -37,12 +37,6 @@ MEntite::~MEntite()
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------
-MCoordonnees MEntite::getDirectionCoords()
-{
-  int dir = (direction / 90);
-  return MCoordonnees(dir % 2, (dir - 1) % 2);
-}
-
 /**
  * Deplace l'entite de deplacement sur le terrain\
  * eg: avec deplacement == Mouvement::HAUT,\
@@ -93,7 +87,8 @@ void MEntite::interagirTuile(MTerrain& terrain)
 {
   try
   {
-    MTuile& tuileInt = terrain(tuile->getPosition() + getDirectionCoords());
+    MTuile& tuileInt = terrain(
+        tuile->getPosition() + MouvementT::getDirectionCoords(direction));
     tuileInt.interagirTuile(this);
   }
   catch (MExceptionOutOfTerrain& e)
@@ -109,8 +104,9 @@ bool MEntite::isAccessible(MTuile const & tuile)
 void MEntite::attaquer(MTerrain& terrain)
 try
 {
-  MEntite* entiteCible = terrain(getTuile()->getPosition()).getEntite(); // FIXME : add direction
-  if (entiteCible != nullptr)
+  MEntite* entiteCible = terrain(
+      getTuile()->getPosition() + MouvementT::getDirectionCoords(direction)).getEntite(); // FIXME : add direction
+  if (entiteCible)
   {
     entiteCible->seDefendre(*this, this->forceTotale());
   }
@@ -146,3 +142,12 @@ void MEntite::setTuile(MTuile* tuile)
   }
 }
 
+void MEntite::setDirection(int direction)
+{
+  // FIXME do something for negatives or fix direction to 4 positions
+  if (direction != 0 || direction != 90 || direction != -90 || direction != 180)
+  {
+    throw MAssException("Direction not viable ! : " + std::to_string(direction));
+  }
+  this->direction = direction % 360;
+}

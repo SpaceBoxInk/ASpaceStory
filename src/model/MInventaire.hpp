@@ -25,7 +25,7 @@ enum class MTypeEquipement
 
 bool operator<(MTypeEquipement lh, MTypeEquipement rh);
 MTypeEquipement operator-(MTypeEquipement lh, int rh);
-MTypeEquipement operator++(MTypeEquipement equip);
+MTypeEquipement operator++(MTypeEquipement& equip);
 
 class MInventaire
 {

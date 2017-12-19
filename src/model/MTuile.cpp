@@ -31,7 +31,7 @@
 MTuile::MTuile(MCoordonnees const& position,
                std::string nameCoucheSol, std::string fichierImg,
                float placeDispoSol) :
-    couches( { nullptr }), position(position), entite(nullptr)
+    couches( { }), position(position), entite(nullptr)
 {
   setPartieCouche(MTypeCouche::SOL, nameCoucheSol, fichierImg, placeDispoSol);
 }
