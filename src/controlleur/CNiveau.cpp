@@ -11,11 +11,12 @@
 
 #include "CNiveau.hpp"
 
+#include "../model/MAssException.hpp"
 #include "../model/MEvents.hpp"
 #include "../model/MPartieCouche.hpp"
 #include "../vue/VPrimitif.hpp"
 
-#include <vector>
+#include <utility>
 
 
 //------------------------------------------------------------
@@ -44,9 +45,9 @@ void CNiveau::setEventMethods()
 {
   addAction<MTerrainEvents, MTypeCouche>(
       MTerrainEvents::COUCHE_LOADED, [this](MTypeCouche couche, Observed const& o)
-  {
-    vuePrincipale->setImg(couche,terrain.getImagesList(couche));
-  });
+      {
+        vuePrincipale->setImg(couche,terrain.getImagesList(couche));
+      });
 }
 
 //------------------------------------------------------------
@@ -57,7 +58,7 @@ void CNiveau::setScriptFolder(std::string levelFolder)
   this->levelFolder = levelFolder;
 }
 
-std::string CNiveau::getLevelFolder() const
+std::string CNiveau::getScriptFolder() const
 {
   return MParameters::getLevelPath() + levelFolder + "/";
 }
@@ -65,6 +66,28 @@ std::string CNiveau::getLevelFolder() const
 void CNiveau::setLevelMainFile(std::string levelMainFile)
 {
   this->levelMainFile = levelMainFile;
+}
+
+std::string CNiveau::getLevelMainFile()
+{
+  return levelMainFile;
+}
+
+MEntite* CNiveau::getEntite(std::string name)
+try
+{
+  return &entites.at(name);
+}
+catch (...)
+{
+  return nullptr;
+}
+
+void CNiveau::addEntite(std::string name, MTuile* tuile, float taille)
+{
+  auto [it, isInserted] = entites.try_emplace(name, name, tuile, taille);
+  if (!isInserted)
+    throw MExceptionEntiteDejaCreee(name);
 }
 
 std::string CNiveau::getScript() const

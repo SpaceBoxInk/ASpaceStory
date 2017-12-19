@@ -23,6 +23,12 @@ enum class Lang
   FR, //!< FR
 };
 
+enum class MActionsKey
+{
+  INTERACT_ENV_KEY,
+  ATTACK,
+};
+
 /**
  * List of parameters for editor
  */
@@ -36,6 +42,7 @@ private:
   static std::string rootPath;
 
   static std::map<char, Mouvement> mouvKeys;
+  static std::map<char, MActionsKey> keys;
 
 //========================>Methods<========================
 private:
@@ -43,6 +50,7 @@ private:
 
   static void setRootPath();
 
+  static char getKeyFor(std::string const& action);
 public:
   static std::string const& getRootPath();
 
@@ -58,7 +66,9 @@ public:
   static std::string getCielsPath();
 
   static Mouvement getMouvFromKey(char key);
+  static MActionsKey getActionFromKey(char key);
   static bool isMouvKey(char key);
+  static bool isActionKey(char key);
 
   static void load(std::string exePath);
 };

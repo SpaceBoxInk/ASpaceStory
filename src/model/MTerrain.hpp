@@ -67,7 +67,7 @@ public:
 
   std::vector<std::string const*> getImagesList(MTypeCouche typeCouche) const;
 
-
+  MEntite* procheEntite(MCoordonnees coordonneeJoueur);
   MCoordonnees toCoords(int index);
 private:
   static void loadSpecificPath(std::string fichier, MTypeCouche const& type);

@@ -31,7 +31,7 @@
 MTuile::MTuile(MCoordonnees const& position,
                std::string nameCoucheSol, std::string fichierImg,
                float placeDispoSol) :
-    couches( { nullptr }), position(position), entite(nullptr)
+    couches( { }), position(position), entite(nullptr)
 {
   setPartieCouche(MTypeCouche::SOL, nameCoucheSol, fichierImg, placeDispoSol);
 }
@@ -79,12 +79,12 @@ bool MTuile::isAdjacente(MTuile const & tuileOther)
   using std::rel_ops::operator !=;
 
   int i = 0;
-  while (i < (int)Mouvement::SIZE
+  while (i < MouvementT::size()
       && *((Mouvement)i) + this->getPosition() != tuileOther.getPosition())
   {
     ++i;
   }
-  return i < (int)Mouvement::SIZE;
+  return i < MouvementT::size();
 }
 
 /**
@@ -107,6 +107,17 @@ bool MTuile::deplacerEntiteVers(MTuile& tuileDst)
   }
   // SEE : we can throw
   return false;
+}
+
+void MTuile::interagirTuile(MEntite* entite)
+{
+  for (int i = 0; i < (int)MTypeCouche::SIZE; ++i)
+  {
+    if (getPartieCouche((MTypeCouche)i))
+    {
+      getPartieCouche((MTypeCouche)i)->declenchementDe(entite);
+    }
+  }
 }
 
 float MTuile::getPlaceDispoOn(MTypeCouche const & typeCouche) const

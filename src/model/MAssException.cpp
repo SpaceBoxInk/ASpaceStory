@@ -12,17 +12,25 @@
 #include "MPartieCouche.hpp"
 #include "MTuile.hpp"
 
+extern "C"
+{
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+}
+
 //------------------------------------------------------------
 //=======================>MAssException<======================
 //------------------------------------------------------------
 
-MAssException::MAssException()
+MAssException::MAssException(std::string desc) :
+    desc(desc)
 {
 }
 
 std::string MAssException::what() const noexcept
 {
-  return "Exception from A Space Story game !\n";
+  return "Exception from A Space Story game !\nDescription : " + desc + "\n";
 }
 
 //------------------------------------------------------------
@@ -94,4 +102,42 @@ MExceptionFile::MExceptionFile(std::string file, std::string desc) :
 std::string MExceptionFile::what() const noexcept
 {
   return "File " + file + " is not valid\nCauses : " + desc + '\n';
+}
+
+//------------------------------------------------------------
+//=====================>MExceptionFile<=======================
+//------------------------------------------------------------
+MExceptionLuaArguments::MExceptionLuaArguments(std::string desc, int nbArgs) :
+    desc(desc)
+{
+  this->desc = std::string("nb args:") + std::to_string(nbArgs) + std::string(":")
+      + "\n" + desc + "\n";
+}
+
+std::string MExceptionLuaArguments::what() const noexcept
+{
+  return desc;
+}
+
+//------------------------------------------------------------
+//==============>MExceptionEntiteInexistante<=================
+//------------------------------------------------------------
+MExceptionEntiteInexistante::MExceptionEntiteInexistante(std::string entite) :
+    entite(entite)
+{
+}
+
+std::string MExceptionEntiteInexistante::what() const noexcept
+{
+  return "entite " + entite + "non présente !";
+}
+
+MExceptionEntiteDejaCreee::MExceptionEntiteDejaCreee(std::string entite) :
+    entite(entite)
+{
+}
+
+std::string MExceptionEntiteDejaCreee::what() const noexcept
+{
+  return "Entite " + entite + "déjà créée !!\n";
 }

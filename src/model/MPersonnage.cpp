@@ -11,6 +11,8 @@
 
 #include "MPersonnage.hpp"
 
+class MTuile;
+
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
@@ -19,14 +21,18 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MPersonnage::MPersonnage(std::string const& nom, MTuile* tuile, float taille) :
-    MEntite(nom, tuile, taille)
+MPersonnage::MPersonnage(std::string const& nom) :
+    MEntite(nom)
 {
+
 }
 
 MPersonnage::~MPersonnage()
 {
 }
+
+
+
 
 //------------------------------------------------------------
 //=========================>Methods<==========================

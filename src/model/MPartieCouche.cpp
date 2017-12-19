@@ -10,6 +10,8 @@
 
 #include "MPartieCouche.hpp"
 
+#include <iostream>
+
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
@@ -36,6 +38,23 @@ bool MPartieCouche::isTypeOf(MTypeCouche type) const
 {
   return getType() == type;
 }
+
+void MPartieCouche::passageDe(MEntite* entite)
+{
+  if (actionPassage)
+  {
+    actionPassage(entite->getNom());
+  }
+}
+
+void MPartieCouche::declenchementDe(MEntite* entite)
+{
+  if (actionDeclenchement)
+  {
+    actionDeclenchement(entite->getNom());
+  }
+}
+
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
