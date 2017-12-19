@@ -101,6 +101,13 @@ int CLua::getScriptPath(lua_State* l)
   return 2;
 }
 
+int CLua::loadfile(lua_State* l)
+{
+  std::string file = cJeu->cNiveau.getScriptFolder() + lua_tostring(l, 1);
+  luaL_loadfile(l, file.c_str());
+  return 1;
+}
+
 int CLua::addActionDeclenchement(lua_State* l)
 {
   testArgs(4);
@@ -272,6 +279,7 @@ void CLua::registerBaseFunctions()
 {
   lua_register(lua, "setScriptPath", setScriptPath);
   lua_register(lua, "getScriptPath", getScriptPath);
+  lua_register(lua, "loadfile", loadfile);
 }
 
 void CLua::registerTerrainFunctions()

@@ -1,5 +1,5 @@
 
-loadfile(getScriptPath() .. "testLoad.lua")();
+loadfile("testLoad.lua")();
 
 setTaillePersonnage(getCurrentPerso(), 0.9);
 setPositionPersonnage(getCurrentPerso(), 2, 2);
