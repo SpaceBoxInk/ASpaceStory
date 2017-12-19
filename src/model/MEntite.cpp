@@ -25,7 +25,7 @@
 //------------------------------------------------------------
 
 MEntite::MEntite(std::string const& nom, MTuile* tuile, float taille) :
-    nom(nom), direction(0), taille(taille), actionDefense(nullptr)
+    nom(nom), direction(0), taille(taille), inventaire(70), actionDefense(nullptr)
 {
   setTuile(tuile);
 }

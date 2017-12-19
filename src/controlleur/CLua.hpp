@@ -13,10 +13,14 @@
 
 #include <exception>
 #include <cxxabi.h>
-#include <luaconf.h>
 #include <any>
 #include <iostream>
+#include <string>
 #include <typeinfo>
+
+#include "/usr/local/Cellar/lua/5.3.4_2/include/luaconf.h"
+
+class MItem;
 
 class CJeu;
 class MTuile;
@@ -37,6 +41,8 @@ class CLua
 private:
   static lua_State* lua;
   static CJeu* cJeu;
+  static MItem* item;
+
 //=======================>Constructors<=======================
 public:
   CLua(CJeu* cJeu);
@@ -66,6 +72,7 @@ private:
 
   static int getCurrentPerso(lua_State* l);
 
+  static int newItem(lua_State* l);
 //==================Register functions========================
   void registerBaseFunctions();
   void registerTerrainFunctions();

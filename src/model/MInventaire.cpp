@@ -6,11 +6,15 @@
  */
 
 #include "MInventaire.hpp"
+
+#include <algorithm>
+#include <iterator>
+#include <string>
+
 #include "MItem.hpp"
 
-
-MInventaire::MInventaire() :
-    equipement( { })
+MInventaire::MInventaire(int taille) :
+    equipement( { }), taille(taille)
 {
 }
 
@@ -63,6 +67,24 @@ bool MInventaire::estEquipe(MTypeEquipement typeEquip) const
   return typeEquip < MTypeEquipement::SIZE && this->equipement.at((int)typeEquip);
 }
 
+
+void MInventaire::ajouterItem(MItem* item)
+{
+  if (this->items.size() < this->taille)
+  {
+    items.push_back(item);
+  }
+}
+
+void MInventaire::supprimerItem(Id const& idItem)
+{
+  auto item = std::find_if(items.begin(), items.end(), [idItem](MItem* i) -> bool
+  {
+    return i->getId() == idItem;
+  });
+  items.erase(item);
+}
+
 //===========================================================
 //====================>MTypeEquipement<======================
 //===========================================================
@@ -71,7 +93,6 @@ bool operator <(MTypeEquipement lh, MTypeEquipement rh)
 {
   return (int)lh < (int)rh;
 }
-
 
 MTypeEquipement operator -(MTypeEquipement lh, int rh)
 {
@@ -82,4 +103,3 @@ MTypeEquipement operator ++(MTypeEquipement& equip)
 {
   return equip = (MTypeEquipement)((int)equip + 1);
 }
-

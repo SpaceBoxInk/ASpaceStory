@@ -9,8 +9,10 @@
 #define SRC_MODEL_MINVENTAIRE_HPP_
 
 #include <array>
+#include <vector>
 
 class MItem;
+using Id = unsigned long long int;
 
 enum class MTypeEquipement
 {
@@ -33,22 +35,29 @@ class MInventaire
 
 private:
   std::array<MItem*, 5> equipement;
+  std::vector<MItem*> items;
+  unsigned int taille;
 
 public:
 
 //=======================>Constructors<=======================
 public:
-  MInventaire();
+  MInventaire(int taille);
 
 //=========================>Methods<==========================
 public:
   int getForceEquipement() const;
   int getDefenseEquipement() const;
-//=====================>Getters&Setters<======================
+  void supprimerItem(Id const& idItem);
+  bool estEquipe(MTypeEquipement typeEquip) const;
+  void ajouterItem(MItem* item);
+  // ToDO : getEquipement
+
+  //=====================>Getters&Setters<======================
+
 public:
   int getDegatEquipement(MTypeEquipement typeEquip) const;
   int getDefenseEquipement(MTypeEquipement typeEquip) const;
-  bool estEquipe(MTypeEquipement typeEquip) const;
 
 };
 

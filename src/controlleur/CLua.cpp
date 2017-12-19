@@ -10,14 +10,15 @@
  */
 
 #include "CLua.hpp"
-#include "CJeu.hpp"
-#include "CNiveau.hpp"
 
 #include "../model/MAssException.hpp"
+#include "../model/MInventaire.hpp"
+#include "../model/MItem.hpp"
 #include "../model/MPartieCouche.hpp"
 #include "../model/MTerrain.hpp"
-
-#include <string>
+#include "../model/MTuile.hpp"
+#include "CJeu.hpp"
+#include "CNiveau.hpp"
 
 //------------------------------------------------------------
 //========================>static members<=========================
@@ -344,6 +345,46 @@ void CLua::push(int n)
 int CLua::getTop()
 {
   return lua_gettop(lua);
+}
+
+int CLua::newItem(lua_State* l)
+{
+  std::string nom = lua_tostring(l, 1);
+  std::string description = lua_tostring(l, 2);
+  int degats;
+  MTypeEquipement equipement;
+  int protection;
+  bool supprimable;
+  MItem* item;
+  switch (getTop()) {
+  case 6:
+    degats = lua_tointeger(l, 3);
+    equipement = (MTypeEquipement)lua_tointeger(l, 4);
+    protection = lua_tointeger(l, 5);
+    supprimable = lua_toboolean(l, 6);
+    item = new MItem(nom, description, equipement, degats, protection, supprimable);
+    break;
+  case 5:
+    degats = lua_tointeger(l, 3);
+    equipement = (MTypeEquipement)lua_tointeger(l, 4);
+    protection = lua_tointeger(l, 5);
+    item = new MItem(nom, description, equipement, degats, protection);
+    break;
+  case 4:
+    degats = lua_tointeger(l, 3);
+    equipement = (MTypeEquipement)lua_tointeger(l, 4);
+    item = new MItem(nom, description, equipement, degats);
+    break;
+  case 3:
+    equipement = (MTypeEquipement)lua_tointeger(l, 3);
+    item = new MItem(nom, description, equipement);
+    break;
+  case 2:
+    item = new MItem(nom, description);
+    break;
+
+  }
+  return 0;
 }
 
 void CLua::testArgs(int nbExcpected)
