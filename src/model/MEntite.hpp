@@ -58,6 +58,7 @@ public:
 
   int defenseTotale() const;
   int forceTotale() const;
+  void addItemToInventaire(MItem* item);
 
 private:
   bool isAccessible(MTuile const& tuile);

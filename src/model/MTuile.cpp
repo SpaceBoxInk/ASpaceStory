@@ -129,6 +129,11 @@ float MTuile::getPlaceDispoOn(MTypeCouche const & typeCouche) const
   return MPartieCouche::PLACE_MAX;
 }
 
+void MTuile::addItem(MItem* item)
+{
+  this->items.push_back(item);
+}
+
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------

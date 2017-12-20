@@ -73,15 +73,23 @@ private:
   static int getCurrentPerso(lua_State* l);
 
   static int newItem(lua_State* l);
+  static int giveNewItemTo(lua_State* l);
+
+  static int addActionUtilisation(lua_State* l);
+
+
+
 //==================Register functions========================
   void registerBaseFunctions();
   void registerTerrainFunctions();
   void registerEntiteFunctions();
+  void registerItemFunctions();
 //======================Lua/ASS function helper===================
   static MTuile* getTuile(int index);
 //======================Lua function helper===================
   static void push(lua_Number n);
   static void push(lua_Integer n);
+  static void push(lua_Unsigned n);
   static void push(int n);
   static void push(lua_String str);
   static void push(lua_CFunction f);

@@ -124,6 +124,11 @@ int MEntite::defenseTotale() const
 {
   return inventaire.getDefenseEquipement();
 }
+
+void MEntite::addItemToInventaire(MItem* item)
+{
+  this->inventaire.ajouterItem(item);
+}
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
@@ -132,6 +137,8 @@ MCompetence const& MEntite::getCompetences() const
 {
   return this->competences;
 }
+
+
 
 void MEntite::setTuile(MTuile* tuile)
 {

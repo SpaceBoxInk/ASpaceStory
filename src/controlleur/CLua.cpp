@@ -25,7 +25,7 @@
 //------------------------------------------------------------
 lua_State* CLua::lua = luaL_newstate();
 CJeu* CLua::cJeu;
-
+MItem* CLua::item = nullptr;
 //------------------------------------------------------------
 //=======================>Constructors<=======================
 //------------------------------------------------------------
@@ -38,6 +38,7 @@ CLua::CLua(CJeu* cJeu)
   registerBaseFunctions();
   registerTerrainFunctions();
   registerEntiteFunctions();
+  registerItemFunctions();
 }
 
 CLua::~CLua()
@@ -294,6 +295,13 @@ void CLua::registerEntiteFunctions()
   lua_register(lua, "addActionDefense", addActionDefense);
 }
 
+void CLua::registerItemFunctions()
+{
+  lua_register(lua, "newItem", newItem);
+  lua_register(lua, "giveNewItemTo", giveNewItemTo);
+  lua_register(lua, "addActionUtilisation", addActionUtilisation);
+}
+
 void CLua::executeScript(std::string script)
 {
   luaL_dofile(lua, script.c_str());
@@ -337,6 +345,11 @@ void CLua::push(lua_Integer n)
   lua_pushinteger(lua, n);
 }
 
+void CLua::push(lua_Unsigned n)
+{
+  lua_pushinteger(lua, n);
+}
+
 void CLua::push(int n)
 {
   lua_pushinteger(lua, n);
@@ -355,7 +368,6 @@ int CLua::newItem(lua_State* l)
   MTypeEquipement equipement;
   int protection;
   bool supprimable;
-  MItem* item;
   switch (getTop()) {
   case 6:
     degats = lua_tointeger(l, 3);
@@ -382,7 +394,55 @@ int CLua::newItem(lua_State* l)
   case 2:
     item = new MItem(nom, description);
     break;
+  }
+  push(item->getId());
+  return 1;
+}
 
+/**
+ * char : 't' : tuile, 'e' : entite, 'p' : personnage
+ */
+int CLua::giveNewItemTo(lua_State* l)
+{
+  char destinataire = lua_tostring(l, 1)[0];
+  if (destinataire == 'e' || destinataire == 'p')
+  {
+    testArgs(2);
+    std::string nomEntite = lua_tostring(l, 2);
+    cJeu->getEntite(nomEntite)->addItemToInventaire(item);
+  }
+  else
+  {
+    testArgs(3);
+    int x = lua_tointeger(l, 2);
+    int y = lua_tointeger(l, 3);
+    cJeu->cNiveau.getTerrain()(x, y).addItem(item);
+  }
+  item = nullptr;
+  return 0;
+}
+
+/**
+ * addActionUtilisation(luaFunction)
+ */
+int CLua::addActionUtilisation(lua_State* l)
+{
+  testArgs(1);
+  if (lua_isfunction(l, -1))
+  {
+    // store function
+    int curIndex = luaL_ref(l, LUA_REGISTRYINDEX);
+    item->setActionUtilisation([&](std::string entite)
+    {
+      // get function previously stored in special lua table registry
+        lua_rawgeti(l, LUA_REGISTRYINDEX, curIndex);
+        if (lua_isfunction(l, -1))
+        {
+          push(entite.c_str());
+          // call function defined by lua
+          lua_call(l, 1, 0);
+        }
+      });
   }
   return 0;
 }
