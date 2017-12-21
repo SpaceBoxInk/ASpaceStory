@@ -4,8 +4,20 @@
  *  Created on: 15 déc. 2017
  *      Author: lordofkawaiii
  */
-#include "wxSFMLCanevas.hpp"
+
 #include "Tilemap.cpp"
+#include "VPrimitif.hpp"
+#include "wxSFMLCanevas.hpp"
+
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <wx/event.h>
+#include <wx/gdicmn.h>
+#include <wx/windowid.h>
+#include <map>
+#include <string>
+#include <vector>
+
 class Canvas : public wxSfmlCanvas
 {
   //========================>Attributes<========================
@@ -15,12 +27,12 @@ private:
   TileMap sky;
   int x;
   int y;
-  std::vector<sf::Texture*> texture;
+  std::vector<sf::Texture> texture;
   std::map<std::string, sf::Sprite> sprites;
   //=======================>Constructors<=======================
 public:
   Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, long style = 0);
-
+  virtual ~Canvas();
   virtual void onUpdate();
 
   //=========================>Methods<==========================
@@ -38,13 +50,13 @@ private:
   void onRight(wxMouseEvent& event);
   //=====================>Getters&Setters<======================
 public:
-  TileMap getGround();
-  TileMap getObj();
-  TileMap getSky();
-  sf::Texture getTexture();
-  void setTexture(std::string file);
+  TileMap& getGround();
+  TileMap& getObj();
+  TileMap& getSky();
+  sf::Texture& getTexture(int index);
+  void setTexture(std::string const& file);
   int getX();
   int getY();
-  std::map<std::string, sf::Sprite> getSprites();
+  std::map<std::string, sf::Sprite>& getSprites();
 private:
 };

@@ -17,12 +17,12 @@ struct AppFrame : public wxFrame
 
   wxPanel* getPanel();
 
-  unique_ptr<wxPanel> _panel;
-  unique_ptr<Canvas> _canvas;
+  wxPanel* _panel;
+  Canvas* _canvas;
   wxPanel* _panel2;
 };
 
 inline wxPanel* AppFrame::getPanel()
 {
-  return _panel.get();
+  return _panel;
 }

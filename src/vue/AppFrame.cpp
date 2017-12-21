@@ -26,7 +26,7 @@ wxFrame(NULL, wxID_ANY, title, pos, size),
 
   wxBoxSizer* hbox = new wxBoxSizer(wxVERTICAL);
 
-  hbox->Add(getCaneva(), 10, wxEXPAND);
+  hbox->Add(_canvas, 10, wxEXPAND);
   hbox->Add(_panel2, 1, wxEXPAND);
   this->SetSizer(hbox);
 
@@ -46,7 +46,7 @@ wxFrame(NULL, wxID_ANY, title, pos, size),
 
 Canvas* AppFrame::getCaneva()
 {
-  return this->_canvas.get();
+  return this->_canvas;
 }
 
 void AppFrame::onResize(wxSizeEvent& event)

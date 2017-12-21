@@ -7,6 +7,13 @@
 
 #include "Caneva.hpp"
 
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Mouse.hpp>
+#include <wx/window.h>
+#include <iostream>
+#include <utility>
+
 Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, long style) :
     wxSfmlCanvas(parent, id, position, size, style)
 {
@@ -32,6 +39,12 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
   Connect(this->GetId(), wxEVT_RIGHT_DCLICK,
           wxMouseEventHandler(Canvas::onRight));
 }
+
+Canvas::~Canvas()
+{
+  std::cout << "delete caneva " << '\n';
+}
+
 
 void Canvas::onUpdate()
 {
@@ -70,17 +83,17 @@ void Canvas::LoadFileIntoGround(int const* file, std::string texture, int level,
 
 }
 
-TileMap Canvas::getGround()
+TileMap& Canvas::getGround()
 {
   return ground;
 }
 
-TileMap Canvas::getObj()
+TileMap& Canvas::getObj()
 {
   return obj;
 }
 
-TileMap Canvas::getSky()
+TileMap& Canvas::getSky()
 {
   return sky;
 }
@@ -129,19 +142,19 @@ void Canvas::addEntite(std::string name, std::string file)
   auto pair = sprites.try_emplace(name);
   if (pair.second)
   {
-    pair.first->second.setTexture(*texture.at(texture.size() - 1));
+    pair.first->second.setTexture(getTexture(texture.size() - 1));
   }
 }
 
-void Canvas::setTexture(std::string file)
+void Canvas::setTexture(std::string const& file)
 {
-  texture.push_back(new sf::Texture());
-  texture.at(texture.size() - 1)->loadFromFile(file);
+  texture.emplace_back();
+  getTexture(texture.size() - 1).loadFromFile(file);
 }
 
-sf::Texture Canvas::getTexture()
+sf::Texture& Canvas::getTexture(int index)
 {
-  return *texture.at(0);
+  return texture.at(index);
 }
 
 int Canvas::getY()
@@ -169,16 +182,16 @@ void Canvas::drawAll()
 
 void Canvas::onRight(wxMouseEvent& event)
 {
-  sf::Vector2f vec(20, 20);
   sf::Sprite& sp = getSprites().at("Joseph Stalin");
-  sp.setPosition(getPosition().x + 10, getPosition().y + 20);
-  sp.move(vec);
+//  sp.setPosition(sp.getPosition().x + 10, sp.getPosition().y + 20);
+  sp.move(20, 20);
   cout << getSprites().at("Joseph Stalin").getPosition().x << " " << sp.getPosition().x
       << endl;
   drawAll();
 }
 
-std::map<std::string, sf::Sprite> Canvas::getSprites()
+
+std::map<std::string, sf::Sprite>& Canvas::getSprites()
 {
   return this->sprites;
 }
