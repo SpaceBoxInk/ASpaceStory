@@ -10,6 +10,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <wx/window.h>
 #include <iostream>
 #include <utility>
@@ -42,7 +43,6 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
 
 Canvas::~Canvas()
 {
-  std::cout << "delete caneva " << '\n';
 }
 
 
@@ -142,17 +142,17 @@ void Canvas::addEntite(std::string name, std::string file)
   auto pair = sprites.try_emplace(name);
   if (pair.second)
   {
-    pair.first->second.setTexture(getTexture(texture.size() - 1));
+    sprites.at(name).setTexture(*getTexture(texture.size() - 1));
   }
 }
 
 void Canvas::setTexture(std::string const& file)
 {
-  texture.emplace_back();
-  getTexture(texture.size() - 1).loadFromFile(file);
+  texture.push_back(new sf::Texture());
+  getTexture(texture.size() - 1)->loadFromFile(file);
 }
 
-sf::Texture& Canvas::getTexture(int index)
+sf::Texture* Canvas::getTexture(int index)
 {
   return texture.at(index);
 }
@@ -170,10 +170,9 @@ void Canvas::drawAll()
     this->draw(ground);
     this->draw(obj);
     this->draw(sky);
-    int i = 0;
     for (auto& pair : sprites)
     {
-      this->draw(pair.second);
+      this->draw(sprites.at(pair.first));
     }
 
     this->display();

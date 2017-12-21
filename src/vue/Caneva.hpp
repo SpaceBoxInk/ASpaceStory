@@ -6,7 +6,6 @@
  */
 
 #include "Tilemap.cpp"
-#include "VPrimitif.hpp"
 #include "wxSFMLCanevas.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
@@ -27,7 +26,7 @@ private:
   TileMap sky;
   int x;
   int y;
-  std::vector<sf::Texture> texture;
+  std::vector<sf::Texture*> texture;
   std::map<std::string, sf::Sprite> sprites;
   //=======================>Constructors<=======================
 public:
@@ -53,7 +52,7 @@ public:
   TileMap& getGround();
   TileMap& getObj();
   TileMap& getSky();
-  sf::Texture& getTexture(int index);
+  sf::Texture* getTexture(int index);
   void setTexture(std::string const& file);
   int getX();
   int getY();
