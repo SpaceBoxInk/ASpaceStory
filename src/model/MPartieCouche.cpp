@@ -22,7 +22,7 @@
 
 MPartieCouche::MPartieCouche(MTypeCouche type, std::string name, std::string fichierImg,
                              float placeDispo) :
-    type(type), name(name), fichierImg(fichierImg), placeDispo(placeDispo), miningLevel(-1)
+    type(type), name(name), fichierImg(fichierImg), placeDispo(placeDispo)
 {
 }
 
@@ -81,6 +81,11 @@ std::string const& MPartieCouche::getFichierImg() const
 float MPartieCouche::getPlaceDispo() const
 {
   return placeDispo;
+}
+
+int MPartieCouche::getMiningLevel() const
+{
+  throw std::logic_error("Cannot call getMiningLevel on couche isn't ELEMENT !");
 }
 
 void MPartieCouche::setActionMining(

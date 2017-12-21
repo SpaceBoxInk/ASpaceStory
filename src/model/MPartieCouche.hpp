@@ -44,7 +44,6 @@ private:
   std::string name;
   std::string fichierImg;
   float placeDispo;
-  int miningLevel;
 
   std::function<void(std::string entite)> actionPassage;
   std::function<void(std::string entite)> actionDeclenchement;
@@ -74,7 +73,7 @@ public:
   std::string const& getName() const;
   std::string const& getFichierImg() const;
   float getPlaceDispo() const;
-  int getMiningLevel() const;
+  virtual int getMiningLevel() const;
 
   void setFichierImg(std::string const & fichierImg);
 
@@ -113,11 +112,6 @@ inline void MPartieCouche::setActionPassage(
 inline void MPartieCouche::unSetActionDeclenchement()
 {
   actionDeclenchement = nullptr;
-}
-
-inline int MPartieCouche::getMiningLevel() const
-{
-  return miningLevel;
 }
 
 inline void MPartieCouche::unSetActionPassage()

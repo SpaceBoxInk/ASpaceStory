@@ -22,6 +22,7 @@ class MPartieCoucheElement : public MPartieCouche
 {
 //========================>Attributes<========================
 private:
+  int miningLevel;
   /**
    * action when this couche is mined
    * THIS POINTER is copied !! it's to share the action between all same couche
@@ -31,7 +32,7 @@ private:
 //=======================>Constructors<=======================
 public:
   MPartieCoucheElement(MTypeCouche type, std::string name, std::string fichierImg,
-                       float placeDispo);
+                       float placeDispo, int miningLevel = -1);
   MPartieCoucheElement(MPartieCoucheElement const&) = default;
   // TODO: rule of five ? copyandswap
   virtual ~MPartieCoucheElement();
@@ -45,6 +46,7 @@ private:
 
 //=====================>Getters&Setters<======================
 public:
+  int getMiningLevel() const override;
   void setActionMining(std::function<void(MEntite* entite, int item)> actionMining)
       override;
   void unSetActionMining() override;

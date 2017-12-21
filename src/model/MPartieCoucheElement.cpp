@@ -11,7 +11,6 @@
 
 #include "MPartieCoucheElement.hpp"
 
-
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
@@ -21,8 +20,9 @@
 //------------------------------------------------------------
 
 MPartieCoucheElement::MPartieCoucheElement(MTypeCouche type, std::string name,
-                                           std::string fichierImg, float placeDispo) :
-    MPartieCouche(type, name, fichierImg, placeDispo),
+                                           std::string fichierImg, float placeDispo,
+                                           int miningLevel) :
+    MPartieCouche(type, name, fichierImg, placeDispo), miningLevel(miningLevel),
     actionMining(new std::function<void(MEntite* entite, int item)>(nullptr))
 {
 }
@@ -56,3 +56,7 @@ void MPartieCoucheElement::unSetActionMining()
   *actionMining = nullptr;
 }
 
+int MPartieCoucheElement::getMiningLevel() const
+{
+  return miningLevel;
+}

@@ -63,6 +63,8 @@ public:
   float getTaille() const;
 
 private:
+  int getMiningPower();
+
   void setDirection(int direction);
   void setDirection(Mouvement direction);
 
@@ -80,6 +82,16 @@ inline void MEntite::setDirection(int direction)
 {
   // FIXME do something for negatives or fix direction to 4 positions
   this->direction = direction % 360;
+}
+
+inline int MEntite::getMiningPower()
+{
+//  if (inventory.getEquipement())
+//  {
+//
+//  }
+  // FIXME : change miningLevel to MAIN item
+  return 0;
 }
 
 inline void MEntite::setDirection(Mouvement direction)

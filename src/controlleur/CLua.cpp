@@ -174,7 +174,7 @@ int CLua::addActionMining(lua_State* l)
         lua_call(l, 2, 1);
         if (!lua_isnil(l, -1))
         {
-          // FIXME : entite->addToInventory(item);
+          // FIXME : entite->addToInventory(getItem());
         }
       });
 

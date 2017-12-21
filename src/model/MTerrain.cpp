@@ -69,6 +69,8 @@ void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
   unsigned short ID;
   float placeDispo;
 
+  int miningLevel;
+
   fichierType.open(fichier);
   if (fichierType)
   {
@@ -87,8 +89,9 @@ void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
       fichierType >> placeDispo;
       if (type == MTypeCouche::ELEMENT)
       {
+        fichierType >> miningLevel;
         getTypeList(type).insert(
-            { ID, new MPartieCoucheElement(type, name, imgFile, placeDispo) });
+            { ID, new MPartieCoucheElement(type, name, imgFile, placeDispo, miningLevel) });
       }
       else
       {

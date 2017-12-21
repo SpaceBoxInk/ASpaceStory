@@ -146,7 +146,7 @@ void MTuile::deletePartieCouche(MTypeCouche typeCouche)
 void MTuile::mine(MEntite* entite, int item)
 {
   MPartieCouche* elem = getPartieCouche(MTypeCouche::ELEMENT);
-  if (elem && item >= elem->getMiningLevel())
+  if (elem && elem->getMiningLevel() >= 0 && item >= elem->getMiningLevel())
   {
     elem->mine(entite, item);
     deletePartieCouche(MTypeCouche::ELEMENT);

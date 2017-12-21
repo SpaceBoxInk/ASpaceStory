@@ -101,7 +101,7 @@ void MEntite::mine(MTerrain& terrain)
 try
 {
   MTuile& tuileInt = terrain(tuile->getPosition() + getDirectionCoords());
-  tuileInt.mine(this, 0); // FIXME : change miningLevel to MAIN item
+  tuileInt.mine(this, getMiningPower());
 }
 catch (MExceptionOutOfTerrain& e)
 {
