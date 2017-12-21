@@ -35,6 +35,7 @@ public:
 private:
 
   void onResize(wxSizeEvent& event);
+  void onRight(wxMouseEvent& event);
   //=====================>Getters&Setters<======================
 public:
   TileMap getGround();
@@ -44,5 +45,6 @@ public:
   void setTexture(std::string file);
   int getX();
   int getY();
+  std::map<std::string, sf::Sprite> getSprites();
 private:
 };

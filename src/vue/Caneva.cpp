@@ -27,12 +27,14 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
   this->addEntite("Joseph Stalin", "joseph-staline.png");
   this->addEntite("24", "241890516020212.png");
 
+
   Connect(this->GetId(), wxEVT_SIZE, wxSizeEventHandler(Canvas::onResize));
+  Connect(this->GetId(), wxEVT_RIGHT_DCLICK,
+          wxMouseEventHandler(Canvas::onRight));
 }
 
 void Canvas::onUpdate()
 {
-  this->setEvent();
   this->drawAll();
 }
 
@@ -163,4 +165,20 @@ void Canvas::drawAll()
 
     this->display();
   }
+}
+
+void Canvas::onRight(wxMouseEvent& event)
+{
+  sf::Vector2f vec(20, 20);
+  sf::Sprite& sp = getSprites().at("Joseph Stalin");
+  sp.setPosition(getPosition().x + 10, getPosition().y + 20);
+  sp.move(vec);
+  cout << getSprites().at("Joseph Stalin").getPosition().x << " " << sp.getPosition().x
+      << endl;
+  drawAll();
+}
+
+std::map<std::string, sf::Sprite> Canvas::getSprites()
+{
+  return this->sprites;
 }
