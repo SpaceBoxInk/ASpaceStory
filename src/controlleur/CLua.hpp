@@ -18,8 +18,6 @@
 #include <string>
 #include <typeinfo>
 
-#include "/usr/local/Cellar/lua/5.3.4_2/include/luaconf.h"
-
 class MItem;
 
 class CJeu;
@@ -73,7 +71,10 @@ private:
   static int getCurrentPerso(lua_State* l);
 
   static int newItem(lua_State* l);
-  static int giveNewItemTo(lua_State* l);
+
+  static int giveNewItemToPerso(lua_State* l);
+  static int giveNewItemToEntity(lua_State* l);
+  static int putNewItemOn(lua_State* l);
 
   static int addActionUtilisation(lua_State* l);
 
@@ -86,6 +87,7 @@ private:
   void registerItemFunctions();
 //======================Lua/ASS function helper===================
   static MTuile* getTuile(int index);
+  static MItem* getItem();
 //======================Lua function helper===================
   static void push(lua_Number n);
   static void push(lua_Integer n);

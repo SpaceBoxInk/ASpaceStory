@@ -139,7 +139,7 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
         }
         else if (ID == 0 && type == MTypeCouche::SOL)
         {
-          throw std::invalid_argument(
+          throw MExceptionArgumentsInvalides(
               std::string("Id 0 not expected for couche SOL in offset ") + std::to_string(i));
         }
         MPartieCouche const & couche = getTypeList(type).at(ID);

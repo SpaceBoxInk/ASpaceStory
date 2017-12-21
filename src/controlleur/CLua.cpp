@@ -298,7 +298,9 @@ void CLua::registerEntiteFunctions()
 void CLua::registerItemFunctions()
 {
   lua_register(lua, "newItem", newItem);
-  lua_register(lua, "giveNewItemTo", giveNewItemTo);
+  lua_register(lua, "giveNewItemToPerso", giveNewItemToPerso);
+  lua_register(lua, "giveNewItemToEntity", giveNewItemToEntity);
+  lua_register(lua, "putNewItemOn", putNewItemOn);
   lua_register(lua, "addActionUtilisation", addActionUtilisation);
 }
 
@@ -317,6 +319,20 @@ MTuile* CLua::getTuile(int index)
   return &(cJeu->cNiveau.getTerrain()(x, y));
 }
 
+MItem* CLua::getItem()
+try
+{
+  if (!item)
+  {
+    throw MExceptionNullPtr("Aucun item de nouveau créé ! call : "); // TODO : getCurFunction()
+  }
+  return item;
+}
+catch (MAssException& e)
+{
+  std::cerr << e.what() << std::endl;
+  throw;
+}
 ////////////////////////////////////////////////////////////////////////////////
 //-///////////////////////////Lua function Helpers///////////////////////////-//
 ////////////////////////////////////////////////////////////////////////////////
@@ -399,28 +415,33 @@ int CLua::newItem(lua_State* l)
   return 1;
 }
 
-/**
- * char : 't' : tuile, 'e' : entite, 'p' : personnage
- */
-int CLua::giveNewItemTo(lua_State* l)
+int CLua::giveNewItemToPerso(lua_State* l)
 {
-  char destinataire = lua_tostring(l, 1)[0];
-  if (destinataire == 'e' || destinataire == 'p')
-  {
-    testArgs(2);
-    std::string nomEntite = lua_tostring(l, 2);
-    cJeu->getEntite(nomEntite)->addItemToInventaire(item);
-  }
-  else
-  {
-    testArgs(3);
-    int x = lua_tointeger(l, 2);
-    int y = lua_tointeger(l, 3);
-    cJeu->cNiveau.getTerrain()(x, y).addItem(item);
-  }
+  cJeu->cPersonnage.getCurrentPerso()->addItemToInventaire(getItem());
   item = nullptr;
   return 0;
 }
+
+int CLua::giveNewItemToEntity(lua_State* l)
+{
+  testArgs(1);
+  std::string nomEntite = lua_tostring(l, 2);
+  MEntite* entite = cJeu->getEntite(nomEntite);
+  entite->addItemToInventaire(getItem());
+  item = nullptr;
+  return 0;
+}
+
+int CLua::putNewItemOn(lua_State* l)
+{
+  testArgs(3);
+  int x = lua_tointeger(l, 2);
+  int y = lua_tointeger(l, 3);
+  cJeu->cNiveau.getTerrain()(x, y).addItem(getItem());
+  item = nullptr;
+  return 0;
+}
+
 
 /**
  * addActionUtilisation(luaFunction)
@@ -432,7 +453,7 @@ int CLua::addActionUtilisation(lua_State* l)
   {
     // store function
     int curIndex = luaL_ref(l, LUA_REGISTRYINDEX);
-    item->setActionUtilisation([&](std::string entite)
+    getItem()->setActionUtilisation([&](std::string entite)
     {
       // get function previously stored in special lua table registry
         lua_rawgeti(l, LUA_REGISTRYINDEX, curIndex);

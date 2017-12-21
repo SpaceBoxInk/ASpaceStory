@@ -1,7 +1,7 @@
 
 #include "MParameters.hpp"
+#include "MAssException.hpp"
 
-#include <bits/exception.h>
 #include <fstream>
 #include <iostream>
 
@@ -31,7 +31,7 @@ void MParameters::setRootPath()
       if (!checkConfFile("/etc/Sbi/"))
         if (!checkConfFile("~/.local/share/Sbi/"))
         {
-          throw "No config file found";
+          throw MExceptionFile(configFile, "No config file found");
         }
 }
 
