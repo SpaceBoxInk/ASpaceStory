@@ -11,11 +11,17 @@
 
 Id MItem::nextId = 0;
 
+bool MItem::operator ==(MItem const& other) const
+{
+  return this->getId() == other.getId();
+}
+
+
 MItem::MItem(std::string nom, std::string description, MTypeEquipement type,
     int degats,
     int protection, bool supprimable) :
     nom(nom), type(type), description(description), degats(degats), protection(protection),
-    supprimable(supprimable), id(nextId++), actionUtilisation(nullptr) // TODO: contructeur de test à modifier
+    supprimable(supprimable), id(nextId++), actionUtilisation(nullptr), miningLevel(-1) // TODO: contructeur de test à modifier
 {
 }
 
@@ -51,3 +57,4 @@ void MItem::utilisation(MEntite* entite)
     this->actionUtilisation(entite->getNom());
   }
 }
+

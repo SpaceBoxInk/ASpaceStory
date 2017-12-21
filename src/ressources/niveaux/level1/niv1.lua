@@ -6,9 +6,6 @@ setPositionPersonnage(getCurrentPerso(), 2, 2);
 
 idIt = newItem("jean", "leak skvsf")
 
-print("un truc")
-print("id is "..idIt)
-
 addActionUtilisation(function(entite)
 	print("utilise jean")
 end)

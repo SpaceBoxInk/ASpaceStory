@@ -129,6 +129,14 @@ void MEntite::addItemToInventaire(MItem* item)
 {
   this->inventaire.ajouterItem(item);
 }
+
+void MEntite::utiliserObjet()
+{
+  if (inventaire.getEquipement(MTypeEquipement::MAIN))
+  {
+    inventaire.getEquipement(MTypeEquipement::MAIN)->utilisation(this);
+  }
+}
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
@@ -147,6 +155,11 @@ void MEntite::setTuile(MTuile* tuile)
   {
     tuile->placeEntite(this);
   }
+}
+
+MInventaire& MEntite::getInventaire()
+{
+  return this->inventaire;
 }
 
 void MEntite::setDirection(int direction)

@@ -27,6 +27,19 @@ int MInventaire::getDegatEquipement(MTypeEquipement typeEquip) const
   return 0;
 }
 
+void MInventaire::equiperItem(MItem* item)
+{
+  if (std::find(items.begin(), items.end(), item) != items.end())
+  {
+    if (estEquipe(item->getType()))
+      {
+      this->items.push_back(this->getEquipement(item->getType()));
+      this->equipement[(int)item->getType()] = nullptr;
+      }
+      equipement[(int)item->getType()] = item;
+  }
+}
+
 int MInventaire::getDefenseEquipement(MTypeEquipement typeEquip) const
 {
   if (estEquipe(typeEquip))
@@ -102,4 +115,9 @@ MTypeEquipement operator -(MTypeEquipement lh, int rh)
 MTypeEquipement operator ++(MTypeEquipement& equip)
 {
   return equip = (MTypeEquipement)((int)equip + 1);
+}
+
+MItem* MInventaire::getEquipement(MTypeEquipement typeEquipement)
+{
+  return this->equipement.at((int)typeEquipement);
 }

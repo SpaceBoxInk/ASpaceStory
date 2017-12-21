@@ -51,7 +51,8 @@ public:
   void supprimerItem(Id const& idItem);
   bool estEquipe(MTypeEquipement typeEquip) const;
   void ajouterItem(MItem* item);
-  // ToDO : getEquipement
+  void equiperItem(MItem* item);
+  MItem* getEquipement(MTypeEquipement typeEquipement);
 
   //=====================>Getters&Setters<======================
 

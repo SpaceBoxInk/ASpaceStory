@@ -27,6 +27,7 @@ enum class MActionsKey
 {
   INTERACT_ENV_KEY,
   ATTACK,
+  USE_MAIN_OBJECT,
 };
 
 /**

@@ -417,7 +417,7 @@ int CLua::newItem(lua_State* l)
 
 int CLua::giveNewItemToPerso(lua_State* l)
 {
-  cJeu->cPersonnage.getCurrentPerso()->addItemToInventaire(getItem());
+  cJeu->cPersonnage.getCurrentPerso()->getInventaire().equiperItem(getItem());
   item = nullptr;
   return 0;
 }

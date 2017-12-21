@@ -16,6 +16,7 @@
 
 class MEntite;
 
+
 class MItem
 {
   //========================>Attributes<========================
@@ -29,6 +30,7 @@ private:
   Id id;
   static Id nextId;
   std::function<void(std::string entite)> actionUtilisation;
+  int miningLevel;
 
   //=======================>Constructors<=======================
 public:
@@ -36,9 +38,13 @@ public:
         int degats = 0,
         int protection = 0, bool supprimable = true);
 
+
   //=========================>Methods<==========================
 public:
   void utilisation(MEntite* entite);
+
+  bool operator ==(MItem const& other) const;
+
 
   //=====================>Getters&Setters<======================
   std::string getNom() const;
@@ -51,6 +57,13 @@ public:
   //------------------------------------------------------------
   //=====================>Implementations<======================
   //------------------------------------------------------------
+
+  MTypeEquipement getType() const;
 };
+
+inline MTypeEquipement MItem::getType() const
+{
+  return type;
+}
 
 #endif /* SRC_MODEL_MITEM_HPP_ */

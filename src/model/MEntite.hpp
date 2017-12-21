@@ -55,6 +55,7 @@ public:
   void attaquer(MTerrain& terrain);
   void seDefendre(MEntite& attaquant, int degats);
   void interagirTuile(MTerrain& terrain);
+  void utiliserObjet();
 
   int defenseTotale() const;
   int forceTotale() const;
@@ -76,6 +77,9 @@ public:
   void setTaille(float taille);
 
   MCompetence const& getCompetences() const;
+  MInventaire& getInventaire();
+
+
 
   void setActionDefense(std::function<void(std::string, int)> actionDefense);
 private:

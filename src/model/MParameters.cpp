@@ -98,6 +98,7 @@ void MParameters::load(std::string exePath)
 
   keys[getKeyFor("interactEnvKey")] = MActionsKey::INTERACT_ENV_KEY;
   keys[getKeyFor("attackKey")] = MActionsKey::ATTACK;
+  keys[getKeyFor("useKey")] = MActionsKey::USE_MAIN_OBJECT;
 }
 
 std::string MParameters::getSolsPath()

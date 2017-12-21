@@ -83,6 +83,9 @@ void CPersonnage::setEventMethods()
             case MActionsKey::ATTACK:
             currentPerso->attaquer(*terrain);
             break;
+            case MActionsKey::USE_MAIN_OBJECT:
+            currentPerso->utiliserObjet();
+            break;
             default:
             break;
           }
