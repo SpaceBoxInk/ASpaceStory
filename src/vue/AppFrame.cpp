@@ -9,14 +9,26 @@
 
 AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size, int tailleTexture) :
 wxFrame(NULL, wxID_ANY, title, pos, size),
-_panel(new wxPanel(this)),
-_canvas(
-    new Canvas(
-        _panel.get(),
-        wxID_ANY,
-        wxPoint(-1, -1),
-                   wxSize(16 * tailleTexture, 8 * tailleTexture)))
+
+    _canvas(
+        new Canvas(this, wxNewId(), wxPoint(-1, -1),
+                   wxSize(16 * tailleTexture, 8 * tailleTexture))),
+    _panel2(
+        new wxPanel(this, wxID_ANY
+                    , wxPoint(-1, -1), wxSize(-1, -1)
+        ))
 {
+  this->SetMinSize(size);
+
+//  getCaneva()->Connect(getCaneva()->GetId(), wxEVT_SIZE,
+//                       wxSizeEventHandler(Canvas::onResize),
+//                       getCaneva());
+
+  wxBoxSizer* hbox = new wxBoxSizer(wxVERTICAL);
+
+  hbox->Add(getCaneva(), 10, wxEXPAND);
+  hbox->Add(_panel2, 1, wxEXPAND);
+  this->SetSizer(hbox);
 
   ////////////////////////////////////////////////////////////////////////////////
   // Probably due to some RTTI, IDE is getting confused by this dynamic call
@@ -35,4 +47,9 @@ _canvas(
 Canvas* AppFrame::getCaneva()
 {
   return this->_canvas.get();
+}
+
+void AppFrame::onResize(wxSizeEvent& event)
+{
+  std::cout << "resize" << std::endl;
 }

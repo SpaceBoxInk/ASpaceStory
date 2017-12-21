@@ -23,9 +23,11 @@ public:
 
   virtual void onUpdate();
 
+wxDECLARE_EVENT_TABLE();
   void onIdle(wxIdleEvent& event);
 
   void onPaint(wxPaintEvent& event);
+
 
   // Explicitly overriding prevents wxWidgets from drawing, which could result in flicker
   void onEraseBackground(wxEraseEvent& event);
@@ -38,6 +40,5 @@ public:
 
   virtual ~wxSfmlCanvas();
 
-wxDECLARE_EVENT_TABLE();
 };
 

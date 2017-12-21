@@ -16,7 +16,7 @@ private:
   int x;
   int y;
   std::vector<sf::Texture*> texture;
-  std::vector<sf::Sprite> sprites;
+  std::map<std::string, sf::Sprite> sprites;
   //=======================>Constructors<=======================
 public:
   Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, long style = 0);
@@ -31,7 +31,7 @@ public:
   bool open();
   void fermer();
   bool setEvent();
-  void addSprite(std::string file);
+  void addEntite(std::string name, std::string file);
 private:
 
   void onResize(wxSizeEvent& event);

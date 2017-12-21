@@ -12,58 +12,45 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
 {
   x = size.x;
   y = size.y;
-}
-
-void Canvas::onUpdate()
-{
-  std::ofstream myfile;
-  myfile.open("wallah.txt");
-  myfile
-      << "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 0 0 0 2 0 0 0 0 1 1 0 0 0 0 0 0 3 3 3 3 3 3 3 3 0 1 0 0 2 0 3 3 3 0 1 1 1 0 0 0 0 1 1 0 3 3 3 0 0 0 1 1 1 2 0 0 0 0 1 0 3 0 2 2 0 0 1 1 1 1 2 0 2 0 1 0 3 0 2 2 2 0 1 1 1 1 1 1 0 0 1 0 3 2 2 2 0 0 0 0 1 1 1 1";
-  myfile.close();
-  std::ofstream h2;
-  h2.open("obj.txt");
-  h2
-      << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-  h2.close();
   int const level[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
       0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 0, 0, 2, 0,
       3, 3, 3, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 0, 0, 0, 1, 0,
       3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0, 2, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 0, 0,
       1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1 };
-//  int const level2[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-//      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-//      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-//      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-//      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+  int const level2[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   this->LoadFileIntoGround(level, "texture4.png", 0, 32);
-//  meh->LoadFileIntoGround(level2, "texture3.png", 1, 32);
-//  meh->addSprite("joseph-staline.png");
-//  meh->addSprite("241890516020212.png");
-//  meh->setEvent();
-  this->clear();
-  this->draw(ground);
-  this->draw(obj);
-  this->draw(sky);
-  for (int var = 0; var < sprites.size(); ++var)
-  {
-    sprites.at(var).setPosition(var * 100, var * 100);
-    this->draw(sprites.at(var));
-  }
+  this->LoadFileIntoGround(level2, "texture3.png", 1, 32);
+  this->addEntite("Joseph Stalin", "joseph-staline.png");
+  this->addEntite("24", "241890516020212.png");
 
-//  this->display();
+  Connect(this->GetId(), wxEVT_SIZE, wxSizeEventHandler(Canvas::onResize));
+}
+
+void Canvas::onUpdate()
+{
+  this->setEvent();
+  this->drawAll();
 }
 
 void Canvas::onResize(wxSizeEvent& event)
 {
-  auto size = event.GetSize();
+//  auto size = event.GetSize();
+//
+//  auto newCanvasWidth = size.x - (2 * kCanvasMargin);
+//  auto newCanvasHeight = size.y - (2 * kCanvasMargin);
+//
+//  // Resize Canvas window
+//  this->setwxWindowSize( { newCanvasWidth, newCanvasHeight });
+//  this->setRenderWindowSize( { (unsigned int)newCanvasWidth, (unsigned int)newCanvasHeight });
 
-  auto newCanvasWidth = size.x - (2 * kCanvasMargin);
-  auto newCanvasHeight = size.y - (2 * kCanvasMargin);
-
-  // Resize Canvas window
-  this->setwxWindowSize( { newCanvasWidth, newCanvasHeight });
-  this->setRenderWindowSize( { (unsigned int)newCanvasWidth, (unsigned int)newCanvasHeight });
+//communication entre SFML et WxWidget
+  sf::Vector2u si(GetSize().x, GetSize().y);
+  sf::RenderWindow::setSize(si);
+  drawAll();
 }
 void Canvas::LoadFileIntoGround(int const* file, std::string texture, int level,
                                 int tailleTexture)
@@ -73,9 +60,11 @@ void Canvas::LoadFileIntoGround(int const* file, std::string texture, int level,
     ground.load(texture, sf::Vector2u(tailleTexture, tailleTexture), file, x / tailleTexture,
                 y / tailleTexture);
   if (level == 1)
-    obj.load(texture, sf::Vector2u(tailleTexture, tailleTexture), file, x, y);
+    obj.load(texture, sf::Vector2u(tailleTexture, tailleTexture), file, x / tailleTexture,
+             y / tailleTexture);
   if (level == 2)
-    sky.load(texture, sf::Vector2u(tailleTexture, tailleTexture), file, x, y);
+    sky.load(texture, sf::Vector2u(tailleTexture, tailleTexture), file, x / tailleTexture,
+             y / tailleTexture);
 
 }
 
@@ -109,6 +98,7 @@ void Canvas::fermer()
   this->close();
 }
 
+//TODO set a rien, les events sont pas géré par sfml
 bool Canvas::setEvent()
 {
   sf::Event event;
@@ -131,11 +121,14 @@ bool Canvas::setEvent()
   }
 }
 
-void Canvas::addSprite(std::string file)
+void Canvas::addEntite(std::string name, std::string file)
 {
   setTexture(file);
-  sprites.emplace_back();
-  sprites.at(sprites.size() - 1).setTexture(*texture.at(texture.size() - 1));
+  auto pair = sprites.try_emplace(name);
+  if (pair.second)
+  {
+    pair.first->second.setTexture(*texture.at(texture.size() - 1));
+  }
 }
 
 void Canvas::setTexture(std::string file)
@@ -162,11 +155,10 @@ void Canvas::drawAll()
     this->draw(ground);
     this->draw(obj);
     this->draw(sky);
-    for (int var = 0; var < sprites.size(); ++var)
+    int i = 0;
+    for (auto& pair : sprites)
     {
-      std::cout << sprites.size() << std::endl;
-      sprites.at(var).setPosition(var * 100, var * 100);
-      this->draw(sprites.at(var));
+      this->draw(pair.second);
     }
 
     this->display();
