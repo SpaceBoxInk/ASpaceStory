@@ -13,6 +13,7 @@
 #include "MEntite.hpp"
 
 #include <array>
+#include <exception>
 #include <functional>
 #include <string>
 
@@ -43,6 +44,7 @@ private:
   std::string name;
   std::string fichierImg;
   float placeDispo;
+  int miningLevel;
 
   std::function<void(std::string entite)> actionPassage;
   std::function<void(std::string entite)> actionDeclenchement;
@@ -62,6 +64,8 @@ public:
   bool isTypeOf(MTypeCouche type) const;
   void passageDe(MEntite* entite);
   void declenchementDe(MEntite* entite);
+
+  virtual void mine(MEntite* entite, int item);
 private:
 
 //=====================>Getters&Setters<======================
@@ -70,13 +74,17 @@ public:
   std::string const& getName() const;
   std::string const& getFichierImg() const;
   float getPlaceDispo() const;
+  int getMiningLevel() const;
 
   void setFichierImg(std::string const & fichierImg);
 
   void setActionDeclenchement(std::function<void(std::string entite)> actionDeclenchement);
   void setActionPassage(std::function<void(std::string entite)> actionPassage);
+  virtual void setActionMining(
+      std::function<void(MEntite* entite, int item)> actionMining);
   void unSetActionDeclenchement();
   void unSetActionPassage();
+  virtual void unSetActionMining();
 
 private:
 
@@ -105,6 +113,11 @@ inline void MPartieCouche::setActionPassage(
 inline void MPartieCouche::unSetActionDeclenchement()
 {
   actionDeclenchement = nullptr;
+}
+
+inline int MPartieCouche::getMiningLevel() const
+{
+  return miningLevel;
 }
 
 inline void MPartieCouche::unSetActionPassage()

@@ -35,7 +35,7 @@ MEntite::~MEntite()
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------
-MCoordonnees MEntite::getDirectionCoords()
+MCoordonnees MEntite::getDirectionCoords() const
 {
   int dir = (direction / 90);
   return MCoordonnees(dir % 2, (dir - 1) % 2);
@@ -101,14 +101,13 @@ void MEntite::mine(MTerrain& terrain)
 try
 {
   MTuile& tuileInt = terrain(tuile->getPosition() + getDirectionCoords());
-  MPartieCouche* itemMined = tuileInt.mine(this); // FIXME change by MItem
-  // TODO : add to inventory
+  tuileInt.mine(this, 0); // FIXME : change miningLevel to MAIN item
 }
 catch (MExceptionOutOfTerrain& e)
 {
 }
 
-bool MEntite::isAccessible(MTuile const & tuile)
+bool MEntite::isAccessible(MTuile const & tuile) const
 {
   return this->tuile->isAdjacente(tuile);
 }

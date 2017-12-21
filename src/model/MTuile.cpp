@@ -9,6 +9,7 @@
 
 #include "MTuile.hpp"
 #include "MAssException.hpp"
+#include "MPartieCoucheElement.hpp"
 
 #include <algorithm>
 #include <utility>
@@ -28,12 +29,13 @@
  * @param fichierImg le nom du fichier image de la COUCHE SOL
  * @param placeDispoSol sa place disponible
  */
-MTuile::MTuile(MCoordonnees const& position,
-               std::string nameCoucheSol, std::string fichierImg,
-               float placeDispoSol) :
+MTuile::MTuile(MCoordonnees const& position, MPartieCouche const& couche) :
     couches( { nullptr }), position(position), entite(nullptr)
 {
-  setPartieCouche(MTypeCouche::SOL, nameCoucheSol, fichierImg, placeDispoSol);
+  if (couche.isTypeOf(MTypeCouche::SOL))
+  {
+    setPartieCouche(couche);
+  }
 }
 
 MTuile::~MTuile()
@@ -73,7 +75,7 @@ float MTuile::getPlaceDispo() const
  * @param tuileOther la tuile à comparer avec this
  * @retval @e true si tuileOther est à coté de la tuile this (diagonales non comprises)
  */
-bool MTuile::isAdjacente(MTuile const & tuileOther)
+bool MTuile::isAdjacente(MTuile const & tuileOther) const
 {
   using MouvementT::operator *;
   using std::rel_ops::operator !=;
@@ -98,14 +100,14 @@ bool MTuile::deplacerEntiteVers(MTuile& tuileDst)
   {
     throw MExceptionEntiteNonPresente(this);
   }
-  // SEE : pas besoin d'un delta car taille de l'entite << placeDispo de la tuile
+// SEE : pas besoin d'un delta car taille de l'entite << placeDispo de la tuile
   if (entite->getTaille() <= tuileDst.getPlaceDispo())
   {
     tuileDst.placeEntite(entite);
     entite = nullptr;
     return true;
   }
-  // SEE : we can throw
+// SEE : we can throw
   return false;
 }
 
@@ -141,24 +143,34 @@ void MTuile::deletePartieCouche(MTypeCouche typeCouche)
   }
 }
 
-MPartieCouche* MTuile::mine(MEntite* entite)
+void MTuile::mine(MEntite* entite, int item)
 {
-  MPartieCouche* item = getPartieCouche(MTypeCouche::ELEMENT);
-  couches[(int)MTypeCouche::ELEMENT] = nullptr;
-  return item;
+  MPartieCouche* elem = getPartieCouche(MTypeCouche::ELEMENT);
+  if (elem && item >= elem->getMiningLevel())
+  {
+    elem->mine(entite, item);
+    deletePartieCouche(MTypeCouche::ELEMENT);
+  }
 }
 
 /**
  *
  * @param couche la couche de la tuile à set
  */
-void MTuile::setPartieCouche(MTypeCouche type, std::string name, std::string fichierImg,
-                             float placeDispo)
+void MTuile::setPartieCouche(MPartieCouche const& couche)
 {
-  if (couches.at((int)type))
+  if (couches.at((int)couche.getType()))
   {
-    deletePartieCouche(type);
+    deletePartieCouche(couche.getType());
   }
-  couches[(int)type] = new MPartieCouche(type, name, fichierImg, placeDispo);
+  if (couche.isTypeOf(MTypeCouche::ELEMENT))
+  {
+    couches[(int)couche.getType()] = new MPartieCoucheElement(
+        dynamic_cast<MPartieCoucheElement const&>(couche));
+  }
+  else
+  {
+    couches[(int)couche.getType()] = new MPartieCouche(couche);
+  }
 }
 

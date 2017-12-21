@@ -22,7 +22,7 @@
 
 MPartieCouche::MPartieCouche(MTypeCouche type, std::string name, std::string fichierImg,
                              float placeDispo) :
-    type(type), name(name), fichierImg(fichierImg), placeDispo(placeDispo)
+    type(type), name(name), fichierImg(fichierImg), placeDispo(placeDispo), miningLevel(-1)
 {
 }
 
@@ -55,6 +55,11 @@ void MPartieCouche::declenchementDe(MEntite* entite)
   }
 }
 
+void MPartieCouche::mine(MEntite* entite, int item)
+{
+  throw std::logic_error("Cannot call mine on couche isn't ELEMENT !");
+}
+
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
@@ -76,4 +81,15 @@ std::string const& MPartieCouche::getFichierImg() const
 float MPartieCouche::getPlaceDispo() const
 {
   return placeDispo;
+}
+
+void MPartieCouche::setActionMining(
+    std::function<void(MEntite* entite, int item)> actionMining)
+{
+  throw std::logic_error("Cannot call setActionMining on couche isn't ELEMENT !");
+}
+
+void MPartieCouche::unSetActionMining()
+{
+  throw std::logic_error("Cannot call unSetActionMining on couche isn't ELEMENT !");
 }

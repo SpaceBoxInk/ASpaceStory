@@ -43,14 +43,14 @@ private:
 
 //=========================>Methods<==========================
 public:
-  MCoordonnees getDirectionCoords();
+  MCoordonnees getDirectionCoords() const;
 
   void deplacer(MTerrain& terrain, Mouvement const& deplacement);
   void interagirTuile(MTerrain& terrain);
   void mine(MTerrain& terrain);
 
 private:
-  bool isAccessible(MTuile const& tuile);
+  bool isAccessible(MTuile const& tuile) const;
 
 //=====================>Getters&Setters<======================
 public:

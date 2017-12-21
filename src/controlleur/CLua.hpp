@@ -56,6 +56,8 @@ private:
   static int addActionDeclenchement(lua_State* l);
   static int addActionPassage(lua_State* l);
 
+  static int addActionMining(lua_State* l);
+
 //==================Register functions========================
   void registerBaseFunctions();
   void registerTerrainFunctions();
@@ -65,7 +67,10 @@ private:
   static void push(lua_CFunction f);
   static void push(lua_Boolean b);
   static int getTop();
+  static int storeFunction();
+  static void pushFunctionFrom(int index);
   static void testArgs(int nbExcpected);
+  static std::string getCurFunction();
 
   template<class T>
   T getTableData(lua_State* l, char const* key, int paramNb = 1);

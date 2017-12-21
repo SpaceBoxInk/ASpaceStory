@@ -158,6 +158,29 @@ int CLua::addActionPassage(lua_State* l)
   return 0;
 }
 
+int CLua::addActionMining(lua_State* l)
+{
+  testArgs(2);
+  std::string element = lua_tostring(l, 1);
+  int curIndex = storeFunction();
+  cJeu->cNiveau.getTerrain().getElement(element).setActionMining(
+      [curIndex, l](MEntite* entite, int item)
+      {
+        pushFunctionFrom(curIndex);
+        // pass entity name on 1st parameter
+        push(entite->getNom().c_str());
+        lua_pushinteger(l, item);
+        // call function defined by lua
+        lua_call(l, 2, 1);
+        if (!lua_isnil(l, -1))
+        {
+          // FIXME : entite->addToInventory(item);
+        }
+      });
+
+  return 0;
+}
+
 void CLua::registerBaseFunctions()
 {
   lua_register(lua, "setScriptPath", setScriptPath);
@@ -169,6 +192,9 @@ void CLua::registerTerrainFunctions()
   lua_register(lua, "loadCouche", loadCouche);
   lua_register(lua, "addActionDeclenchement", addActionDeclenchement);
   lua_register(lua, "addActionPassage", addActionPassage);
+
+  // TODO : change in another register !!
+  lua_register(lua, "addActionMining", addActionMining);
 }
 
 void CLua::executeScript(std::string script)
@@ -204,6 +230,28 @@ int CLua::getTop()
   return lua_gettop(lua);
 }
 
+int CLua::storeFunction()
+{
+  if (lua_isfunction(lua, -1))
+  {
+    // store function
+    return luaL_ref(lua, LUA_REGISTRYINDEX);
+  }
+  throw std::invalid_argument("This is not a function ! called : " + getCurFunction());
+  return 0;
+}
+
+void CLua::pushFunctionFrom(int index)
+{
+  // get function previously stored in special lua table registry
+  lua_rawgeti(lua, LUA_REGISTRYINDEX, index);
+  if (!lua_isfunction(lua, -1))
+  {
+    throw std::invalid_argument(
+        "Try to get back a function but not get a function ! called : " + getCurFunction());
+  }
+}
+
 void CLua::testArgs(int nbExcpected)
 {
   try
@@ -220,6 +268,14 @@ void CLua::testArgs(int nbExcpected)
     throw;
   }
 
+}
+
+std::string CLua::getCurFunction()
+{
+  lua_Debug ar;
+  lua_getstack(lua, 0, &ar);
+  lua_getinfo(lua, "nf", &ar);
+  return ar.name;
 }
 ////////////////////////////////////////////////////////////////////////////////
 

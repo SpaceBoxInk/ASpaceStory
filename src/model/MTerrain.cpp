@@ -11,20 +11,21 @@
 #include "MAssException.hpp"
 #include "MEvents.hpp"
 #include "MParameters.hpp"
+#include "MPartieCoucheElement.hpp"
 
-#include <bits/unordered_map.h>
 #include <fstream>
 #include <iostream>
 #include <iterator>
 #include <stdexcept>
+#include <unordered_map>
 #include <utility>
 
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
-std::unordered_map<std::uint8_t, MPartieCouche> MTerrain::solsType;
-std::unordered_map<std::uint8_t, MPartieCouche> MTerrain::elementsType;
-std::unordered_map<std::uint8_t, MPartieCouche> MTerrain::cielsType;
+std::unordered_map<std::uint8_t, MPartieCouche*> MTerrain::solsType;
+std::unordered_map<std::uint8_t, MPartieCouche*> MTerrain::elementsType;
+std::unordered_map<std::uint8_t, MPartieCouche*> MTerrain::cielsType;
 
 MCoordonnees MTerrain::taille(40, 20);
 //------------------------------------------------------------
@@ -55,7 +56,7 @@ void MTerrain::loadTypes()
   loadSpecificPath(MParameters::getCielsPath(), MTypeCouche::CIEL);
 }
 
-MCoordonnees MTerrain::toCoords(int index)
+MCoordonnees MTerrain::toCoords(int index) const
 {
   return MCoordonnees(index % taille.getX(), index / taille.getX());
 }
@@ -84,7 +85,15 @@ void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
       fichierType >> imgFile;
       fichierType >> ID;
       fichierType >> placeDispo;
-      getTypeList(type).insert( { ID, MPartieCouche(type, name, imgFile, placeDispo) });
+      if (type == MTypeCouche::ELEMENT)
+      {
+        getTypeList(type).insert(
+            { ID, new MPartieCoucheElement(type, name, imgFile, placeDispo) });
+      }
+      else
+      {
+        getTypeList(type).insert( { ID, new MPartieCouche(type, name, imgFile, placeDispo) });
+      }
     }
   }
   else
@@ -94,7 +103,17 @@ void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
   fichierType.close();
 }
 
-std::unordered_map<uint8_t, MPartieCouche>& MTerrain::getTypeList(
+MPartieCouche& MTerrain::getElement(std::string element)
+{
+  auto elemMap = getTypeList(MTypeCouche::ELEMENT);
+  return *std::find_if(elemMap.begin(), elemMap.end(),
+                       [element](std::pair<uint8_t, MPartieCouche*> pair)
+  {
+    return pair.second->getName() == element;
+  })->second;
+}
+
+std::unordered_map<uint8_t, MPartieCouche*>& MTerrain::getTypeList(
     MTypeCouche const& typeCouche)
 {
   switch (typeCouche) {
@@ -142,20 +161,17 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
           throw std::invalid_argument(
               std::string("Id 0 not expected for couche SOL in offset ") + std::to_string(i));
         }
-        MPartieCouche const & couche = getTypeList(type).at(ID);
+        MPartieCouche const& couche = *getTypeList(type).at(ID);
         // si on veut mettre une couche à une tuile pas existante
         // il faut aussi que le type soit le sol, on commence par le sol !
         if (tuiles.size() <= i && type == MTypeCouche::SOL)
         {
           // SEE : push_back may be replaced by something related to the position "i"
-          tuiles.push_back(
-              new MTuile(toCoords(i), couche.getName(), couche.getFichierImg(),
-                         couche.getPlaceDispo()));
+          tuiles.push_back(new MTuile(toCoords(i), couche));
         }
         else if (tuiles.size() > i)
         {
-          tuiles[i]->setPartieCouche(couche.getType(), couche.getName(),
-                                     couche.getFichierImg(), couche.getPlaceDispo());
+          tuiles[i]->setPartieCouche(couche);
         }
         else
         {
