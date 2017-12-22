@@ -6,3 +6,4 @@ coffre : coffre.png 3 0.0
 tombe : tombe.png 4 0.0
 piece_robot : piece_robot.png 5 0.0
 passage_etroit : passage_etroit.png 6 0.0
+portail : portail.png 7 0.0
