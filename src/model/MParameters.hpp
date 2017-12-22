@@ -10,6 +10,7 @@
 #pragma once
 
 #include "MCoordonnees.hpp"
+#include "MPartieCouche.hpp"
 
 #include <map>
 #include <string>
@@ -44,6 +45,7 @@ private:
   static void setRootPath();
 
 public:
+  // PATHS
   static std::string const& getRootPath();
 
   static std::string getConfPath();
@@ -57,8 +59,14 @@ public:
   static std::string getElementsPath();
   static std::string getCielsPath();
 
+  // KEYS
   static Mouvement getMouvFromKey(char key);
   static bool isMouvKey(char key);
+
+  // GRAPHICS
+  static std::string getTextureFor(MTypeCouche couche);
+  static int getTailleTuile();
+  static std::string getSpritesPath();
 
   static void load(std::string exePath);
 };

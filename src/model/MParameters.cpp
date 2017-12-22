@@ -44,45 +44,6 @@ std::string MParameters::getConfPath()
   return rootPath + configFile;
 }
 
-void MParameters::load(std::string exePath)
-{
-  rootPath = exePath.substr(0, exePath.rfind('/') + 1);
-  setRootPath();
-
-  // load file
-  std::ifstream file;
-  try
-  {
-    file.open(getConfPath());
-    if (file.is_open())
-    {
-      while (!file.eof())
-      {
-        std::string key;
-        std::string val;
-        file >> key >> val >> val;
-        conf[key] = val;
-      }
-    }
-    else
-    {
-      std::cerr << "Impossible de charger le fichier de configuration " + getConfPath()
-          << '\n';
-    }
-  }
-  catch (std::exception& e)
-  {
-    std::cerr << "Impossible de charger le fichier de configuration " + getConfPath() << '\n';
-  }
-  file.close();
-  //=========================================================================================
-  // set configurations
-  mouvKeys[conf["upKey"][0]] = Mouvement::HAUT;
-  mouvKeys[conf["downKey"][0]] = Mouvement::BAS;
-  mouvKeys[conf["leftKey"][0]] = Mouvement::GAUCHE;
-  mouvKeys[conf["rightKey"][0]] = Mouvement::DROITE;
-}
-
 std::string MParameters::getSolsPath()
 {
   return getTuilePath() + conf["solsInfo"];
@@ -132,4 +93,58 @@ try
 catch (...)
 {
   return false;
+}
+
+std::string MParameters::getTextureFor(MTypeCouche couche)
+{
+  return getTuilePath() + conf["textureCouche" + (int)couche];
+}
+
+int MParameters::getTailleTuile()
+{
+  return std::stoi(conf["tailleTuilePx"]);
+}
+
+std::string MParameters::getSpritesPath()
+{
+  return getRootPath() + conf["spritesPath"];;
+}
+
+void MParameters::load(std::string exePath)
+{
+  rootPath = exePath.substr(0, exePath.rfind('/') + 1);
+  setRootPath();
+
+  // load file
+  std::ifstream file;
+  try
+  {
+    file.open(getConfPath());
+    if (file.is_open())
+    {
+      while (!file.eof())
+      {
+        std::string key;
+        std::string val;
+        file >> key >> val >> val;
+        conf[key] = val;
+      }
+    }
+    else
+    {
+      std::cerr << "Impossible de charger le fichier de configuration " + getConfPath()
+          << '\n';
+    }
+  }
+  catch (std::exception& e)
+  {
+    std::cerr << "Impossible de charger le fichier de configuration " + getConfPath() << '\n';
+  }
+  file.close();
+  //=========================================================================================
+  // set configurations
+  mouvKeys[conf["upKey"][0]] = Mouvement::HAUT;
+  mouvKeys[conf["downKey"][0]] = Mouvement::BAS;
+  mouvKeys[conf["leftKey"][0]] = Mouvement::GAUCHE;
+  mouvKeys[conf["rightKey"][0]] = Mouvement::DROITE;
 }

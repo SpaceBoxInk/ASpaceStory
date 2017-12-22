@@ -22,7 +22,7 @@ private:
 
 //=======================>Constructors<=======================
 public:
-  MPersonnage(std::string const& nom, MTuile* tuile, float taille);
+  MPersonnage(std::string const& nom, std::string sprite, MTuile* tuile, float taille);
   // TODO: rule of five ? copyandswap
   virtual ~MPersonnage();
 

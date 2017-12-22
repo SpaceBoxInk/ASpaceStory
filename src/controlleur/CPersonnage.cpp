@@ -15,6 +15,7 @@
 #include "../model/MPartieCouche.hpp"
 #include "../model/MTerrain.hpp"
 #include "../model/MTuile.hpp"
+#include "../vue/AppFrameInterface.hpp"
 
 #include <cstdlib>
 
@@ -30,7 +31,7 @@ using namespace std;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-CPersonnage::CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain) :
+CPersonnage::CPersonnage(AppFrameInterface* vuePrincipale, MTerrain* terrain) :
     vuePrincipale(vuePrincipale), terrain(terrain)
 {
   setEventMethods();
@@ -39,16 +40,6 @@ CPersonnage::CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain) :
 CPersonnage::~CPersonnage()
 {
 }
-
-void CPersonnage::launchPersonnage()
-{
-  vuePrincipale->setImg(MTypeCouche::SOL, terrain->getImagesList(MTypeCouche::SOL));
-  do
-  {
-    this->vuePrincipale->show((MCoordonnees)*personnage->getTuile());
-  } while (true);
-}
-
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------

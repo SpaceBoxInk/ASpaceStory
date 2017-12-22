@@ -15,13 +15,14 @@
 #include "CNiveau.hpp"
 #include "CPersonnage.hpp"
 
+#include "../vue/AppFrame.hpp"
 
 class CJeu
 {
   friend class CLua;
 //========================>Attributes<========================
 private:
-  VPrimitif vuePrincipale;
+  AppFrameInterface* vuePrincipale;
   CNiveau cNiveau;
   CPersonnage cPersonnage;
   CLua cLua;

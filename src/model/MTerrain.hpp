@@ -65,7 +65,7 @@ public:
 
   std::vector<MTuile*> getAdjacentes(MTuile const& tuile);
 
-  std::vector<std::string const*> getImagesList(MTypeCouche typeCouche) const;
+  std::vector<int> getImagesList(MTypeCouche typeCouche) const;
 
 
   MCoordonnees toCoords(int index);

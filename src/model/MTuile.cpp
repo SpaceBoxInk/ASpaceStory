@@ -28,12 +28,12 @@
  * @param fichierImg le nom du fichier image de la COUCHE SOL
  * @param placeDispoSol sa place disponible
  */
-MTuile::MTuile(MCoordonnees const& position,
+MTuile::MTuile(MCoordonnees const& position, int id,
                std::string nameCoucheSol, std::string fichierImg,
                float placeDispoSol) :
     couches( { nullptr }), position(position), entite(nullptr)
 {
-  setPartieCouche(MTypeCouche::SOL, nameCoucheSol, fichierImg, placeDispoSol);
+  setPartieCouche(id, MTypeCouche::SOL, nameCoucheSol, fichierImg, placeDispoSol);
 }
 
 MTuile::~MTuile()
@@ -133,13 +133,14 @@ void MTuile::deletePartieCouche(MTypeCouche typeCouche)
  *
  * @param couche la couche de la tuile à set
  */
-void MTuile::setPartieCouche(MTypeCouche type, std::string name, std::string fichierImg,
+void MTuile::setPartieCouche(int id, MTypeCouche type, std::string name,
+                             std::string fichierImg,
                              float placeDispo)
 {
   if (couches.at((int)type))
   {
     deletePartieCouche(type);
   }
-  couches[(int)type] = new MPartieCouche(type, name, fichierImg, placeDispo);
+  couches[(int)type] = new MPartieCouche(id, type, name, fichierImg, placeDispo);
 }
 

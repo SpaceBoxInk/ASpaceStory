@@ -38,8 +38,8 @@ private:
   MEntite* entite;
 //=======================>Constructors<=======================
 public:
-  MTuile(MCoordonnees const& position, std::string nameCoucheSol, std::string fichierImg,
-         float placeDispoSol);
+  MTuile(MCoordonnees const& position, int id, std::string nameCoucheSol,
+         std::string fichierImg, float placeDispoSol);
   /**
    * constructeur de recopie supprimé\
    * on ne veut pas pouvoir copier la tuile
@@ -72,7 +72,7 @@ public:
 
   MPartieCouche* getPartieCouche(MTypeCouche type);
   MPartieCouche const* getPartieCouche(MTypeCouche type) const;
-  void setPartieCouche(MTypeCouche type, std::string name, std::string fichierImg,
+  void setPartieCouche(int id, MTypeCouche type, std::string name, std::string fichierImg,
                        float placeDispo);
 private:
 };

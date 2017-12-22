@@ -5,6 +5,8 @@
  *      Author: lordofkawaiii
  */
 
+#pragma once
+
 #include "Tilemap.cpp"
 #include "wxSFMLCanevas.hpp"
 
@@ -36,10 +38,10 @@ public:
 
   //=========================>Methods<==========================
 public:
-  void LoadFileIntoGround(int const* file, std::string texture, int level, int tailleTexture);
+  void loadFileIntoGround(int const* idList, std::string texture, int level,
+                          int tailleTexture);
 
   void drawAll();
-  bool open();
   void fermer();
   bool setEvent();
   void addEntite(std::string name, std::string file);
@@ -49,13 +51,11 @@ private:
   void onRight(wxMouseEvent& event);
   //=====================>Getters&Setters<======================
 public:
+private:
   TileMap& getGround();
   TileMap& getObj();
   TileMap& getSky();
   sf::Texture* getTexture(int index);
   void setTexture(std::string const& file);
-  int getX();
-  int getY();
   std::map<std::string, sf::Sprite>& getSprites();
-private:
 };

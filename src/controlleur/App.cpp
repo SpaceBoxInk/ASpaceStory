@@ -6,10 +6,15 @@
  */
 
 #include "App.hpp"
+#include "CJeu.hpp"
+
+#include "../model/MParameters.hpp"
+#include "../vue/AppFrame.hpp"
+
 IMPLEMENT_APP(App);
 bool App::OnInit()
 {
-  AppFrame *frame = new AppFrame("A Space Story", wxPoint(50, 50), wxSize(512, 340), 32);
-  frame->Show(true);
+  MParameters::load(argv[0].ToStdString());
+  new CJeu();
   return true;
 };

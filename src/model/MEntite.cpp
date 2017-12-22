@@ -21,8 +21,8 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MEntite::MEntite(std::string const& nom, MTuile* tuile, float taille) :
-    nom(nom), tuile(tuile), direction(0), taille(taille)
+MEntite::MEntite(std::string const& nom, std::string sprite, MTuile* tuile, float taille) :
+    nom(nom), sprite(sprite), tuile(tuile), direction(0), taille(taille)
 {
   tuile->placeEntite(this);
 }

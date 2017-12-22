@@ -20,20 +20,20 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
 {
   x = size.x;
   y = size.y;
-  int const level[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
-      0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 0, 0, 2, 0,
-      3, 3, 3, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 0, 0, 0, 1, 0,
-      3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0, 2, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 0, 0,
-      1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1 };
-  int const level2[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-  this->LoadFileIntoGround(level, "texture4.png", 0, 32);
-  this->LoadFileIntoGround(level2, "texture3.png", 1, 32);
-  this->addEntite("Joseph Stalin", "joseph-staline.png");
-  this->addEntite("24", "241890516020212.png");
+//  int const level[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
+//      0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 0, 0, 2, 0,
+//      3, 3, 3, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 0, 0, 0, 1, 0,
+//      3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0, 2, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 0, 0,
+//      1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1 };
+//  int const level2[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+//      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+//      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+//      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+//      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+//  this->loadFileIntoGround(level, "texture4.png", 0, 32);
+//  this->loadFileIntoGround(level2, "texture3.png", 1, 32);
+//  this->addEntite("Joseph Stalin", "joseph-staline.png");
+//  this->addEntite("24", "241890516020212.png");
 
 
   Connect(this->GetId(), wxEVT_SIZE, wxSizeEventHandler(Canvas::onResize));
@@ -67,18 +67,18 @@ void Canvas::onResize(wxSizeEvent& event)
   sf::RenderWindow::setSize(si);
   drawAll();
 }
-void Canvas::LoadFileIntoGround(int const* file, std::string texture, int level,
+void Canvas::loadFileIntoGround(int const* idList, std::string texture, int level,
                                 int tailleTexture)
 {
   //TODO : c'est un tableau
   if (level == 0)
-    ground.load(texture, sf::Vector2u(tailleTexture, tailleTexture), file, x / tailleTexture,
+    ground.load(texture, sf::Vector2u(tailleTexture, tailleTexture), idList, x / tailleTexture,
                 y / tailleTexture);
   if (level == 1)
-    obj.load(texture, sf::Vector2u(tailleTexture, tailleTexture), file, x / tailleTexture,
+    obj.load(texture, sf::Vector2u(tailleTexture, tailleTexture), idList, x / tailleTexture,
              y / tailleTexture);
   if (level == 2)
-    sky.load(texture, sf::Vector2u(tailleTexture, tailleTexture), file, x / tailleTexture,
+    sky.load(texture, sf::Vector2u(tailleTexture, tailleTexture), idList, x / tailleTexture,
              y / tailleTexture);
 
 }
@@ -96,16 +96,6 @@ TileMap& Canvas::getObj()
 TileMap& Canvas::getSky()
 {
   return sky;
-}
-
-int Canvas::getX()
-{
-  return x;
-}
-
-bool Canvas::open()
-{
-  return this->isOpen();
 }
 
 void Canvas::fermer()
@@ -157,11 +147,6 @@ sf::Texture* Canvas::getTexture(int index)
   return texture.at(index);
 }
 
-int Canvas::getY()
-{
-  return y;
-}
-
 void Canvas::drawAll()
 {
   if (this->isOpen())
@@ -184,8 +169,8 @@ void Canvas::onRight(wxMouseEvent& event)
   sf::Sprite& sp = getSprites().at("Joseph Stalin");
 //  sp.setPosition(sp.getPosition().x + 10, sp.getPosition().y + 20);
   sp.move(20, 20);
-  cout << getSprites().at("Joseph Stalin").getPosition().x << " " << sp.getPosition().x
-      << endl;
+  std::cout << getSprites().at("Joseph Stalin").getPosition().x << " " << sp.getPosition().x
+      << std::endl;
   drawAll();
 }
 

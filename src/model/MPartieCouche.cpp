@@ -18,9 +18,10 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MPartieCouche::MPartieCouche(MTypeCouche type, std::string name, std::string fichierImg,
+MPartieCouche::MPartieCouche(int id, MTypeCouche type, std::string name,
+                             std::string fichierImg,
                              float placeDispo) :
-    type(type), name(name), fichierImg(fichierImg), placeDispo(placeDispo)
+    id(id), type(type), name(name), fichierImg(fichierImg), placeDispo(placeDispo)
 {
 }
 

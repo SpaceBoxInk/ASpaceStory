@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <wx/wx.h>
 #include <memory>
@@ -7,8 +9,6 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 #endif
-
-using namespace std;
 
 static int const kDefaultWindowWidth = 1280;
 static int const kDefaultWindowHeight = 720;

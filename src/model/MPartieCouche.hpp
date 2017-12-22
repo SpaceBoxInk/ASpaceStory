@@ -36,6 +36,7 @@ public:
 
 //========================>Attributes<========================
 private:
+  int id;
   MTypeCouche type;
   std::string name;
   std::string fichierImg;
@@ -43,7 +44,8 @@ private:
 
 //=======================>Constructors<=======================
 public:
-  MPartieCouche(MTypeCouche type, std::string name, std::string fichierImg, float placeDispo);
+  MPartieCouche(int id, MTypeCouche type, std::string name, std::string fichierImg,
+                float placeDispo);
   MPartieCouche(MPartieCouche const&) = default;
   // TODO: rule of five ? copyandswap
   virtual ~MPartieCouche();
@@ -58,6 +60,8 @@ private:
 
 //=====================>Getters&Setters<======================
 public:
+  int getId() const;
+
   MTypeCouche const& getType() const;
   std::string const& getName() const;
   std::string const& getFichierImg() const;
@@ -70,6 +74,10 @@ private:
 //--------------------------------------------------------------
 //========================>Definitions<=========================
 //--------------------------------------------------------------
+inline int MPartieCouche::getId() const
+{
+  return id;
+}
 
 inline void MPartieCouche::setFichierImg(std::string const & fichierImg)
 {

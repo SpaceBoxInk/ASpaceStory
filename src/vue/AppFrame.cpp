@@ -44,6 +44,17 @@ wxFrame(NULL, wxID_ANY, title, pos, size),
   ////////////////////////////////////////////////////////////////////////////////
 }
 
+void AppFrame::loadFileIntoGround(int const * idList, std::string texture, MTypeCouche level,
+                                  int tailleTexture)
+{
+  getCaneva()->loadFileIntoGround(idList, texture, (int)level, tailleTexture);
+}
+
+void AppFrame::addEntite(std::string name, std::string file)
+{
+  getCaneva()->addEntite(name, file);
+}
+
 Canvas* AppFrame::getCaneva()
 {
   return this->_canvas;

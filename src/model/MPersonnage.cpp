@@ -19,8 +19,9 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MPersonnage::MPersonnage(std::string const& nom, MTuile* tuile, float taille) :
-    MEntite(nom, tuile, taille)
+MPersonnage::MPersonnage(std::string const& nom, std::string sprite, MTuile* tuile,
+                         float taille) :
+    MEntite(nom, sprite, tuile, taille)
 {
 }
 

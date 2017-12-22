@@ -79,7 +79,7 @@ void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
       fichierType >> imgFile;
       fichierType >> ID;
       fichierType >> placeDispo;
-      getTypeList(type).insert( { ID, MPartieCouche(type, name, imgFile, placeDispo) });
+      getTypeList(type).insert( { ID, MPartieCouche(ID, type, name, imgFile, placeDispo) });
     }
   }
   else
@@ -143,12 +143,12 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
         {
           // SEE : push_back may be replaced by something related to the position "i"
           tuiles.push_back(
-              new MTuile(toCoords(i), couche.getName(), couche.getFichierImg(),
+              new MTuile(toCoords(i), couche.getId(), couche.getName(), couche.getFichierImg(),
                          couche.getPlaceDispo()));
         }
         else if (tuiles.size() > i)
         {
-          tuiles[i]->setPartieCouche(couche.getType(), couche.getName(),
+          tuiles[i]->setPartieCouche(couche.getId(), couche.getType(), couche.getName(),
                                      couche.getFichierImg(), couche.getPlaceDispo());
         }
         else
@@ -221,19 +221,19 @@ std::vector<MTuile*> MTerrain::getAdjacentes(MTuile const & tuile)
   return tuiles;
 }
 
-std::vector<std::string const*> MTerrain::getImagesList(MTypeCouche typeCouche) const
+std::vector<int> MTerrain::getImagesList(MTypeCouche typeCouche) const
 {
-  std::vector<std::string const*> imgs;
+  std::vector<int> imgs;
   for (MTuile const* tuile : tuiles)
   {
     MPartieCouche const* couche = tuile->getPartieCouche(typeCouche);
     if (couche)
     {
-      imgs.push_back(&couche->getFichierImg());
+      imgs.push_back(couche->getId());
     }
     else
     {
-      imgs.push_back(nullptr);
+      imgs.push_back(0);
     }
   }
   return imgs;

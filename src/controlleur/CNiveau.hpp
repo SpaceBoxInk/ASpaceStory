@@ -17,14 +17,14 @@
 
 #include <string>
 
-class VPrimitif;
+class AppFrameInterface;
 
 class CNiveau : public Observer
 {
 //========================>Attributes<========================
 private:
   MTerrain terrain;
-  VPrimitif* vuePrincipale;
+  AppFrameInterface* vuePrincipale;
   /**
    * folder for level resources
    */
@@ -35,7 +35,7 @@ private:
   std::string levelMainFile;
 //=======================>Constructors<=======================
 public:
-  CNiveau(VPrimitif* vuePrincipale, std::string levelFolder =
+  CNiveau(AppFrameInterface* vuePrincipale, std::string levelFolder =
               MParameters::getMainScriptFolder(),
           std::string levelMainFile = MParameters::getMainScript());
   // TODO: rule of five ? copyandswap

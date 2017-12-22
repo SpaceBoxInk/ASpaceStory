@@ -13,7 +13,6 @@
 
 #include "../model/MCoordonnees.hpp"
 #include "../model/MPersonnage.hpp"
-#include "../vue/VPrimitif.hpp"
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -24,17 +23,19 @@
 //------------------------------------------------------------
 
 CJeu::CJeu() :
-vuePrincipale(cNiveau.getTerrain().getTaille()), cNiveau(&vuePrincipale),
-    cPersonnage(&vuePrincipale, &cNiveau.getTerrain()), cLua(this)
+    vuePrincipale(new AppFrame("A Space Story", wxPoint(50, 50), wxSize(512, 340), 32)),
+    cNiveau(vuePrincipale), cPersonnage(vuePrincipale, &cNiveau.getTerrain()), cLua(this)
 {
   cLua.executeScript(cNiveau.getScript());
   // TODO : to change (lua)
-  cPersonnage.setPersonnage("name", &cNiveau.getTerrain()(2, 1), 0.9);
-  cPersonnage.launchPersonnage();
+  cPersonnage.setPersonnage("name", MParameters::getSpritesPath() + "texture3.png",
+                            &cNiveau.getTerrain()(2, 1), 0.9);
+  dynamic_cast<AppFrame*>(vuePrincipale)->Show();
 }
 
 CJeu::~CJeu()
 {
+  delete vuePrincipale;
 }
 
 //------------------------------------------------------------

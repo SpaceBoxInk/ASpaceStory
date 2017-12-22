@@ -11,10 +11,10 @@
 
 #include "../model/MPersonnage.hpp"
 #include "../outils/ObserverPattern/Observer.hpp"
-#include "../vue/VPrimitif.hpp"
 
 #include <string>
 
+class AppFrameInterface;
 class MPersonnage;
 class MTuile;
 
@@ -31,14 +31,14 @@ private:
   /**
    * Vue principale TODO : faire vue principale, pour l'instant ce n'est que la vue du terrain
    */
-  VPrimitif* vuePrincipale;
+  AppFrameInterface* vuePrincipale;
 
   MPersonnage* personnage;
 
   MTerrain* terrain;
 //=======================>Constructors<=======================
 public:
-  CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain);
+  CPersonnage(AppFrameInterface* vuePrincipale, MTerrain* terrain);
   // TODO: rule of five ? copyandswap
   virtual ~CPersonnage();
 
@@ -46,8 +46,7 @@ private:
 
 //=========================>Methods<==========================
 public:
-  void launchPersonnage();
-  void setPersonnage(std::string nom, MTuile* tuile, float taille);
+  void setPersonnage(std::string nom, std::string sprite, MTuile* tuile, float taille);
 private:
   void setEventMethods();
 
@@ -55,29 +54,14 @@ private:
 public:
 
 private:
-  void changeVue(VPrimitif* vTerrain);
 };
 
-inline void CPersonnage::setPersonnage(std::string nom, MTuile* tuile, float taille)
+inline void CPersonnage::setPersonnage(std::string nom, std::string sprite, MTuile* tuile,
+                                       float taille)
 {
-  personnage = new MPersonnage(nom, tuile, taille);
+  personnage = new MPersonnage(nom, sprite, tuile, taille);
 }
 
 //------------------------------------------------------------
 //=====================>Implementations<======================
 //------------------------------------------------------------
-
-/**
- *
- * @param vTerrain la vue du terrain
- * TODO : pour l'instant il n'y a pas la vuePrincipale/vueTerrain
- */
-inline void CPersonnage::changeVue(VPrimitif* vTerrain)
-{
-  if (vuePrincipale)
-  {
-    delete vuePrincipale;
-  }
-
-  this->vuePrincipale = vTerrain;
-}

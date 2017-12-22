@@ -23,12 +23,13 @@ class MEntite
 //========================>Attributes<========================
 private:
   std::string nom;
+  std::string sprite;
   MTuile* tuile;
   int direction;
   float taille;
 //=======================>Constructors<=======================
 public:
-  MEntite(std::string const& nom, MTuile* tuile, float taille);
+  MEntite(std::string const& nom, std::string sprite, MTuile* tuile, float taille);
   // TODO: rule of five ? copyandswap
   virtual ~MEntite();
 

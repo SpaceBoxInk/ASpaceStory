@@ -13,10 +13,7 @@
 
 #include "../model/MEvents.hpp"
 #include "../model/MPartieCouche.hpp"
-#include "../vue/VPrimitif.hpp"
-
-#include <vector>
-
+#include "../vue/AppFrameInterface.hpp"
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -26,7 +23,8 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-CNiveau::CNiveau(VPrimitif* vuePrincipale, std::string levelFolder, std::string levelMainFile) :
+CNiveau::CNiveau(AppFrameInterface* vuePrincipale, std::string levelFolder,
+                 std::string levelMainFile) :
     vuePrincipale(vuePrincipale), levelFolder(levelFolder), levelMainFile(levelMainFile)
 {
   terrain.addObserver(this);
@@ -43,10 +41,12 @@ CNiveau::~CNiveau()
 void CNiveau::setEventMethods()
 {
   addAction<MTerrainEvents, MTypeCouche>(
-      MTerrainEvents::COUCHE_LOADED, [this](MTypeCouche couche, Observed const& o)
-  {
-    vuePrincipale->setImg(couche,terrain.getImagesList(couche));
-  });
+      MTerrainEvents::COUCHE_LOADED,
+      [this](MTypeCouche couche, Observed const& o)
+      {
+        int const*&& imgs = &terrain.getImagesList(couche)[0];
+        vuePrincipale->loadFileIntoGround(imgs, MParameters::getTextureFor(couche), couche, MParameters::getTailleTuile());
+      });
 }
 
 //------------------------------------------------------------
