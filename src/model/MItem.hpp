@@ -36,7 +36,7 @@ private:
 public:
   MItem(std::string nom, std::string description, MTypeEquipement type = MTypeEquipement::MAIN,
         int degats = 0,
-        int protection = 0, bool supprimable = true);
+        int protection = 0, bool supprimable = true, int miningLevel = 0);
 
 
   //=========================>Methods<==========================

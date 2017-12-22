@@ -29,15 +29,17 @@ int MInventaire::getDegatEquipement(MTypeEquipement typeEquip) const
 
 void MInventaire::equiperItem(MItem* item)
 {
-  if (std::find(items.begin(), items.end(), item) != items.end())
+  auto it = std::find(items.begin(), items.end(), item);
+  if (it != items.end())
   {
-    if (estEquipe(item->getType()))
-      {
-      this->items.push_back(this->getEquipement(item->getType()));
-      this->equipement[(int)item->getType()] = nullptr;
-      }
-      equipement[(int)item->getType()] = item;
+    items.erase(it, it);
   }
+  if (estEquipe(item->getType()))
+  {
+    this->items.push_back(this->getEquipement(item->getType()));
+    this->equipement[(int)item->getType()] = nullptr;
+  }
+  equipement[(int)item->getType()] = item;
 }
 
 int MInventaire::getDefenseEquipement(MTypeEquipement typeEquip) const
@@ -79,7 +81,6 @@ bool MInventaire::estEquipe(MTypeEquipement typeEquip) const
 {
   return typeEquip < MTypeEquipement::SIZE && this->equipement.at((int)typeEquip);
 }
-
 
 void MInventaire::ajouterItem(MItem* item)
 {

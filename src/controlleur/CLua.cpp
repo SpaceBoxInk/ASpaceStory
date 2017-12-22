@@ -453,7 +453,7 @@ int CLua::addActionUtilisation(lua_State* l)
   {
     // store function
     int curIndex = luaL_ref(l, LUA_REGISTRYINDEX);
-    getItem()->setActionUtilisation([&](std::string entite)
+    getItem()->setActionUtilisation([curIndex, l](std::string entite)
     {
       // get function previously stored in special lua table registry
         lua_rawgeti(l, LUA_REGISTRYINDEX, curIndex);
