@@ -35,7 +35,7 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
 //      2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1 };
 //  this->loadFileIntoGround(level, MParameters::getTuilePath() + "textureCouche0.png", 0, 32);
 //  this->loadFileIntoGround(level2, "texture3.png", 1, 32);
-  this->addEntite("hitler", "perso_face.png");
+//  this->addEntite("hitler", "perso_face.png");
 //  this->addEntite("24", "241890516020212.png");
 
   Connect(this->GetId(), wxEVT_SIZE, wxSizeEventHandler(Canvas::onResize));
@@ -206,7 +206,7 @@ void Canvas::drawAll()
 void Canvas::onRight(wxMouseEvent& event)
 {
   std::cout << "bonjour" << std::endl;
-  this->move("hitler", MCoordonnees(1, 0));
+//  this->move("hitler", MCoordonnees(1, 0));
 //  this->setPositionOf("Joseph Stalin", MCoordonnees(0, 0));
 
 }
