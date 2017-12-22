@@ -67,3 +67,7 @@ void AppFrame::onResize(wxSizeEvent& event)
 {
   std::cout << "resize" << std::endl;
 }
+
+wxPanel* AppFrame::getPanel()
+{
+}

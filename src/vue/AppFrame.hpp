@@ -19,6 +19,8 @@ public:
 
   void loadFileIntoGround(int const* idList, std::string texture, MTypeCouche level,
                           int tailleTexture) override;
+
+
   void addEntite(std::string name, std::string file) override;
 private:
   Canvas* getCaneva();
