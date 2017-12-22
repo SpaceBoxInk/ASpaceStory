@@ -7,12 +7,15 @@
 
 #include "AppFrame.hpp"
 
+#include "../model/MParameters.hpp"
+
 AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size, int tailleTexture) :
 wxFrame(NULL, wxID_ANY, title, pos, size),
 
     _canvas(
         new Canvas(this, wxNewId(), wxPoint(-1, -1),
-                   wxSize(16 * tailleTexture, 8 * tailleTexture))),
+            wxSize(MParameters::getNbTuileX() * tailleTexture,
+                   MParameters::getNbTuileY() * tailleTexture))),
     _panel2(
         new wxPanel(this, wxID_ANY
                     , wxPoint(-1, -1), wxSize(-1, -1)

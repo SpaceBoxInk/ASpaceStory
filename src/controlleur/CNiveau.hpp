@@ -11,10 +11,12 @@
 
 #pragma once
 
+#include "../model/MEntite.hpp"
 #include "../model/MParameters.hpp"
 #include "../model/MTerrain.hpp"
 #include "../outils/ObserverPattern/Observer.hpp"
 
+#include <map>
 #include <string>
 
 class AppFrameInterface;
@@ -25,6 +27,7 @@ class CNiveau : public Observer
 private:
   MTerrain terrain;
   AppFrameInterface* vuePrincipale;
+  std::map<std::string, MEntite> entites;
   /**
    * folder for level resources
    */
@@ -45,6 +48,8 @@ private:
 
 //=========================>Methods<==========================
 public:
+  MEntite* getEntite(std::string name);
+  void addEntite(std::string name, MTuile* tuile, float taille);
 private:
   void setEventMethods();
 //=====================>Getters&Setters<======================
@@ -52,8 +57,10 @@ public:
   MTerrain& getTerrain();
 
   void setScriptFolder(std::string levelFolder);
-  std::string getLevelFolder() const;
+  std::string getScriptFolder() const;
   void setLevelMainFile(std::string levelMainFile);
+  std::string getLevelMainFile();
+
   std::string getScript() const;
 private:
 

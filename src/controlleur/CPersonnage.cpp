@@ -32,13 +32,18 @@ using namespace std;
 //------------------------------------------------------------
 
 CPersonnage::CPersonnage(AppFrameInterface* vuePrincipale, MTerrain* terrain) :
-    vuePrincipale(vuePrincipale), terrain(terrain)
+    vuePrincipale(vuePrincipale), terrain(terrain), quit(false)
 {
   setEventMethods();
 }
 
 CPersonnage::~CPersonnage()
 {
+  if (currentPerso)
+  {
+    delete currentPerso;
+    currentPerso = nullptr;
+  }
 }
 //------------------------------------------------------------
 //=========================>Methods<==========================
@@ -50,17 +55,31 @@ void CPersonnage::setEventMethods()
   // action when keyboard input
   addAction<MUserEvents, char>(
       MUserEvents::KEY_PRESSED, [this](char const& inputChar, Observed const&)
-  {
-    if (inputChar == '!')
-    {
-      exit(0);
-    }
-    if (MParameters::isMouvKey(inputChar))
-    {
-      personnage->deplacer(*terrain, MParameters::getMouvFromKey(inputChar));
-    }
+      {
+        if (inputChar == '!')
+        {
+          quit=true;
+        }
+        if (MParameters::isMouvKey(inputChar))
+        {
+          currentPerso->deplacer(*terrain, MParameters::getMouvFromKey(inputChar));
+        }
+        else if (MParameters::isActionKey(inputChar))
+        {
+          switch (MParameters::getActionFromKey(inputChar))
+          {
+            case MActionsKey::INTERACT_ENV_KEY:
+            currentPerso->interagirTuile(*terrain);
+            break;
+            case MActionsKey::ATTACK:
+            currentPerso->attaquer(*terrain);
+            break;
+            default:
+            break;
+          }
+        }
 
-  });
+      });
 }
 
 //------------------------------------------------------------

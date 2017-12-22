@@ -15,7 +15,7 @@
 
 #include "../outils/ObserverPattern/Observed.hpp"
 
-#include <bits/stdint-uintn.h>
+#include <cstdint>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -67,7 +67,7 @@ public:
 
   std::vector<int> getImagesList(MTypeCouche typeCouche) const;
 
-
+  MEntite* procheEntite(MCoordonnees coordonneeJoueur);
   MCoordonnees toCoords(int index);
 private:
   static void loadSpecificPath(std::string fichier, MTypeCouche const& type);

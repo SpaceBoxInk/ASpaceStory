@@ -26,18 +26,25 @@ std::unordered_map<std::uint8_t, MPartieCouche> MTerrain::solsType;
 std::unordered_map<std::uint8_t, MPartieCouche> MTerrain::elementsType;
 std::unordered_map<std::uint8_t, MPartieCouche> MTerrain::cielsType;
 
-MCoordonnees MTerrain::taille(40, 20);
+MCoordonnees MTerrain::taille(16, 8);
 //------------------------------------------------------------
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
 MTerrain::MTerrain()
 {
+  taille =
+  { MParameters::getNbTuileX(), MParameters::getNbTuileY()};
   loadTypes();
 }
 
 MTerrain::~MTerrain()
 {
+  for (int i = tuiles.size() - 1; i >= 0; --i)
+  {
+    delete tuiles[i];
+    tuiles.pop_back();
+  }
 }
 
 //------------------------------------------------------------
@@ -106,7 +113,7 @@ std::unordered_map<uint8_t, MPartieCouche>& MTerrain::getTypeList(
 }
 
 /**
- * FIXME : complete comments
+ * FIXME : complete all comments
  * @param fichier
  * @param type
  */
@@ -129,6 +136,7 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
         if (ID == 0 && type != MTypeCouche::SOL)
         {
           // le rien
+          tuiles[i]->deletePartieCouche(type);
           continue;
         }
         else if (ID == 0 && type == MTypeCouche::SOL)
@@ -169,7 +177,7 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
   {
     throw MExceptionFile(fichier, "ne peut etre ouvert");
   }
-
+  setChanged();
   notifyObservers(MTerrainEvents::COUCHE_LOADED, type);
 }
 
@@ -207,7 +215,7 @@ std::vector<MTuile*> MTerrain::getAdjacentes(MTuile const & tuile)
   // we want to use operator(MCoordonnees)
   // (*this) : deref this,
   MTerrain& thisRef = *this;
-  for (int i = 0; i < (int)Mouvement::SIZE; ++i)
+  for (int i = 0; i < MouvementT::size(); ++i)
   {
     try
     {

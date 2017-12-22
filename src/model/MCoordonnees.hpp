@@ -9,6 +9,7 @@
 #define SRC_MODEL_MCOORDONNEES_HPP_
 
 #include <string>
+#include <array>
 
 
 class MCoordonnees
@@ -20,7 +21,7 @@ public:
   MCoordonnees const& operator=(MCoordonnees const& other);
   MCoordonnees const& operator+=(MCoordonnees const& other);
   bool operator ==(MCoordonnees const & other) const;
-  bool operator <(MCoordonnees const & other) const;
+//  bool operator <(MCoordonnees const & other) const;
 
   void deplacerDe(MCoordonnees const& m);
 
@@ -36,7 +37,7 @@ private:
 
 enum class Mouvement
 {
-  HAUT,
+  HAUT = 0,
   BAS,
   DROITE,
   GAUCHE,
@@ -45,7 +46,29 @@ enum class Mouvement
 
 namespace MouvementT
 {
+  /// retourne les coordonnees de mouvement à appliquer en fonction du mouvement
   MCoordonnees operator *(Mouvement m);
+
+  constexpr int size()
+  {
+    return (int)(Mouvement::SIZE);
+  }
+
+  constexpr int getDirection(Mouvement m)
+  {
+    constexpr std::array<int, MouvementT::size()> directions = { 0, 180, 90, -90 };
+    return directions[int(m)];
+  }
+
+  /**
+   * @return les coordonées de déplacement pour la direction donnée
+   */
+  inline MCoordonnees getDirectionCoords(int direction)
+  {
+    int dir = (direction / 90);
+    return MCoordonnees(dir % 2, (dir - 1) % 2);
+  }
+
 }
 
 //==============================================================

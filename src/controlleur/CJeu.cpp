@@ -23,13 +23,14 @@
 //------------------------------------------------------------
 
 CJeu::CJeu() :
-    vuePrincipale(new AppFrame("A Space Story", wxPoint(50, 50), wxSize(512, 340), 32)),
+    vuePrincipale(new AppFrame("A Space Story", wxPoint(0, 0), wxSize(1536, 1020), 32)),
     cNiveau(vuePrincipale), cPersonnage(vuePrincipale, &cNiveau.getTerrain()), cLua(this)
 {
+  cPersonnage.addPersonnage("name");
+  cPersonnage.setPersonnage("name");
   cLua.executeScript(cNiveau.getScript());
   // TODO : to change (lua)
-  cPersonnage.setPersonnage("name", MParameters::getSpritesPath() + "texture3.png",
-                            &cNiveau.getTerrain()(2, 1), 0.9);
+  cPersonnage.setPersonnage("name");
   dynamic_cast<AppFrame*>(vuePrincipale)->Show();
 }
 
@@ -38,6 +39,16 @@ CJeu::~CJeu()
   delete vuePrincipale;
 }
 
+MEntite* CJeu::getEntite(std::string name)
+{
+  MEntite* ent = cNiveau.getEntite(name);
+  return ent;
+}
+
+MPersonnage* CJeu::getPersonnage(std::string name)
+{
+  return cPersonnage.getPersonnage(name);
+}
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------

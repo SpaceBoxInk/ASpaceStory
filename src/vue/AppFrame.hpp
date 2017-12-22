@@ -27,12 +27,12 @@ private:
 
   wxPanel* getPanel();
 
-  wxPanel* _panel; // FIXME il sert à quoi ?
+//  wxPanel* _panel; // FIXME il sert à quoi ?
   Canvas* _canvas;
   wxPanel* _panel2;
 };
 
-inline wxPanel* AppFrame::getPanel()
-{
-  return _panel;
-}
+//inline wxPanel* AppFrame::getPanel()
+//{
+//  return _panel;
+//}

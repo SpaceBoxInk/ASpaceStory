@@ -1,17 +1,16 @@
 /**
- * @file MPersonnage.cpp
+ * @file MRobot.cpp
  *
  * Early optimization is the root of all evil
  * DRY ! Don't repeat yourself
  *
- *  @date 3 déc. 2017
+ *  @date 14 déc. 2017
  *  @author FederAndInk
  *  @brief TODO complete
  */
 
-#include "MPersonnage.hpp"
+#include "MRobot.hpp"
 
-class MTuile;
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -21,18 +20,14 @@ class MTuile;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MPersonnage::MPersonnage(std::string const& nom) :
-    MEntite(nom)
-{
-
-}
-
-MPersonnage::~MPersonnage()
+MRobot::MRobot(MPersonnage* proprietaire, std::string const& nom, MTuile* tuile, float taille) :
+    MEntite(nom, tuile, taille), proprietaire(*proprietaire)
 {
 }
 
-
-
+MRobot::~MRobot()
+{
+}
 
 //------------------------------------------------------------
 //=========================>Methods<==========================

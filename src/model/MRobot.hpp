@@ -1,43 +1,40 @@
 /**
- * @file CJeu.hpp
+ * @file MRobot.hpp
  *
  * Early optimization is the root of all evil
  * DRY ! Don't repeat yourself
  *
- *  @date 8 déc. 2017
+ *  @date 14 déc. 2017
  *  @author FederAndInk
  *  @brief TODO complete
  */
 
 #pragma once
 
-#include "CLua.hpp"
-#include "CNiveau.hpp"
-#include "CPersonnage.hpp"
+#include "MEntite.hpp"
 
-#include "../vue/AppFrame.hpp"
+#include <string>
 
-class CJeu
+class MTuile;
+
+class MPersonnage;
+
+class MRobot : public MEntite
 {
-  friend class CLua;
 //========================>Attributes<========================
 private:
-  AppFrameInterface* vuePrincipale;
-  CNiveau cNiveau;
-  CPersonnage cPersonnage;
-  CLua cLua;
+  MPersonnage& proprietaire;
 //=======================>Constructors<=======================
 public:
-  CJeu();
+  MRobot(MPersonnage* proprietaire, std::string const& nom, MTuile* tuile, float taille);
   // TODO: rule of five ? copyandswap
-  virtual ~CJeu();
+  virtual ~MRobot();
 
 private:
 
 //=========================>Methods<==========================
 public:
-  MEntite* getEntite(std::string name);
-  MPersonnage* getPersonnage(std::string name);
+
 private:
 
 //=====================>Getters&Setters<======================

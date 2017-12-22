@@ -6,6 +6,9 @@
 .project
 .settings/
 
+# images
+*.pal
+
 # Prerequisites
 *.d
 
