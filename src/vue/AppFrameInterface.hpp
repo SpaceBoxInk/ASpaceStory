@@ -64,14 +64,6 @@ public:
 //  virtual void afficherEnigme(std::string image, std::string description, bool indice = false) = 0;
 //  virtual void afficherInventaire() = 0;
 //  virtual void afficherEditeur() = 0;
-  /**
-   * @param id id de l'objet
-   * @param image image de l'objet
-   * @param position la position dans l'inventaire ligne par ligne, si @a -1 l'objet va dans une case disponible
-   */
-//  virtual void ajouterObjInventaire(unsigned long long id, std::string image,
-//                                    int position = -1) = 0;
-//  virtual void enleverObjInventaire(unsigned long long id) = 0;
 private:
 
 //=====================>Getters&Setters<======================
