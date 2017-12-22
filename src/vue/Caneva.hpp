@@ -7,9 +7,6 @@
 
 #pragma once
 
-#include "Tilemap.cpp"
-#include "wxSFMLCanevas.hpp"
-
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <wx/event.h>
@@ -18,6 +15,11 @@
 #include <map>
 #include <string>
 #include <vector>
+
+#include "Tilemap.cpp"
+#include "wxSFMLCanevas.hpp"
+
+class MCoordonnees;
 
 class Canvas : public wxSfmlCanvas
 {
@@ -30,11 +32,14 @@ private:
   int y;
   std::vector<sf::Texture*> texture;
   std::map<std::string, sf::Sprite> sprites;
+  int tailleTexture;
   //=======================>Constructors<=======================
 public:
-  Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, long style = 0);
+  Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, long style = 0,
+         int TailleTexture = 32);
   virtual ~Canvas();
   virtual void onUpdate();
+  std::map<std::string, sf::Sprite>& getSprites();
 
   //=========================>Methods<==========================
 public:
@@ -45,6 +50,9 @@ public:
   void fermer();
   bool setEvent();
   void addEntite(std::string name, std::string file);
+  void move(std::string entityName, MCoordonnees const& offset);
+  void setPositionOf(std::string entityName, MCoordonnees const& position);
+
 private:
 
   void onResize(wxSizeEvent& event);
@@ -55,7 +63,8 @@ private:
   TileMap& getGround();
   TileMap& getObj();
   TileMap& getSky();
+  void setTailleTexture(int taille);
+  int getTailleTexture();
   sf::Texture* getTexture(int index);
   void setTexture(std::string const& file);
-  std::map<std::string, sf::Sprite>& getSprites();
 };

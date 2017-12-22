@@ -71,3 +71,13 @@ void AppFrame::onResize(wxSizeEvent& event)
 wxPanel* AppFrame::getPanel()
 {
 }
+
+void AppFrame::move(std::string entityName, MCoordonnees const& offset)
+{
+  _canvas->move(entityName, offset);
+}
+
+void AppFrame::setPositionOf(std::string entityName, MCoordonnees const& position)
+{
+  _canvas->setPositionOf(entityName, position);
+}

@@ -22,14 +22,15 @@ public:
 
 
   void addEntite(std::string name, std::string file) override;
+
+  void move(std::string entityName, MCoordonnees const& offset) override;
+  void setPositionOf(std::string entityName, MCoordonnees const& offset) override;
 private:
   Canvas* getCaneva();
 
   void onResize(wxSizeEvent& event);
 
   wxPanel* getPanel();
-
-//  wxPanel* _panel; // FIXME il sert à quoi ?
   Canvas* _canvas;
   wxPanel* _panel2;
 };

@@ -7,8 +7,6 @@
 
 #include "Caneva.hpp"
 
-#include "../model/MParameters.hpp"
-
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
@@ -16,12 +14,16 @@
 #include <iostream>
 #include <utility>
 
-Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, long style) :
+#include "../model/MCoordonnees.hpp"
+
+Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, long style,
+               int tailleTexture) :
     wxSfmlCanvas(parent, id, position, size, style)
 {
   x = size.x;
   y = size.y;
-//  int const level[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
+  this->tailleTexture = tailleTexture;
+  //  int const level[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
 //      0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 0, 0, 2, 0,
 //      3, 3, 3, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 0, 0, 0, 1, 0,
 //      3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0, 2, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1, 0, 0,
@@ -33,19 +35,16 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
 //      2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1 };
 //  this->loadFileIntoGround(level, MParameters::getTuilePath() + "textureCouche0.png", 0, 32);
 //  this->loadFileIntoGround(level2, "texture3.png", 1, 32);
-//  this->addEntite("Joseph Stalin", "joseph-staline.png");
+  this->addEntite("hitler", "perso_face.png");
 //  this->addEntite("24", "241890516020212.png");
 
-
   Connect(this->GetId(), wxEVT_SIZE, wxSizeEventHandler(Canvas::onResize));
-  Connect(this->GetId(), wxEVT_RIGHT_DCLICK,
-          wxMouseEventHandler(Canvas::onRight));
+  Connect(this->GetId(), wxEVT_RIGHT_DCLICK, wxMouseEventHandler(Canvas::onRight));
 }
 
 Canvas::~Canvas()
 {
 }
-
 
 void Canvas::onUpdate()
 {
@@ -137,6 +136,45 @@ void Canvas::addEntite(std::string name, std::string file)
   }
 }
 
+void Canvas::move(std::string entityName, MCoordonnees const& offset)
+try
+{
+  sf::Sprite& sp = getSprites().at(entityName);
+  sp.move(offset.getX() * getTailleTexture(), offset.getY() * getTailleTexture());
+  drawAll();
+}
+catch (std::out_of_range e)
+{
+  std::cout << "pas trouvé" << std::endl;
+}
+
+void Canvas::setPositionOf(std::string entityName, MCoordonnees const& position)
+try
+{
+  for (int var = 0; var < 5; ++var)
+  {
+    this->move("Joseph Stalin", MCoordonnees(2, 2));
+  }
+  sf::Sprite& sp = getSprites().at(entityName);
+  sp.setPosition(position.getX() * getTailleTexture(), position.getY() * getTailleTexture());
+  drawAll();
+}
+catch (std::out_of_range e)
+{
+  std::cout << "pas trouvé" << std::endl;
+}
+
+
+void Canvas::setTailleTexture(int taille)
+{
+  this->tailleTexture = taille;
+}
+
+int Canvas::getTailleTexture()
+{
+  return this->tailleTexture;
+}
+
 void Canvas::setTexture(std::string const& file)
 {
   texture.push_back(new sf::Texture());
@@ -167,14 +205,11 @@ void Canvas::drawAll()
 
 void Canvas::onRight(wxMouseEvent& event)
 {
-  sf::Sprite& sp = getSprites().at("Joseph Stalin");
-//  sp.setPosition(sp.getPosition().x + 10, sp.getPosition().y + 20);
-  sp.move(20, 20);
-  std::cout << getSprites().at("Joseph Stalin").getPosition().x << " " << sp.getPosition().x
-      << std::endl;
-  drawAll();
-}
+  std::cout << "bonjour" << std::endl;
+  this->move("hitler", MCoordonnees(1, 0));
+//  this->setPositionOf("Joseph Stalin", MCoordonnees(0, 0));
 
+}
 
 std::map<std::string, sf::Sprite>& Canvas::getSprites()
 {
