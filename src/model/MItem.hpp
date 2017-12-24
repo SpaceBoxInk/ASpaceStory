@@ -21,14 +21,14 @@ class MItem
 {
   //========================>Attributes<========================
 private:
+  Id id;
+  static Id nextId;
   std::string nom;
   MTypeEquipement type;
   std::string description;
   int degats;
   int protection;
   bool supprimable;
-  Id id;
-  static Id nextId;
   std::function<void(std::string entite)> actionUtilisation;
   int miningLevel;
 

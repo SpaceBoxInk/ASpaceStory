@@ -20,8 +20,8 @@ bool MItem::operator ==(MItem const& other) const
 MItem::MItem(std::string nom, std::string description, MTypeEquipement type,
     int degats,
              int protection, bool supprimable, int miningLevel) :
-    nom(nom), type(type), description(description), degats(degats), protection(protection),
-    supprimable(supprimable), id(nextId++), actionUtilisation(nullptr),
+    id(nextId++), nom(nom), type(type), description(description), degats(degats),
+    protection(protection), supprimable(supprimable), actionUtilisation(nullptr),
     miningLevel(miningLevel) // TODO: contructeur de test à modifier
 {
 }

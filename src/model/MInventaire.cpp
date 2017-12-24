@@ -6,12 +6,11 @@
  */
 
 #include "MInventaire.hpp"
+#include "MAssException.hpp"
+#include "MItem.hpp"
 
 #include <algorithm>
 #include <iterator>
-#include <string>
-
-#include "MItem.hpp"
 
 MInventaire::MInventaire(int taille) :
     equipement( { }), taille(taille)
@@ -27,19 +26,19 @@ int MInventaire::getDegatEquipement(MTypeEquipement typeEquip) const
   return 0;
 }
 
-void MInventaire::equiperItem(MItem* item)
+void MInventaire::equipe(Id itemId)
 {
-  auto it = std::find(items.begin(), items.end(), item);
-  if (it != items.end())
+  MItem* item = getItem(itemId);
+  if (item)
   {
-    items.erase(it, it);
+    supprimerItem(itemId);
+    desequipe(item->getType());
+    equipement[(int)item->getType()] = item;
   }
-  if (estEquipe(item->getType()))
+  else
   {
-    this->items.push_back(this->getEquipement(item->getType()));
-    this->equipement[(int)item->getType()] = nullptr;
+    throw MExceptionNullPtr("Pas d'item : itemId à équiper depuis l'inventaire");
   }
-  equipement[(int)item->getType()] = item;
 }
 
 int MInventaire::getDefenseEquipement(MTypeEquipement typeEquip) const
@@ -82,6 +81,15 @@ bool MInventaire::estEquipe(MTypeEquipement typeEquip) const
   return typeEquip < MTypeEquipement::SIZE && this->equipement.at((int)typeEquip);
 }
 
+void MInventaire::desequipe(MTypeEquipement typeEquip)
+{
+  if (estEquipe(typeEquip))
+  {
+    ajouterItem(getEquipement(typeEquip));
+    this->equipement[(int)typeEquip] = nullptr;
+  }
+}
+
 void MInventaire::ajouterItem(MItem* item)
 {
   if (this->items.size() < this->taille)
@@ -90,13 +98,27 @@ void MInventaire::ajouterItem(MItem* item)
   }
 }
 
-void MInventaire::supprimerItem(Id const& idItem)
+void MInventaire::supprimerItem(Id idItem)
 {
   auto item = std::find_if(items.begin(), items.end(), [idItem](MItem* i) -> bool
   {
     return i->getId() == idItem;
   });
   items.erase(item);
+}
+
+MItem* MInventaire::getEquipement(MTypeEquipement typeEquipement)
+{
+  return this->equipement.at((int)typeEquipement);
+}
+
+MItem* MInventaire::getItem(Id itemId)
+{
+  auto it = std::find_if(equipement.begin(), equipement.end(), [itemId](MItem* item) -> bool
+  {
+    return item->getId() == itemId;
+  });
+  return it == equipement.end() ? nullptr : *it;
 }
 
 //===========================================================
@@ -116,9 +138,4 @@ MTypeEquipement operator -(MTypeEquipement lh, int rh)
 MTypeEquipement operator ++(MTypeEquipement& equip)
 {
   return equip = (MTypeEquipement)((int)equip + 1);
-}
-
-MItem* MInventaire::getEquipement(MTypeEquipement typeEquipement)
-{
-  return this->equipement.at((int)typeEquipement);
 }

@@ -46,17 +46,20 @@ public:
 
 //=========================>Methods<==========================
 public:
+  void ajouterItem(MItem* item);
+  void supprimerItem(Id idItem);
+  bool estEquipe(MTypeEquipement typeEquip) const;
+
+  void equipe(Id itemId);
+  void desequipe(MTypeEquipement typeEquip);
+
+//=====================>Getters&Setters<======================
+public:
+  MItem* getEquipement(MTypeEquipement typeEquipement);
+  MItem* getItem(Id itemId);
+
   int getForceEquipement() const;
   int getDefenseEquipement() const;
-  void supprimerItem(Id const& idItem);
-  bool estEquipe(MTypeEquipement typeEquip) const;
-  void ajouterItem(MItem* item);
-  void equiperItem(MItem* item);
-  MItem* getEquipement(MTypeEquipement typeEquipement);
-
-  //=====================>Getters&Setters<======================
-
-public:
   int getDegatEquipement(MTypeEquipement typeEquip) const;
   int getDefenseEquipement(MTypeEquipement typeEquip) const;
 

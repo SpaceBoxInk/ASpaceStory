@@ -96,6 +96,11 @@ void MEntite::interagirTuile(MTerrain& terrain)
   }
 }
 
+void MEntite::equipe(Id idItem)
+{
+  inventaire.equipe(idItem);
+}
+
 bool MEntite::isAccessible(MTuile const & tuile)
 {
   return this->tuile->isAdjacente(tuile);
