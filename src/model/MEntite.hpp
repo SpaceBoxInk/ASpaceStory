@@ -11,8 +11,11 @@
 
 #pragma once
 
+#include "MCompetence.hpp"
 #include "MCoordonnees.hpp"
+#include "MInventaire.hpp"
 
+#include <functional>
 #include <string>
 
 class MTerrain;
@@ -33,9 +36,13 @@ private:
    */
   int direction;
   float taille;
+  MCompetence competences;
+  MInventaire inventaire;
+
+  std::function<void(std::string, int)> actionDefense;
 //=======================>Constructors<=======================
 public:
-  MEntite(std::string const& nom, MTuile* tuile, float taille);
+  MEntite(std::string const& nom, MTuile* tuile = nullptr, float taille = 1);
   // TODO: rule of five ? copyandswap
   virtual ~MEntite();
 
@@ -43,11 +50,18 @@ private:
 
 //=========================>Methods<==========================
 public:
-  MCoordonnees getDirectionCoords() const;
-
   void deplacer(MTerrain& terrain, Mouvement const& deplacement);
+
+  void attaquer(MTerrain& terrain);
+  void seDefendre(MEntite& attaquant, int degats);
   void interagirTuile(MTerrain& terrain);
+  void utiliserObjet();
   void mine(MTerrain& terrain);
+
+  int defenseTotale() const;
+  int forceTotale() const;
+  void addItemToInventaire(MItem* item);
+  void equipe(Id idItem);
 
 private:
   bool isAccessible(MTuile const& tuile) const;
@@ -59,9 +73,17 @@ public:
   std::string const & getNom() const;
 
   MTuile const * getTuile() const;
+  void setTuile(MTuile* tuile);
 
   float getTaille() const;
+  void setTaille(float taille);
 
+  MCompetence const& getCompetences() const;
+  MInventaire& getInventaire();
+
+
+
+  void setActionDefense(std::function<void(std::string, int)> actionDefense);
 private:
   int getMiningPower();
 
@@ -78,10 +100,9 @@ inline int MEntite::getDirection() const
   return direction;
 }
 
-inline void MEntite::setDirection(int direction)
+inline void MEntite::setActionDefense(std::function<void(std::string, int)> actionDefense)
 {
-  // FIXME do something for negatives or fix direction to 4 positions
-  this->direction = direction % 360;
+  this->actionDefense = actionDefense;
 }
 
 inline int MEntite::getMiningPower()
@@ -112,5 +133,10 @@ inline MTuile const * MEntite::getTuile() const
 inline float MEntite::getTaille() const
 {
   return taille;
+}
+
+inline void MEntite::setTaille(float taille)
+{
+  this->taille = taille;
 }
 

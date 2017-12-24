@@ -23,13 +23,14 @@ extern "C"
 //=======================>MAssException<======================
 //------------------------------------------------------------
 
-MAssException::MAssException()
+MAssException::MAssException(std::string desc) :
+    desc(desc)
 {
 }
 
 std::string MAssException::what() const noexcept
 {
-  return "Exception from A Space Story game !\n";
+  return "Exception from A Space Story game !\nDescription : " + desc + "\n";
 }
 
 //------------------------------------------------------------
@@ -116,4 +117,55 @@ MExceptionLuaArguments::MExceptionLuaArguments(std::string desc, int nbArgs) :
 std::string MExceptionLuaArguments::what() const noexcept
 {
   return desc;
+}
+
+//------------------------------------------------------------
+//==============>MExceptionEntiteInexistante<=================
+//------------------------------------------------------------
+MExceptionEntiteInexistante::MExceptionEntiteInexistante(std::string entite) :
+    entite(entite)
+{
+}
+
+std::string MExceptionEntiteInexistante::what() const noexcept
+{
+  return "entite " + entite + "non présente !";
+}
+
+//------------------------------------------------------------
+//================>MExceptionEntiteDejaCreee<=================
+//------------------------------------------------------------
+MExceptionEntiteDejaCreee::MExceptionEntiteDejaCreee(std::string entite) :
+    entite(entite)
+{
+}
+
+std::string MExceptionEntiteDejaCreee::what() const noexcept
+{
+  return "Entite " + entite + "déjà créée !!\n";
+}
+
+//------------------------------------------------------------
+//================>MExceptionEntiteDejaCreee<=================
+//------------------------------------------------------------
+MExceptionNullPtr::MExceptionNullPtr(std::string desc) :
+    desc(desc)
+{
+}
+
+std::string MExceptionNullPtr::what() const noexcept
+{
+  return "nullptr dereferencement ! caused by : " + desc;
+}
+//------------------------------------------------------------
+//==============>MExceptionArgumentsInvalides<================
+//------------------------------------------------------------
+MExceptionArgumentsInvalides::MExceptionArgumentsInvalides(std::string desc) :
+    desc(desc)
+{
+}
+
+std::string MExceptionArgumentsInvalides::what() const noexcept
+{
+  return "Invalid Arguments : " + desc;
 }

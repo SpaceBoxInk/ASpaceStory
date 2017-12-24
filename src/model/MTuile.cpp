@@ -30,7 +30,7 @@
  * @param placeDispoSol sa place disponible
  */
 MTuile::MTuile(MCoordonnees const& position, MPartieCouche const& couche) :
-    couches( { nullptr }), position(position), entite(nullptr)
+    couches( { }), position(position), entite(nullptr)
 {
   if (couche.isTypeOf(MTypeCouche::SOL))
   {
@@ -129,6 +129,11 @@ float MTuile::getPlaceDispoOn(MTypeCouche const & typeCouche) const
     return couches.at((int)typeCouche)->getPlaceDispo();
   }
   return MPartieCouche::PLACE_MAX;
+}
+
+void MTuile::addItem(MItem* item)
+{
+  this->items.push_back(item);
 }
 
 //------------------------------------------------------------

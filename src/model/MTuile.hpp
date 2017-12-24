@@ -9,12 +9,13 @@
 
 #pragma once
 
-#include "MCoordonnees.hpp"
-#include "MEntite.hpp"
-#include "MPartieCouche.hpp"
-
 #include <array>
 #include <string>
+
+#include "MCoordonnees.hpp"
+#include "MEntite.hpp"
+#include "MItem.hpp"
+#include "MPartieCouche.hpp"
 
 class MEntite;
 
@@ -33,6 +34,7 @@ private:
    * et le ciel\
    */
   std::array<MPartieCouche*, 3> couches;
+  std::vector<MItem*> items;
   MCoordonnees position;
 
   MEntite* entite;
@@ -61,6 +63,7 @@ public:
 
   void interagirTuile(MEntite* entite);
   void mine(MEntite* entite, int item); // replace By item
+  void addItem(MItem* item);
 private:
   float getPlaceDispoOn(MTypeCouche const& typeCouche) const;
 
@@ -68,9 +71,10 @@ private:
 public:
   MCoordonnees const & getPosition() const;
   void deletePartieCouche(MTypeCouche typeCouche);
-  MEntite const& getEntite() const;
+  MEntite* getEntite();
   bool isEntitePresente() const;
   void placeEntite(MEntite* entite);
+
 
   MPartieCouche* getPartieCouche(MTypeCouche type);
   MPartieCouche const* getPartieCouche(MTypeCouche type) const;
@@ -97,9 +101,9 @@ inline MCoordonnees const& MTuile::getPosition() const
   return position;
 }
 
-inline MEntite const & MTuile::getEntite() const
+inline MEntite* MTuile::getEntite()
 {
-  return *entite;
+  return entite;
 }
 
 /**
@@ -120,6 +124,8 @@ inline MPartieCouche* MTuile::getPartieCouche(MTypeCouche type)
 {
   return couches.at((int)type);
 }
+
+
 
 /**
  *

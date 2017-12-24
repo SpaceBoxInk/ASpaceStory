@@ -11,14 +11,17 @@
 
 #pragma once
 
-#include <bits/exception.h>
+#include <exception>
 #include <cxxabi.h>
-#include <luaconf.h>
 #include <any>
 #include <iostream>
+#include <string>
 #include <typeinfo>
 
+class MItem;
+
 class CJeu;
+class MTuile;
 
 extern "C"
 {
@@ -36,6 +39,8 @@ class CLua
 private:
   static lua_State* lua;
   static CJeu* cJeu;
+  static MItem* item;
+
 //=======================>Constructors<=======================
 public:
   CLua(CJeu* cJeu);
@@ -58,11 +63,38 @@ private:
 
   static int addActionMining(lua_State* l);
 
+  static int newEntity(lua_State* l);
+  static int addActionDefense(lua_State* l);
+  template<class T>
+  static int setPosition(lua_State* l);
+  template<class T>
+  static int setTaille(lua_State* l);
+
+  static int getCurrentPerso(lua_State* l);
+
+  static int newItem(lua_State* l);
+
+  static int giveNewItemToPerso(lua_State* l);
+  static int giveNewItemToEntity(lua_State* l);
+  static int putNewItemOn(lua_State* l);
+
+  static int addActionUtilisation(lua_State* l);
+
+
+
 //==================Register functions========================
   void registerBaseFunctions();
   void registerTerrainFunctions();
+  void registerEntiteFunctions();
+  void registerItemFunctions();
+//======================Lua/ASS function helper===================
+  static MTuile* getTuile(int index);
+  static MItem* getItem();
 //======================Lua function helper===================
   static void push(lua_Number n);
+  static void push(lua_Integer n);
+  static void push(lua_Unsigned n);
+  static void push(int n);
   static void push(lua_String str);
   static void push(lua_CFunction f);
   static void push(lua_Boolean b);
@@ -126,7 +158,7 @@ T CLua::getTableData(lua_State* l, char const* key, int paramNb)
   lua_pop(l, 1);
   try
   {
-    return std::any_cast < T > (any);
+    return std::any_cast<T>(any);
   }
   catch (std::exception& e)
   {

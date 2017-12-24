@@ -11,10 +11,12 @@
 
 #pragma once
 
+#include "../model/MEntite.hpp"
 #include "../model/MParameters.hpp"
 #include "../model/MTerrain.hpp"
 #include "../outils/ObserverPattern/Observer.hpp"
 
+#include <map>
 #include <string>
 
 class VPrimitif;
@@ -24,6 +26,7 @@ class CNiveau : public Observer
 //========================>Attributes<========================
 private:
   MTerrain terrain;
+  std::map<std::string, MEntite> entites;
   VPrimitif* vuePrincipale;
   /**
    * folder for level resources
@@ -45,6 +48,8 @@ private:
 
 //=========================>Methods<==========================
 public:
+  MEntite* getEntite(std::string name);
+  void addEntite(std::string name, MTuile* tuile, float taille);
 private:
   void setEventMethods();
 //=====================>Getters&Setters<======================

@@ -11,11 +11,12 @@
 
 #include "CNiveau.hpp"
 
+#include "../model/MAssException.hpp"
 #include "../model/MEvents.hpp"
 #include "../model/MPartieCouche.hpp"
 #include "../vue/VPrimitif.hpp"
 
-#include <vector>
+#include <utility>
 
 
 //------------------------------------------------------------
@@ -44,9 +45,9 @@ void CNiveau::setEventMethods()
 {
   addAction<MTerrainEvents, MTypeCouche>(
       MTerrainEvents::COUCHE_LOADED, [this](MTypeCouche couche, Observed const& o)
-  {
-    vuePrincipale->setImg(couche,terrain.getImagesList(couche));
-  });
+      {
+        vuePrincipale->setImg(couche,terrain.getImagesList(couche));
+      });
 }
 
 //------------------------------------------------------------
@@ -70,6 +71,23 @@ void CNiveau::setLevelMainFile(std::string levelMainFile)
 std::string CNiveau::getLevelMainFile() const
 {
   return levelMainFile;
+}
+
+MEntite* CNiveau::getEntite(std::string name)
+try
+{
+  return &entites.at(name);
+}
+catch (...)
+{
+  return nullptr;
+}
+
+void CNiveau::addEntite(std::string name, MTuile* tuile, float taille)
+{
+  auto [it, isInserted] = entites.try_emplace(name, name, tuile, taille);
+  if (!isInserted)
+    throw MExceptionEntiteDejaCreee(name);
 }
 
 std::string CNiveau::getScript() const

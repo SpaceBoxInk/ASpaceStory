@@ -9,10 +9,12 @@
 
 #pragma once
 
+#include "../model/MAssException.hpp"
 #include "../model/MPersonnage.hpp"
 #include "../outils/ObserverPattern/Observer.hpp"
 #include "../vue/VPrimitif.hpp"
 
+#include <map>
 #include <string>
 
 class MPersonnage;
@@ -32,7 +34,8 @@ private:
    * Vue principale TODO : faire vue principale, pour l'instant ce n'est que la vue du terrain
    */
   VPrimitif* vuePrincipale;
-  MPersonnage* personnage;
+  std::map<std::string, MPersonnage> personnages;
+  MPersonnage* currentPerso;
   MTerrain* terrain;
   bool quit;
 //=======================>Constructors<=======================
@@ -46,7 +49,11 @@ private:
 //=========================>Methods<==========================
 public:
   void launchPersonnage();
-  void setPersonnage(std::string nom, MTuile* tuile, float taille);
+  bool setPersonnage(std::string nom);
+  void attaquer();
+  MPersonnage* getPersonnage(std::string nom);
+  MPersonnage* getCurrentPerso();
+  void addPersonnage(std::string nom);
 private:
   void setEventMethods();
 
@@ -57,9 +64,37 @@ private:
   void changeVue(VPrimitif* vTerrain);
 };
 
-inline void CPersonnage::setPersonnage(std::string nom, MTuile* tuile, float taille)
+inline bool CPersonnage::setPersonnage(std::string nom)
+try
 {
-  personnage = new MPersonnage(nom, tuile, taille);
+  currentPerso = &personnages.at(nom);
+  return true;
+}
+catch (...)
+{
+  return false;
+}
+
+inline MPersonnage* CPersonnage::getPersonnage(std::string nom)
+try
+{
+  return &personnages.at(nom);
+}
+catch (...)
+{
+  return nullptr;
+}
+
+inline MPersonnage* CPersonnage::getCurrentPerso()
+{
+  return currentPerso;
+}
+
+inline void CPersonnage::addPersonnage(std::string nom)
+{
+auto [it, isInserted] = personnages.emplace(nom, nom);
+  if (!isInserted)
+    throw MExceptionEntiteDejaCreee(nom);
 }
 
 //------------------------------------------------------------
