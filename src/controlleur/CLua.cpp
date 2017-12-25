@@ -217,7 +217,6 @@ int CLua::setPosition(lua_State* l)
     return cJeu->cPersonnage.getPersonnage(name);
   };
 
-  // FIXME : testNbArgs
   std::string entiteName = lua_tostring(l, 1);
 
   MEntite* e = getEntite(entiteName);
@@ -247,7 +246,6 @@ int CLua::setTaille(lua_State* l)
     return cJeu->cPersonnage.getPersonnage(name);
   };
 
-  // FIXME : testNbArgs
   std::string entiteName = lua_tostring(l, 1);
   float taille = lua_tonumber(l, 2);
 
@@ -361,7 +359,6 @@ int CLua::addActionUtilisation(lua_State* l)
   return 0;
 }
 
-
 int CLua::addActionMining(lua_State* l)
 {
   testArgs(2);
@@ -378,7 +375,8 @@ int CLua::addActionMining(lua_State* l)
         lua_call(l, 2, 1);
         if (!lua_isnil(l, -1))
         {
-          // FIXME : entite->addToInventory(getItem());
+          entite->addItemToInventaire(getItem());
+          CLua::item = nullptr;
         }
       });
 
@@ -442,7 +440,7 @@ try
 {
   if (!item)
   {
-    throw MExceptionNullPtr("Aucun item de nouveau créé ! call : "); // TODO : getCurFunction()
+    throw MExceptionNullPtr("Aucun item de nouveau créé ! call : " + getCurFunction());
   }
   return item;
 }

@@ -8,14 +8,12 @@
 #ifndef SRC_MODEL_MITEM_HPP_
 #define SRC_MODEL_MITEM_HPP_
 
-
 #include <functional>
 #include <string>
 
 #include "MInventaire.hpp"
 
 class MEntite;
-
 
 class MItem
 {
@@ -35,16 +33,13 @@ private:
   //=======================>Constructors<=======================
 public:
   MItem(std::string nom, std::string description, MTypeEquipement type = MTypeEquipement::MAIN,
-        int degats = 0,
-        int protection = 0, bool supprimable = true, int miningLevel = 0);
-
+        int degats = 0, int protection = 0, bool supprimable = true, int miningLevel = 0);
 
   //=========================>Methods<==========================
 public:
   void utilisation(MEntite* entite);
 
   bool operator ==(MItem const& other) const;
-
 
   //=====================>Getters&Setters<======================
   std::string getNom() const;
@@ -53,17 +48,21 @@ public:
   Id getId() const;
   void setActionUtilisation(std::function<void(std::string entite)> actionUtilisation);
 
-
-  //------------------------------------------------------------
-  //=====================>Implementations<======================
-  //------------------------------------------------------------
-
   MTypeEquipement getType() const;
+  int getMiningLevel() const;
 };
+//------------------------------------------------------------
+//=====================>Implementations<======================
+//------------------------------------------------------------
 
 inline MTypeEquipement MItem::getType() const
 {
   return type;
+}
+
+inline int MItem::getMiningLevel() const
+{
+  return miningLevel;
 }
 
 #endif /* SRC_MODEL_MITEM_HPP_ */

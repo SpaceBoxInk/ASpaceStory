@@ -119,7 +119,6 @@ private:
 template<class T>
 T CLua::getTableData(lua_State* l, char const* key, int paramNb)
 {
-// TODO : verifier que si la pile n'est pas vide ca fonctionne toujours
   lua_getfield(l, paramNb, key);
   std::any any;
   switch (lua_type(l, -1)) {

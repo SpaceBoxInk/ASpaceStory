@@ -8,7 +8,7 @@
 #include "MCompetence.hpp"
 
 MCompetence::MCompetence() :
-    vieMax(0), vie(0), force(0) //TODO : temporaire pour tests à modifier
+    vieMax(20), vie(20), force(5) //TODO : temporaire pour tests à modifier
 {
 
 }
@@ -38,5 +38,5 @@ void MCompetence::addVie(int vieAjoutee)
 
 void MCompetence::enleveVie(int vieEnlevee)
 {
-  this->vie = this->vie - vieEnlevee; // TODO : take in account the defense !
+  this->vie = this->vie - vieEnlevee;
 }

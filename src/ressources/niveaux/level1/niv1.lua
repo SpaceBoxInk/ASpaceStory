@@ -3,8 +3,8 @@ loadfile(getScriptPath() .. "testLoad.lua")();
 
 addActionMining("montagne", function(entite, item)
   print(entite.." mine montagne avec "..item)
-  
---  return newItem();
+  local id = newItem("Montagne", "Ceci est gros")
+  return id
 end)
 
 setTaillePersonnage(getCurrentPerso(), 0.9);

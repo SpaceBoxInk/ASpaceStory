@@ -22,7 +22,7 @@ MItem::MItem(std::string nom, std::string description, MTypeEquipement type,
              int protection, bool supprimable, int miningLevel) :
     id(nextId++), nom(nom), type(type), description(description), degats(degats),
     protection(protection), supprimable(supprimable), actionUtilisation(nullptr),
-    miningLevel(miningLevel) // TODO: contructeur de test à modifier
+    miningLevel(miningLevel)
 {
 }
 

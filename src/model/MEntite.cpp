@@ -125,7 +125,7 @@ void MEntite::attaquer(MTerrain& terrain)
 try
 {
   MEntite* entiteCible = terrain(
-      getTuile()->getPosition() + MouvementT::getDirectionCoords(direction)).getEntite(); // FIXME : add direction
+      getTuile()->getPosition() + MouvementT::getDirectionCoords(direction)).getEntite();
   if (entiteCible)
   {
     entiteCible->seDefendre(*this, this->forceTotale());
@@ -178,6 +178,15 @@ void MEntite::setTuile(MTuile* tuile)
 MInventaire& MEntite::getInventaire()
 {
   return this->inventaire;
+}
+
+int MEntite::getMiningPower()
+{
+  if (inventaire.estEquipe(MTypeEquipement::MAIN))
+  {
+    return inventaire.getEquipement(MTypeEquipement::MAIN)->getMiningLevel();
+  }
+  return 0;
 }
 
 void MEntite::setDirection(int direction)

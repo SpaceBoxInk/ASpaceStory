@@ -105,16 +105,6 @@ inline void MEntite::setActionDefense(std::function<void(std::string, int)> acti
   this->actionDefense = actionDefense;
 }
 
-inline int MEntite::getMiningPower()
-{
-//  if (inventory.getEquipement())
-//  {
-//
-//  }
-  // FIXME : change miningLevel to MAIN item
-  return 0;
-}
-
 inline void MEntite::setDirection(Mouvement direction)
 {
   this->direction = MouvementT::getDirection(direction);
