@@ -26,7 +26,7 @@ class MTerrain;
  * le controlleur pour gérer les déplacements, les intéractions
  * du personnage (comme il est indépendant des niveaux)
  */
-class CPersonnage : Observer
+class CPersonnage : public Observer
 {
 //========================>Attributes<========================
 private:
@@ -49,7 +49,6 @@ private:
 //=========================>Methods<==========================
 public:
   bool setPersonnage(std::string nom);
-  void attaquer();
   MPersonnage* getPersonnage(std::string nom);
   MPersonnage* getCurrentPerso();
   void addPersonnage(std::string nom);
@@ -93,6 +92,10 @@ inline void CPersonnage::addPersonnage(std::string nom)
 auto [it, isInserted] = personnages.emplace(nom, nom);
   if (!isInserted)
     throw MExceptionEntiteDejaCreee(nom);
+  else
+  {
+    it->second.addObserver(this);
+  }
 }
 
 //------------------------------------------------------------

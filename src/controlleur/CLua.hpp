@@ -64,7 +64,7 @@ private:
   static int newEntity(lua_State* l);
   static int addActionDefense(lua_State* l);
 
-  static MEntite* getEntite(std::string& entiteName);
+  static MEntite* getEntite(std::string& entiteName, int nbArgsNoEntity);
   static int setPosition(lua_State* l);
   static int setTaille(lua_State* l);
   static int setTexture(lua_State* l);

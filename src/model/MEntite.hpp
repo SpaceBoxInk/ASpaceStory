@@ -16,13 +16,15 @@
 #include "MInventaire.hpp"
 #include "MObjetTexture.hpp"
 
+#include "../outils/ObserverPattern/Observed.hpp"
+
 #include <functional>
 #include <string>
 
 class MTerrain;
 class MTuile;
 
-class MEntite : public MObjetTexture
+class MEntite : public MObjetTexture, public Observed
 {
 //========================>Attributes<========================
 private:

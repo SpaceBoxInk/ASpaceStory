@@ -43,12 +43,17 @@ CNiveau::~CNiveau()
 //------------------------------------------------------------
 void CNiveau::setEventMethods()
 {
-  addAction<MTerrainEvents, MTypeCouche>(
-      MTerrainEvents::COUCHE_LOADED,
+  addAction<MModelEvents, MTypeCouche>(
+      MModelEvents::COUCHE_LOADED,
       [this](MTypeCouche couche, Observed const& o)
       {
         vuePrincipale->loadFileIntoGround(&terrain.getImagesList(couche)[0], MParameters::getTextureFor(couche),
             couche, MParameters::getTailleTuile());
+      });
+  addAction<MModelEvents, MEntite>(
+      MModelEvents::ENTITY_MOVED, [this](MEntite const& entity, Observed const&)
+      {
+        vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition());
       });
 }
 
@@ -90,6 +95,12 @@ void CNiveau::addEntite(std::string name, std::string texture, MTuile* tuile, fl
   auto [it, isInserted] = entites.try_emplace(name, name, texture, tuile, taille);
   if (!isInserted)
     throw MExceptionEntiteDejaCreee(name);
+  else
+  {
+    it->second.addObserver(this);
+    vuePrincipale->addEntite(name, texture);
+    vuePrincipale->setPositionOf(name, tuile->getPosition());
+  }
 }
 
 std::string CNiveau::getScript() const

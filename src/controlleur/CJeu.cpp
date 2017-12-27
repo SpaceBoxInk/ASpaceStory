@@ -28,9 +28,19 @@ CJeu::CJeu() :
 {
   cPersonnage.addPersonnage("name");
   cPersonnage.setPersonnage("name");
-  cLua.executeScript(cNiveau.getScript());
+  try
+  {
+    cLua.executeScript(cNiveau.getScript());
+  }
+  catch (MAssException& e)
+  {
+    std::cout << e.what() << '\n';
+  }
   // TODO : to change (lua)
-  cPersonnage.setPersonnage("name");
+  vuePrincipale->addEntite(cPersonnage.getCurrentPerso()->getNom(),
+                           cPersonnage.getCurrentPerso()->getTexture());
+  vuePrincipale->setPositionOf(cPersonnage.getCurrentPerso()->getNom(),
+                               cPersonnage.getCurrentPerso()->getTuile()->getPosition());
   dynamic_cast<AppFrame*>(vuePrincipale)->Show();
 }
 

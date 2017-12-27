@@ -178,7 +178,7 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
     throw MExceptionFile(fichier, "ne peut etre ouvert");
   }
   setChanged();
-  notifyObservers(MTerrainEvents::COUCHE_LOADED, type);
+  notifyObservers(MModelEvents::COUCHE_LOADED, type);
 }
 
 MTuile& MTerrain::operator ()(int x, int y)

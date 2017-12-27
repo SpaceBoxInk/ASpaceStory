@@ -10,7 +10,7 @@
 #include "../model/MParameters.hpp"
 
 AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size, int tailleTexture) :
-wxFrame(NULL, wxID_ANY, title, pos, size),
+    wxFrame(NULL, wxID_ANY, title, pos, size),
 
     _canvas(
         new Canvas(this, wxNewId(), wxPoint(-1, -1),

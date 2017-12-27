@@ -39,11 +39,6 @@ CPersonnage::CPersonnage(AppFrameInterface* vuePrincipale, MTerrain* terrain) :
 
 CPersonnage::~CPersonnage()
 {
-  if (currentPerso)
-  {
-    delete currentPerso;
-    currentPerso = nullptr;
-  }
 }
 //------------------------------------------------------------
 //=========================>Methods<==========================
@@ -79,6 +74,12 @@ void CPersonnage::setEventMethods()
           }
         }
 
+      });
+
+  addAction<MModelEvents, MEntite>(
+      MModelEvents::ENTITY_MOVED, [this](MEntite const& entity, Observed const&)
+      {
+        vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition());
       });
 }
 

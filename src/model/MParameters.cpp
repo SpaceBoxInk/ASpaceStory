@@ -48,7 +48,7 @@ char MParameters::getKeyFor(std::string const & action)
 }
 
 
-std::string const & MParameters::getRootPath()
+std::string MParameters::getRootPath()
 {
   return rootPath;
 }

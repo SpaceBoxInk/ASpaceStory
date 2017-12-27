@@ -170,7 +170,7 @@ int CLua::newEntity(lua_State* l)
   std::string name = lua_tostring(l, 1);
   std::string texture = lua_tostring(l, 2);
   MTuile* tuile = getTuile(3);
-  float taille = lua_tonumber(l, 3);
+  float taille = lua_tonumber(l, 5);
 
   cJeu->cNiveau.addEntite(name, texture, tuile, taille);
   return 0;
@@ -207,15 +207,16 @@ int CLua::addActionDefense(lua_State* l)
   return 0;
 }
 
-MEntite* CLua::getEntite(std::string& entiteName)
+MEntite* CLua::getEntite(std::string& entiteName, int nbArgsNoEntity)
 {
-  if (getTop() == 2)
+  if (getTop() - nbArgsNoEntity == 1)
   {
     entiteName = lua_tostring(lua, 1);
     return cJeu->getEntite(entiteName);
   }
-  else if (getTop() == 1)
+  else if (getTop() - nbArgsNoEntity == 0)
   {
+    entiteName = cJeu->cPersonnage.getCurrentPerso()->getNom();
     return cJeu->cPersonnage.getCurrentPerso();
   }
   else
@@ -232,11 +233,11 @@ int CLua::setPosition(lua_State* l)
 {
   // FIXME : testNbArgs
   std::string entiteName;
-  MEntite* e = getEntite(entiteName);
+  MEntite* e = getEntite(entiteName, 2);
 
   if (e)
   {
-    e->setTuile(getTuile(2));
+    e->setTuile(getTuile(-2));
   }
   else
   {
@@ -248,8 +249,8 @@ int CLua::setPosition(lua_State* l)
 int CLua::setTexture(lua_State* l)
 {
   std::string entiteName;
-  MEntite* e = getEntite(entiteName);
-  e->setTexture(lua_tostring(l, 2));
+  MEntite* e = getEntite(entiteName, 1);
+  e->setTexture(lua_tostring(l, -1));
   return 0;
 }
 
@@ -260,9 +261,9 @@ int CLua::setTaille(lua_State* l)
 {
   // FIXME : testNbArgs
   std::string entiteName;
-  float taille = lua_tonumber(l, 2);
+  float taille = lua_tonumber(l, -1);
 
-  MEntite* e = getEntite(entiteName);
+  MEntite* e = getEntite(entiteName, 1);
 
   if (e)
   {
@@ -309,7 +310,21 @@ void CLua::registerEntiteFunctions()
 
 void CLua::executeScript(std::string script)
 {
-  luaL_dofile(lua, script.c_str());
+  try
+  {
+    luaL_dofile(lua, script.c_str());
+  }
+  catch (MAssException& e)
+  {
+    throw;
+  }
+  catch (...)
+  {
+    lua_Debug ar;
+    lua_getstack(lua, 0, &ar);
+    lua_getinfo(lua, "nfSl", &ar);
+    std::cout << "Error in " << ar.namewhat << " : " << ar.name << '\n';
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

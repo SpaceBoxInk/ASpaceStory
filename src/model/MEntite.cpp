@@ -10,9 +10,8 @@
  */
 
 #include "MEntite.hpp"
-
 #include "MAssException.hpp"
-#include "MInventaire.hpp"
+#include "MEvents.hpp"
 #include "MTerrain.hpp"
 #include "MTuile.hpp"
 
@@ -67,6 +66,8 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
       if (tuile->deplacerEntiteVers(tuileDst))
       {
         tuile = &terrain(tuile->getPosition() + *deplacement);
+        setChanged();
+        notifyObservers(MModelEvents::ENTITY_MOVED, *this);
       }
     }
   }

@@ -145,23 +145,19 @@ try
 }
 catch (std::out_of_range e)
 {
-  std::cout << "pas trouvé" << std::endl;
+  std::cout << entityName << " pas trouvé" << std::endl;
 }
 
 void Canvas::setPositionOf(std::string entityName, MCoordonnees const& position)
 try
 {
-  for (int var = 0; var < 5; ++var)
-  {
-    this->move("Joseph Stalin", MCoordonnees(2, 2));
-  }
   sf::Sprite& sp = getSprites().at(entityName);
   sp.setPosition(position.getX() * getTailleTexture(), position.getY() * getTailleTexture());
   drawAll();
 }
 catch (std::out_of_range e)
 {
-  std::cout << "pas trouvé" << std::endl;
+  std::cout << entityName << " pas trouvé" << std::endl;
 }
 
 

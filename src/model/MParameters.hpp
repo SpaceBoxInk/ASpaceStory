@@ -54,7 +54,7 @@ private:
   static char getKeyFor(std::string const& action);
 public:
   // PATHS
-  static std::string const& getRootPath();
+  static std::string getRootPath();
 
   static std::string getConfPath();
   static std::string getTuilePath();
