@@ -1,5 +1,5 @@
 
-loadfile(getScriptPath() .. "testLoad.lua")();
+loadfile("testLoad.lua")();
 
 addActionMining("montagne", function(entite, item)
   print(entite.." mine montagne avec "..item)

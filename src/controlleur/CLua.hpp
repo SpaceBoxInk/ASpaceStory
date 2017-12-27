@@ -57,6 +57,7 @@ private:
   static int loadCouche(lua_State* l);
   static int setScriptPath(lua_State* l);
   static int getScriptPath(lua_State* l);
+  static int loadfile(lua_State* l);
 
   static int addActionDeclenchement(lua_State* l);
   static int addActionPassage(lua_State* l);
