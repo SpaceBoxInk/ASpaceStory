@@ -1,8 +1,22 @@
 
 loadfile(getScriptPath() .. "testLoad.lua")();
 
+addActionMining("montagne", function(entite, item)
+  print(entite.." mine montagne avec "..item)
+  local id = newItem("Montagne", "Ceci est gros")
+  return id
+end)
+
 setTaillePersonnage(getCurrentPerso(), 0.9);
 setPositionPersonnage(getCurrentPerso(), 2, 2);
+
+idIt = newItem("jean", "leak skvsf")
+
+addActionUtilisation(function(entite)
+	print("utilise jean")
+end)
+
+giveNewItemToPerso(getCurrentPerso())
 
 newEntity("test", 2, 1, 0.9)
 

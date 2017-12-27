@@ -68,7 +68,7 @@ void CNiveau::setLevelMainFile(std::string levelMainFile)
   this->levelMainFile = levelMainFile;
 }
 
-std::string CNiveau::getLevelMainFile()
+std::string CNiveau::getLevelMainFile() const
 {
   return levelMainFile;
 }

@@ -77,11 +77,17 @@ void CPersonnage::setEventMethods()
         {
           switch (MParameters::getActionFromKey(inputChar))
           {
-            case MActionsKey::INTERACT_ENV_KEY:
+            case MActionsKey::INTERACT_ENV:
             currentPerso->interagirTuile(*terrain);
+            break;
+            case MActionsKey::MINE:
+            currentPerso->mine(*terrain);
             break;
             case MActionsKey::ATTACK:
             currentPerso->attaquer(*terrain);
+            break;
+            case MActionsKey::USE_MAIN_OBJECT:
+            currentPerso->utiliserObjet();
             break;
             default:
             break;

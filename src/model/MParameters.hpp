@@ -25,8 +25,10 @@ enum class Lang
 
 enum class MActionsKey
 {
-  INTERACT_ENV_KEY,
+  INTERACT_ENV,
+  MINE,
   ATTACK,
+  USE_MAIN_OBJECT,
 };
 
 /**

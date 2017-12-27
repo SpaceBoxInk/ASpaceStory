@@ -10,9 +10,8 @@
  */
 
 #include "MEntite.hpp"
-
 #include "MAssException.hpp"
-#include "MInventaire.hpp"
+#include "MItem.hpp"
 #include "MTerrain.hpp"
 #include "MTuile.hpp"
 
@@ -25,7 +24,7 @@
 //------------------------------------------------------------
 
 MEntite::MEntite(std::string const& nom, MTuile* tuile, float taille) :
-    nom(nom), direction(0), taille(taille), actionDefense(nullptr)
+    nom(nom), direction(0), taille(taille), inventaire(70), actionDefense(nullptr)
 {
   setTuile(tuile);
 }
@@ -83,20 +82,41 @@ void MEntite::seDefendre(MEntite& attaquant, int degats)
   }
 }
 
+/**
+ * interagi avec la tuile dans la #direction de l'entité\
+ * ex: appuie sur un bouton
+ * @param terrain le terrain ou est l'entité
+ */
 void MEntite::interagirTuile(MTerrain& terrain)
+try
 {
-  try
-  {
-    MTuile& tuileInt = terrain(
-        tuile->getPosition() + MouvementT::getDirectionCoords(direction));
-    tuileInt.interagirTuile(this);
-  }
-  catch (MExceptionOutOfTerrain& e)
-  {
-  }
+  MTuile& tuileInt = terrain(tuile->getPosition() + MouvementT::getDirectionCoords(direction));
+  tuileInt.interagirTuile(this);
+}
+catch (MExceptionOutOfTerrain& e)
+{
 }
 
-bool MEntite::isAccessible(MTuile const & tuile)
+/**
+ * mine la #MTuile devant l'entite (la couche 1 : #MTypeCouche::ELEMENT)
+ * @param terrain le terrain ou est l'entité
+ */
+void MEntite::mine(MTerrain& terrain)
+try
+{
+  MTuile& tuileInt = terrain(tuile->getPosition() + MouvementT::getDirectionCoords(direction));
+  tuileInt.mine(this, getMiningPower());
+}
+catch (MExceptionOutOfTerrain& e)
+{
+}
+
+void MEntite::equipe(Id idItem)
+{
+  inventaire.equipe(idItem);
+}
+
+bool MEntite::isAccessible(MTuile const & tuile) const
 {
   return this->tuile->isAdjacente(tuile);
 }
@@ -105,7 +125,7 @@ void MEntite::attaquer(MTerrain& terrain)
 try
 {
   MEntite* entiteCible = terrain(
-      getTuile()->getPosition() + MouvementT::getDirectionCoords(direction)).getEntite(); // FIXME : add direction
+      getTuile()->getPosition() + MouvementT::getDirectionCoords(direction)).getEntite();
   if (entiteCible)
   {
     entiteCible->seDefendre(*this, this->forceTotale());
@@ -124,6 +144,19 @@ int MEntite::defenseTotale() const
 {
   return inventaire.getDefenseEquipement();
 }
+
+void MEntite::addItemToInventaire(MItem* item)
+{
+  this->inventaire.ajouterItem(item);
+}
+
+void MEntite::utiliserObjet()
+{
+  if (inventaire.getEquipement(MTypeEquipement::MAIN))
+  {
+    inventaire.getEquipement(MTypeEquipement::MAIN)->utilisation(this);
+  }
+}
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
@@ -140,6 +173,20 @@ void MEntite::setTuile(MTuile* tuile)
   {
     tuile->placeEntite(this);
   }
+}
+
+MInventaire& MEntite::getInventaire()
+{
+  return this->inventaire;
+}
+
+int MEntite::getMiningPower()
+{
+  if (inventaire.estEquipe(MTypeEquipement::MAIN))
+  {
+    return inventaire.getEquipement(MTypeEquipement::MAIN)->getMiningLevel();
+  }
+  return 0;
 }
 
 void MEntite::setDirection(int direction)

@@ -10,6 +10,7 @@
  */
 
 #include "MPersonnage.hpp"
+#include "MItem.hpp"
 
 class MTuile;
 
@@ -24,7 +25,6 @@ class MTuile;
 MPersonnage::MPersonnage(std::string const& nom) :
     MEntite(nom)
 {
-
 }
 
 MPersonnage::~MPersonnage()

@@ -59,7 +59,7 @@ public:
   void setScriptFolder(std::string levelFolder);
   std::string getScriptFolder() const;
   void setLevelMainFile(std::string levelMainFile);
-  std::string getLevelMainFile();
+  std::string getLevelMainFile() const;
 
   std::string getScript() const;
 private:

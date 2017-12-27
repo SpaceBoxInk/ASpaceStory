@@ -10,21 +10,22 @@
  */
 
 #include "CLua.hpp"
-#include "CJeu.hpp"
-#include "CNiveau.hpp"
 
 #include "../model/MAssException.hpp"
+#include "../model/MInventaire.hpp"
+#include "../model/MItem.hpp"
 #include "../model/MPartieCouche.hpp"
 #include "../model/MTerrain.hpp"
-
-#include <string>
+#include "../model/MTuile.hpp"
+#include "CJeu.hpp"
+#include "CNiveau.hpp"
 
 //------------------------------------------------------------
 //========================>static members<=========================
 //------------------------------------------------------------
 lua_State* CLua::lua = luaL_newstate();
 CJeu* CLua::cJeu;
-
+MItem* CLua::item = nullptr;
 //------------------------------------------------------------
 //=======================>Constructors<=======================
 //------------------------------------------------------------
@@ -37,6 +38,7 @@ CLua::CLua(CJeu* cJeu)
   registerBaseFunctions();
   registerTerrainFunctions();
   registerEntiteFunctions();
+  registerItemFunctions();
 }
 
 CLua::~CLua()
@@ -215,7 +217,6 @@ int CLua::setPosition(lua_State* l)
     return cJeu->cPersonnage.getPersonnage(name);
   };
 
-  // FIXME : testNbArgs
   std::string entiteName = lua_tostring(l, 1);
 
   MEntite* e = getEntite(entiteName);
@@ -245,7 +246,6 @@ int CLua::setTaille(lua_State* l)
     return cJeu->cPersonnage.getPersonnage(name);
   };
 
-  // FIXME : testNbArgs
   std::string entiteName = lua_tostring(l, 1);
   float taille = lua_tonumber(l, 2);
 
@@ -268,6 +268,121 @@ int CLua::getCurrentPerso(lua_State* l)
   return 1;
 }
 
+int CLua::newItem(lua_State* l)
+{
+  std::string nom = lua_tostring(l, 1);
+  std::string description = lua_tostring(l, 2);
+  int degats;
+  MTypeEquipement equipement;
+  int protection;
+  bool supprimable;
+  switch (getTop()) {
+  case 6:
+    degats = lua_tointeger(l, 3);
+    equipement = (MTypeEquipement)lua_tointeger(l, 4);
+    protection = lua_tointeger(l, 5);
+    supprimable = lua_toboolean(l, 6);
+    item = new MItem(nom, description, equipement, degats, protection, supprimable);
+    break;
+  case 5:
+    degats = lua_tointeger(l, 3);
+    equipement = (MTypeEquipement)lua_tointeger(l, 4);
+    protection = lua_tointeger(l, 5);
+    item = new MItem(nom, description, equipement, degats, protection);
+    break;
+  case 4:
+    degats = lua_tointeger(l, 3);
+    equipement = (MTypeEquipement)lua_tointeger(l, 4);
+    item = new MItem(nom, description, equipement, degats);
+    break;
+  case 3:
+    equipement = (MTypeEquipement)lua_tointeger(l, 3);
+    item = new MItem(nom, description, equipement);
+    break;
+  case 2:
+    item = new MItem(nom, description);
+    break;
+  }
+  push(item->getId());
+  return 1;
+}
+
+int CLua::giveNewItemToPerso(lua_State* l)
+{
+  cJeu->cPersonnage.getCurrentPerso()->addItemToInventaire(getItem());
+  item = nullptr;
+  return 0;
+}
+
+int CLua::giveNewItemToEntity(lua_State* l)
+{
+  testArgs(1);
+  std::string nomEntite = lua_tostring(l, 2);
+  MEntite* entite = cJeu->getEntite(nomEntite);
+  entite->addItemToInventaire(getItem());
+  item = nullptr;
+  return 0;
+}
+
+int CLua::putNewItemOn(lua_State* l)
+{
+  testArgs(3);
+  int x = lua_tointeger(l, 2);
+  int y = lua_tointeger(l, 3);
+  cJeu->cNiveau.getTerrain()(x, y).addItem(getItem());
+  item = nullptr;
+  return 0;
+}
+
+/**
+ * addActionUtilisation(luaFunction)
+ */
+int CLua::addActionUtilisation(lua_State* l)
+{
+  testArgs(1);
+  if (lua_isfunction(l, -1))
+  {
+    // store function
+    int curIndex = luaL_ref(l, LUA_REGISTRYINDEX);
+    getItem()->setActionUtilisation([curIndex, l](std::string entite)
+    {
+      // get function previously stored in special lua table registry
+        lua_rawgeti(l, LUA_REGISTRYINDEX, curIndex);
+        if (lua_isfunction(l, -1))
+        {
+          push(entite.c_str());
+          // call function defined by lua
+          lua_call(l, 1, 0);
+        }
+      });
+  }
+  return 0;
+}
+
+int CLua::addActionMining(lua_State* l)
+{
+  testArgs(2);
+  std::string element = lua_tostring(l, 1);
+  int curIndex = storeFunction();
+  cJeu->cNiveau.getTerrain().getElement(element).setActionMining(
+      [curIndex, l](MEntite* entite, int item)
+      {
+        pushFunctionFrom(curIndex);
+        // pass entity name on 1st parameter
+        push(entite->getNom().c_str());
+        lua_pushinteger(l, item);
+        // call function defined by lua
+        lua_call(l, 2, 1);
+        if (!lua_isnil(l, -1))
+        {
+          entite->addItemToInventaire(getItem());
+          CLua::item = nullptr;
+        }
+      });
+
+  return 0;
+}
+
 void CLua::registerBaseFunctions()
 {
   lua_register(lua, "setScriptPath", setScriptPath);
@@ -279,6 +394,9 @@ void CLua::registerTerrainFunctions()
   lua_register(lua, "loadCouche", loadCouche);
   lua_register(lua, "addActionDeclenchement", addActionDeclenchement);
   lua_register(lua, "addActionPassage", addActionPassage);
+
+  // TODO : change in another register !!
+  lua_register(lua, "addActionMining", addActionMining);
 }
 
 void CLua::registerEntiteFunctions()
@@ -291,6 +409,15 @@ void CLua::registerEntiteFunctions()
   lua_register(lua, "setPositionPersonnage", setPosition<MPersonnage>);
   lua_register(lua, "getCurrentPerso", getCurrentPerso);
   lua_register(lua, "addActionDefense", addActionDefense);
+}
+
+void CLua::registerItemFunctions()
+{
+  lua_register(lua, "newItem", newItem);
+  lua_register(lua, "giveNewItemToPerso", giveNewItemToPerso);
+  lua_register(lua, "giveNewItemToEntity", giveNewItemToEntity);
+  lua_register(lua, "putNewItemOn", putNewItemOn);
+  lua_register(lua, "addActionUtilisation", addActionUtilisation);
 }
 
 void CLua::executeScript(std::string script)
@@ -308,6 +435,20 @@ MTuile* CLua::getTuile(int index)
   return &(cJeu->cNiveau.getTerrain()(x, y));
 }
 
+MItem* CLua::getItem()
+try
+{
+  if (!item)
+  {
+    throw MExceptionNullPtr("Aucun item de nouveau créé ! call : " + getCurFunction());
+  }
+  return item;
+}
+catch (MAssException& e)
+{
+  std::cerr << e.what() << std::endl;
+  throw;
+}
 ////////////////////////////////////////////////////////////////////////////////
 //-///////////////////////////Lua function Helpers///////////////////////////-//
 ////////////////////////////////////////////////////////////////////////////////
@@ -336,6 +477,11 @@ void CLua::push(lua_Integer n)
   lua_pushinteger(lua, n);
 }
 
+void CLua::push(lua_Unsigned n)
+{
+  lua_pushinteger(lua, n);
+}
+
 void CLua::push(int n)
 {
   lua_pushinteger(lua, n);
@@ -344,6 +490,28 @@ void CLua::push(int n)
 int CLua::getTop()
 {
   return lua_gettop(lua);
+}
+
+int CLua::storeFunction()
+{
+  if (lua_isfunction(lua, -1))
+  {
+    // store function
+    return luaL_ref(lua, LUA_REGISTRYINDEX);
+  }
+  throw std::invalid_argument("This is not a function ! called : " + getCurFunction());
+  return 0;
+}
+
+void CLua::pushFunctionFrom(int index)
+{
+  // get function previously stored in special lua table registry
+  lua_rawgeti(lua, LUA_REGISTRYINDEX, index);
+  if (!lua_isfunction(lua, -1))
+  {
+    throw std::invalid_argument(
+        "Try to get back a function but not get a function ! called : " + getCurFunction());
+  }
 }
 
 void CLua::testArgs(int nbExcpected)
@@ -368,6 +536,14 @@ void CLua::testArgs(int nbExcpected)
     throw;
   }
 
+}
+
+std::string CLua::getCurFunction()
+{
+  lua_Debug ar;
+  lua_getstack(lua, 0, &ar);
+  lua_getinfo(lua, "nf", &ar);
+  return ar.name;
 }
 ////////////////////////////////////////////////////////////////////////////////
 

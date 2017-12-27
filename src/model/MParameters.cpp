@@ -1,7 +1,7 @@
 
 #include "MParameters.hpp"
+#include "MAssException.hpp"
 
-#include <bits/exception.h>
 #include <fstream>
 #include <iostream>
 
@@ -31,7 +31,7 @@ void MParameters::setRootPath()
       if (!checkConfFile("/etc/Sbi/"))
         if (!checkConfFile("~/.local/share/Sbi/"))
         {
-          throw "No config file found";
+          throw MExceptionFile(configFile, "No config file found");
         }
 }
 
@@ -96,8 +96,10 @@ void MParameters::load(std::string exePath)
   mouvKeys[getKeyFor("leftKey")] = Mouvement::GAUCHE;
   mouvKeys[getKeyFor("rightKey")] = Mouvement::DROITE;
 
-  keys[getKeyFor("interactEnvKey")] = MActionsKey::INTERACT_ENV_KEY;
+  keys[getKeyFor("interactEnvKey")] = MActionsKey::INTERACT_ENV;
+  keys[getKeyFor("mineKey")] = MActionsKey::MINE;
   keys[getKeyFor("attackKey")] = MActionsKey::ATTACK;
+  keys[getKeyFor("useKey")] = MActionsKey::USE_MAIN_OBJECT;
 }
 
 std::string MParameters::getSolsPath()

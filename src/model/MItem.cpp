@@ -7,8 +7,22 @@
 
 #include "MItem.hpp"
 
-MItem::MItem() :
-    nom("test"), type((MTypeEquipement)2), description("testDescr"), degats(3), protection(34) // TODO: contructeur de test à modifier
+#include "MEntite.hpp"
+
+Id MItem::nextId = 0;
+
+bool MItem::operator ==(MItem const& other) const
+{
+  return this->getId() == other.getId();
+}
+
+
+MItem::MItem(std::string nom, std::string description, MTypeEquipement type,
+    int degats,
+             int protection, bool supprimable, int miningLevel) :
+    id(nextId++), nom(nom), type(type), description(description), degats(degats),
+    protection(protection), supprimable(supprimable), actionUtilisation(nullptr),
+    miningLevel(miningLevel)
 {
 }
 
@@ -21,3 +35,27 @@ int MItem::getProtection() const
 {
   return this->protection;
 }
+
+std::string MItem::getNom() const
+{
+  return this->nom;
+}
+
+Id MItem::getId() const
+{
+  return id;
+}
+
+void MItem::setActionUtilisation(std::function<void(std::string entite)> actionUtilisation)
+{
+  this->actionUtilisation = actionUtilisation;
+}
+
+void MItem::utilisation(MEntite* entite)
+{
+  if (actionUtilisation)
+  {
+    this->actionUtilisation(entite->getNom());
+  }
+}
+

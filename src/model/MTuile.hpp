@@ -9,12 +9,13 @@
 
 #pragma once
 
-#include "MCoordonnees.hpp"
-#include "MEntite.hpp"
-#include "MPartieCouche.hpp"
-
 #include <array>
 #include <string>
+
+#include "MCoordonnees.hpp"
+#include "MEntite.hpp"
+#include "MItem.hpp"
+#include "MPartieCouche.hpp"
 
 class MEntite;
 
@@ -33,13 +34,13 @@ private:
    * et le ciel\
    */
   std::array<MPartieCouche*, 3> couches;
+  std::vector<MItem*> items;
   MCoordonnees position;
 
   MEntite* entite;
 //=======================>Constructors<=======================
 public:
-  MTuile(MCoordonnees const& position, std::string nameCoucheSol, std::string fichierImg,
-         float placeDispoSol);
+  MTuile(MCoordonnees const& position, MPartieCouche const& couche);
   /**
    * constructeur de recopie supprimé\
    * on ne veut pas pouvoir copier la tuile
@@ -57,10 +58,12 @@ public:
 
   float getPlaceDispo() const;
 
-  bool isAdjacente(MTuile const& tuileOther);
+  bool isAdjacente(MTuile const& tuileOther) const;
   bool deplacerEntiteVers(MTuile& tuileDst);
 
   void interagirTuile(MEntite* entite);
+  void mine(MEntite* entite, int item); // replace By item
+  void addItem(MItem* item);
 private:
   float getPlaceDispoOn(MTypeCouche const& typeCouche) const;
 
@@ -69,13 +72,13 @@ public:
   MCoordonnees const & getPosition() const;
   void deletePartieCouche(MTypeCouche typeCouche);
   MEntite* getEntite();
-  bool isEntitePresente();
+  bool isEntitePresente() const;
   void placeEntite(MEntite* entite);
+
 
   MPartieCouche* getPartieCouche(MTypeCouche type);
   MPartieCouche const* getPartieCouche(MTypeCouche type) const;
-  void setPartieCouche(MTypeCouche type, std::string name, std::string fichierImg,
-                       float placeDispo);
+  void setPartieCouche(MPartieCouche const& couche);
 private:
 };
 //------------------------------------------------------------
@@ -107,7 +110,7 @@ inline MEntite* MTuile::getEntite()
  *
  * @retval @e true si une entité est sur la tuile
  */
-inline bool MTuile::isEntitePresente()
+inline bool MTuile::isEntitePresente() const
 {
   return entite;
 }
@@ -121,6 +124,8 @@ inline MPartieCouche* MTuile::getPartieCouche(MTypeCouche type)
 {
   return couches.at((int)type);
 }
+
+
 
 /**
  *
