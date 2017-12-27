@@ -1,17 +1,15 @@
 /**
- * @file MPersonnage.cpp
+ * @file MObjetTexture.cpp
  *
  * Early optimization is the root of all evil
  * DRY ! Don't repeat yourself
  *
- *  @date 3 déc. 2017
+ *  @date 25 déc. 2017
  *  @author FederAndInk
  *  @brief TODO complete
  */
 
-#include "MPersonnage.hpp"
-
-class MTuile;
+#include "MObjetTexture.hpp"
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -21,19 +19,13 @@ class MTuile;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MPersonnage::MPersonnage(std::string const& nom) :
-    MEntite(nom, "")
-{
-
-}
-
-MPersonnage::~MPersonnage()
+MObjetTexture::MObjetTexture(std::string texture)
 {
 }
 
-
-
-
+MObjetTexture::~MObjetTexture()
+{
+}
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------

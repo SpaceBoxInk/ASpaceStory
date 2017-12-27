@@ -1,35 +1,28 @@
 /**
- * @file MRobot.hpp
+ * @file MObjetTexture.hpp
  *
  * Early optimization is the root of all evil
  * DRY ! Don't repeat yourself
  *
- *  @date 14 déc. 2017
+ *  @date 25 déc. 2017
  *  @author FederAndInk
  *  @brief TODO complete
  */
 
 #pragma once
 
-#include "MEntite.hpp"
-
 #include <string>
 
-class MTuile;
-
-class MPersonnage;
-
-class MRobot : public MEntite
+class MObjetTexture
 {
 //========================>Attributes<========================
 private:
-  MPersonnage& proprietaire;
+  std::string texture;
 //=======================>Constructors<=======================
 public:
-  MRobot(MPersonnage* proprietaire, std::string const& texture, std::string const& nom,
-         MTuile* tuile, float taille);
+  MObjetTexture(std::string texture);
   // TODO: rule of five ? copyandswap
-  virtual ~MRobot();
+  virtual ~MObjetTexture();
 
 private:
 
@@ -40,10 +33,22 @@ private:
 
 //=====================>Getters&Setters<======================
 public:
+  std::string getTexture();
+  void setTexture(std::string texture);
 
 private:
 
 };
+
+inline std::string MObjetTexture::getTexture()
+{
+  return texture;
+}
+
+inline void MObjetTexture::setTexture(std::string texture)
+{
+  this->texture = texture;
+}
 //------------------------------------------------------------
 //=====================>Implementations<======================
 //------------------------------------------------------------

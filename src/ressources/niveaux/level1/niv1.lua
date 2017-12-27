@@ -1,10 +1,11 @@
 
 loadfile(getScriptPath() .. "testLoad.lua")();
 
-setTaillePersonnage(getCurrentPerso(), 0.9);
-setPositionPersonnage(getCurrentPerso(), 2, 2);
+setTaillePersonnage(0.9);
+setPositionPersonnage(2, 2);
+setTexturePersonnage(2, 2);
 
-newEntity("test", 2, 1, 0.9)
+newEntity("test", getResourcesPath() + "sprites/texture3.png", 2, 1, 0.9)
 
 addActionDefense("test", function(entiteAtt, degat)
 	print("arg")

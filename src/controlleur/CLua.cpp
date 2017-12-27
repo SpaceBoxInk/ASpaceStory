@@ -101,6 +101,12 @@ int CLua::getScriptPath(lua_State* l)
   return 2;
 }
 
+int CLua::getResourcesPath(lua_State* l)
+{
+  push(MParameters::getRootPath().c_str());
+  return 1;
+}
+
 int CLua::addActionDeclenchement(lua_State* l)
 {
   testArgs(4);
@@ -156,16 +162,17 @@ int CLua::addActionPassage(lua_State* l)
   return 0;
 }
 /**
- * newEntity(name, x, y, taille)
+ * newEntity(name, texture, x, y, taille)
  */
 int CLua::newEntity(lua_State* l)
 {
-  testArgs(4);
+  testArgs(5);
   std::string name = lua_tostring(l, 1);
-  MTuile* tuile = getTuile(2);
+  std::string texture = lua_tostring(l, 2);
+  MTuile* tuile = getTuile(3);
   float taille = lua_tonumber(l, 3);
 
-  cJeu->cNiveau.addEntite(name, tuile, taille);
+  cJeu->cNiveau.addEntite(name, texture, tuile, taille);
   return 0;
 }
 
@@ -200,25 +207,33 @@ int CLua::addActionDefense(lua_State* l)
   return 0;
 }
 
+MEntite* CLua::getEntite(std::string& entiteName)
+{
+  if (getTop() == 2)
+  {
+    entiteName = lua_tostring(lua, 1);
+    return cJeu->getEntite(entiteName);
+  }
+  else if (getTop() == 1)
+  {
+    return cJeu->cPersonnage.getCurrentPerso();
+  }
+  else
+  {
+    throw MExceptionLuaArguments(
+        "one arg for personnage, \ntwo : string for entity, int for item", getTop());
+  }
+}
+
 /**
  * setPosition(string entiteName, int x, int y)
  */
-template<class T>
 int CLua::setPosition(lua_State* l)
 {
-  testArgs(3);
-  auto constexpr getEntite = [](std::string name) -> MEntite*
-  {
-    if (typeid(T) == typeid(MEntite))
-    return cJeu->getEntite(name);
-    else
-    return cJeu->cPersonnage.getPersonnage(name);
-  };
-
   // FIXME : testNbArgs
-  std::string entiteName = lua_tostring(l, 1);
-
+  std::string entiteName;
   MEntite* e = getEntite(entiteName);
+
   if (e)
   {
     e->setTuile(getTuile(2));
@@ -230,26 +245,25 @@ int CLua::setPosition(lua_State* l)
   return 0;
 }
 
+int CLua::setTexture(lua_State* l)
+{
+  std::string entiteName;
+  MEntite* e = getEntite(entiteName);
+  e->setTexture(lua_tostring(l, 2));
+  return 0;
+}
+
 /**
  * setTaille(string entiteName, int taille)
  */
-template<class T>
 int CLua::setTaille(lua_State* l)
 {
-  testArgs(2);
-  auto constexpr getEntite = [](std::string name) -> MEntite*
-  {
-    if (typeid(T) == typeid(MEntite))
-    return cJeu->getEntite(name);
-    else
-    return cJeu->cPersonnage.getPersonnage(name);
-  };
-
   // FIXME : testNbArgs
-  std::string entiteName = lua_tostring(l, 1);
+  std::string entiteName;
   float taille = lua_tonumber(l, 2);
 
   MEntite* e = getEntite(entiteName);
+
   if (e)
   {
     e->setTaille(taille);
@@ -272,6 +286,7 @@ void CLua::registerBaseFunctions()
 {
   lua_register(lua, "setScriptPath", setScriptPath);
   lua_register(lua, "getScriptPath", getScriptPath);
+  lua_register(lua, "getResourcesPath", getResourcesPath);
 }
 
 void CLua::registerTerrainFunctions()
@@ -285,10 +300,9 @@ void CLua::registerEntiteFunctions()
 {
   lua_register(lua, "newEntity", newEntity);
 
-  lua_register(lua, "setTailleEntity", setTaille<MEntite>);
-  lua_register(lua, "setTaillePersonnage", setTaille<MPersonnage>);
-  lua_register(lua, "setPositionEntity", setPosition<MEntite>);
-  lua_register(lua, "setPositionPersonnage", setPosition<MPersonnage>);
+  lua_register(lua, "setTaille", setTaille);
+  lua_register(lua, "setPosition", setPosition);
+  lua_register(lua, "setTexture", setTexture);
   lua_register(lua, "getCurrentPerso", getCurrentPerso);
   lua_register(lua, "addActionDefense", addActionDefense);
 }

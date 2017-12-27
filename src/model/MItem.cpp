@@ -7,8 +7,9 @@
 
 #include "MItem.hpp"
 
-MItem::MItem() :
-    nom("test"), type((MTypeEquipement)2), description("testDescr"), degats(3), protection(34) // TODO: contructeur de test à modifier
+MItem::MItem(std::string const& texture) :
+    MObjetTexture(texture), nom("test"), type((MTypeEquipement)2), description("testDescr"),
+    degats(3), protection(34) // TODO: contructeur de test à modifier
 {
 }
 

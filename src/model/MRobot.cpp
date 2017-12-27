@@ -20,8 +20,9 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MRobot::MRobot(MPersonnage* proprietaire, std::string const& nom, MTuile* tuile, float taille) :
-    MEntite(nom, tuile, taille), proprietaire(*proprietaire)
+MRobot::MRobot(MPersonnage* proprietaire, std::string const& nom, std::string const& texture,
+               MTuile* tuile, float taille) :
+    MEntite(nom, texture, tuile, taille), proprietaire(*proprietaire)
 {
 }
 

@@ -16,7 +16,10 @@
 #include <luaconf.h>
 #include <any>
 #include <iostream>
+#include <string>
 #include <typeinfo>
+
+class MEntite;
 
 class CJeu;
 class MTuile;
@@ -53,16 +56,18 @@ private:
   static int loadCouche(lua_State* l);
   static int setScriptPath(lua_State* l);
   static int getScriptPath(lua_State* l);
+  static int getResourcesPath(lua_State* l);
 
   static int addActionDeclenchement(lua_State* l);
   static int addActionPassage(lua_State* l);
 
   static int newEntity(lua_State* l);
   static int addActionDefense(lua_State* l);
-  template<class T>
+
+  static MEntite* getEntite(std::string& entiteName);
   static int setPosition(lua_State* l);
-  template<class T>
   static int setTaille(lua_State* l);
+  static int setTexture(lua_State* l);
 
   static int getCurrentPerso(lua_State* l);
 

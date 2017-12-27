@@ -85,9 +85,9 @@ catch (...)
   return nullptr;
 }
 
-void CNiveau::addEntite(std::string name, MTuile* tuile, float taille)
+void CNiveau::addEntite(std::string name, std::string texture, MTuile* tuile, float taille)
 {
-  auto [it, isInserted] = entites.try_emplace(name, name, tuile, taille);
+  auto [it, isInserted] = entites.try_emplace(name, name, texture, tuile, taille);
   if (!isInserted)
     throw MExceptionEntiteDejaCreee(name);
 }

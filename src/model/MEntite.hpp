@@ -14,6 +14,7 @@
 #include "MCompetence.hpp"
 #include "MCoordonnees.hpp"
 #include "MInventaire.hpp"
+#include "MObjetTexture.hpp"
 
 #include <functional>
 #include <string>
@@ -21,12 +22,11 @@
 class MTerrain;
 class MTuile;
 
-class MEntite
+class MEntite : public MObjetTexture
 {
 //========================>Attributes<========================
 private:
   std::string nom;
-  std::string sprite;
   MTuile* tuile;
   /**
    * en degrée,
@@ -43,7 +43,8 @@ private:
   std::function<void(std::string, int)> actionDefense;
 //=======================>Constructors<=======================
 public:
-  MEntite(std::string const& nom, MTuile* tuile = nullptr, float taille = 1);
+  MEntite(std::string const& nom, std::string const& texture, MTuile* tuile = nullptr,
+          float taille = 1);
   // TODO: rule of five ? copyandswap
   virtual ~MEntite();
 
@@ -68,8 +69,6 @@ public:
   int getDirection() const;
 
   std::string const & getNom() const;
-
-  void setSprite(std::string const& sprite);
 
   MTuile const * getTuile() const;
   void setTuile(MTuile* tuile);
@@ -97,11 +96,6 @@ inline int MEntite::getDirection() const
 inline void MEntite::setActionDefense(std::function<void(std::string, int)> actionDefense)
 {
   this->actionDefense = actionDefense;
-}
-
-inline void MEntite::setSprite(std::string const & sprite)
-{
-  this->sprite = sprite;
 }
 
 inline void MEntite::setDirection(Mouvement direction)

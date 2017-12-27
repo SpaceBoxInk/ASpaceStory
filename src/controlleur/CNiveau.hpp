@@ -49,7 +49,7 @@ private:
 //=========================>Methods<==========================
 public:
   MEntite* getEntite(std::string name);
-  void addEntite(std::string name, MTuile* tuile, float taille);
+  void addEntite(std::string name, std::string texture, MTuile* tuile, float taille);
 private:
   void setEventMethods();
 //=====================>Getters&Setters<======================

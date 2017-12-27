@@ -9,11 +9,12 @@
 #define SRC_MODEL_MITEM_HPP_
 
 
+#include "MInventaire.hpp"
+#include "MObjetTexture.hpp"
+
 #include <string>
 
-#include "MInventaire.hpp"
-
-class MItem
+class MItem : public MObjetTexture
 {
   //========================>Attributes<========================
 private:
@@ -26,7 +27,7 @@ private:
 
   //=======================>Constructors<=======================
 public:
-  MItem();
+  MItem(std::string const& texture);
 
   //=========================>Methods<==========================
 public:

@@ -24,8 +24,9 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MEntite::MEntite(std::string const& nom, MTuile* tuile, float taille) :
-    nom(nom), direction(0), taille(taille), actionDefense(nullptr)
+MEntite::MEntite(std::string const& nom, std::string const& texture, MTuile* tuile,
+                 float taille) :
+    MObjetTexture(texture), nom(nom), direction(0), taille(taille), actionDefense(nullptr)
 {
   setTuile(tuile);
 }
