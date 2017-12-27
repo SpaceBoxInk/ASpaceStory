@@ -27,8 +27,13 @@ public:
   void setPositionOf(std::string entityName, MCoordonnees const& offset) override;
 private:
   Canvas* getCaneva();
+  void onFocus(wxFocusEvent& event);
+
+  void onKey(wxKeyEvent& event);
 
   void onResize(wxSizeEvent& event);
+
+  void showEnigma(std::string title, std::string file, std::string textInside);
 
   wxPanel* getPanel();
   Canvas* _canvas;

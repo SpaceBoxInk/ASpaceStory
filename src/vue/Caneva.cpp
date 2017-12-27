@@ -6,6 +6,7 @@
  */
 
 #include "Caneva.hpp"
+#include "VInventory.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
@@ -35,7 +36,7 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
 //      2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1 };
 //  this->loadFileIntoGround(level, MParameters::getTuilePath() + "textureCouche0.png", 0, 32);
 //  this->loadFileIntoGround(level2, "texture3.png", 1, 32);
-//  this->addEntite("hitler", "perso_face.png");
+  this->addEntite("hitler", "perso_face_32.png");
 //  this->addEntite("24", "241890516020212.png");
 
   Connect(this->GetId(), wxEVT_SIZE, wxSizeEventHandler(Canvas::onResize));
@@ -207,7 +208,10 @@ void Canvas::onRight(wxMouseEvent& event)
 {
   std::cout << "bonjour" << std::endl;
 //  this->move("hitler", MCoordonnees(1, 0));
+  inventory *custom = new inventory("wallah", wxT("joseph-staline.png"), "bonjour");
+  custom->Show(true);
 //  this->setPositionOf("Joseph Stalin", MCoordonnees(0, 0));
+
 
 }
 

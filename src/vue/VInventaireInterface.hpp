@@ -13,7 +13,7 @@
 
 #include "../outils/ObserverPattern/Observed.hpp"
 
-class VInventaireInterface : Observed
+class VInventaireInterface : public Observed
 {
 //========================>Attributes<========================
 private:
