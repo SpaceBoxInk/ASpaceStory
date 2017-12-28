@@ -35,6 +35,7 @@ CPersonnage::CPersonnage(AppFrameInterface* vuePrincipale, MTerrain* terrain) :
     vuePrincipale(vuePrincipale), terrain(terrain), quit(false)
 {
   setEventMethods();
+  editor.showEditor();
 }
 
 CPersonnage::~CPersonnage()

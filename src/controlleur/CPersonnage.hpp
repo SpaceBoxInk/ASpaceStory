@@ -9,9 +9,9 @@
 
 #pragma once
 
+#include "../editor/controler/CEditor.hpp"
 #include "../model/MAssException.hpp"
 #include "../model/MPersonnage.hpp"
-#include "../outils/ObserverPattern/Observer.hpp"
 
 #include <map>
 #include <string>
@@ -19,21 +19,19 @@
 class AppFrameInterface;
 class MPersonnage;
 class MTuile;
-
 class MTerrain;
 
 /**
- * le controlleur pour gérer les déplacements, les intéractions
+ * le controlleur pour gérer les déplacements, les interactions
  * du personnage (comme il est indépendant des niveaux)
  */
 class CPersonnage : public Observer
 {
 //========================>Attributes<========================
 private:
-  /**
-   * Vue principale TODO : faire vue principale, pour l'instant ce n'est que la vue du terrain
-   */
   AppFrameInterface* vuePrincipale;
+  CEditor editor;
+
   std::map<std::string, MPersonnage> personnages;
   MPersonnage* currentPerso;
   MTerrain* terrain;
