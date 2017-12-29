@@ -277,39 +277,37 @@ int CLua::getCurrentPerso(lua_State* l)
 
 int CLua::newItem(lua_State* l)
 {
+  // required parameters :
   std::string nom = lua_tostring(l, 1);
   std::string description = lua_tostring(l, 2);
-  int degats;
-  MTypeEquipement equipement;
-  int protection;
-  bool supprimable;
+  // Default parameters :
+  int degats = 0;
+  MTypeEquipement equipement = MTypeEquipement::MAIN;
+  int protection = 0;
+  bool supprimable = true;
+  int miningLevel = 0;
+
   switch (getTop()) {
+  case 7:
+    miningLevel = lua_tointeger(l, 7);
+    /* no break */
   case 6:
-    degats = lua_tointeger(l, 3);
-    equipement = (MTypeEquipement)lua_tointeger(l, 4);
-    protection = lua_tointeger(l, 5);
     supprimable = lua_toboolean(l, 6);
-    item = new MItem(nom, description, equipement, degats, protection, supprimable);
-    break;
+    /* no break */
   case 5:
-    degats = lua_tointeger(l, 3);
-    equipement = (MTypeEquipement)lua_tointeger(l, 4);
     protection = lua_tointeger(l, 5);
-    item = new MItem(nom, description, equipement, degats, protection);
-    break;
+    /* no break */
   case 4:
-    degats = lua_tointeger(l, 3);
-    equipement = (MTypeEquipement)lua_tointeger(l, 4);
-    item = new MItem(nom, description, equipement, degats);
-    break;
+    degats = lua_tointeger(l, 4);
+    /* no break */
   case 3:
     equipement = (MTypeEquipement)lua_tointeger(l, 3);
-    item = new MItem(nom, description, equipement);
     break;
-  case 2:
-    item = new MItem(nom, description);
-    break;
+  default:
+    throw MExceptionLuaArguments("Nombre d'argument pour création d'item invalid ! ",
+                                 getTop());
   }
+  item = new MItem(nom, description, equipement, degats, protection, supprimable, miningLevel);
   push(item->getId());
   return 1;
 }

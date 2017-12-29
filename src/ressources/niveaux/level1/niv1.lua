@@ -10,7 +10,7 @@ end)
 setTaillePersonnage(getCurrentPerso(), 0.9);
 setPositionPersonnage(getCurrentPerso(), 2, 2);
 
-idIt = newItem("jean", "leak skvsf")
+idIt = newItem("jean", "leak skvsf", 2, 3, 3, false, 1)
 
 addActionUtilisation(function(entite)
 	print("utilise jean")
