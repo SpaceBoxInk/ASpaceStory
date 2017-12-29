@@ -331,9 +331,9 @@ int CLua::giveNewItemToEntity(lua_State* l)
 
 int CLua::putNewItemOn(lua_State* l)
 {
-  testArgs(3);
-  int x = lua_tointeger(l, 2);
-  int y = lua_tointeger(l, 3);
+  testArgs(2);
+  int x = lua_tointeger(l, 1);
+  int y = lua_tointeger(l, 2);
   cJeu->cNiveau.getTerrain()(x, y).addItem(getItem());
   item = nullptr;
   return 0;
