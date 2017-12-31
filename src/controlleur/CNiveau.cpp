@@ -11,12 +11,12 @@
 
 #include "CNiveau.hpp"
 
+#include <iostream>
+
 #include "../model/MAssException.hpp"
 #include "../model/MEvents.hpp"
 #include "../model/MPartieCouche.hpp"
 #include "../vue/VPrimitif.hpp"
-
-#include <utility>
 
 
 //------------------------------------------------------------
@@ -100,3 +100,15 @@ MTerrain& CNiveau::getTerrain()
   return terrain;
 }
 
+void CNiveau::addEnigme(std::string nom, std::string description, std::string image)
+{
+  if (enigmes.count(nom) == 0)
+  {
+  enigmes[nom] = MEnigme(nom, description, image);
+  }
+}
+
+void CNiveau::afficherEnigme(std::string nom)
+{
+  // TODO : faire cette fonction
+}

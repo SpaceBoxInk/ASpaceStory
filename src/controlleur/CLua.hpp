@@ -80,6 +80,9 @@ private:
 
   static int addActionUtilisation(lua_State* l);
 
+  static int newEnigme(lua_State* l);
+  static int afficherEnigme(lua_State* l);
+
 
 
 //==================Register functions========================
@@ -87,6 +90,7 @@ private:
   void registerTerrainFunctions();
   void registerEntiteFunctions();
   void registerItemFunctions();
+  void registerEnigmeFunctions();
 //======================Lua/ASS function helper===================
   static MTuile* getTuile(int index);
   static MItem* getItem();
