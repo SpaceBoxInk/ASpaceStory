@@ -39,6 +39,7 @@ CLua::CLua(CJeu* cJeu)
   registerTerrainFunctions();
   registerEntiteFunctions();
   registerItemFunctions();
+  registerEnigmeFunctions();
 }
 
 CLua::~CLua()
@@ -80,11 +81,16 @@ int CLua::loadCouche(lua_State* l)
  */
 int CLua::setScriptPath(lua_State* l)
 {
-  if (getTop() >= 1)
+  if (getTop() == 1 || getTop() == 2)
   {
     cJeu->cNiveau.setScriptFolder(lua_tostring(l, 1));
   }
-  else if (getTop() == 2)
+  else
+  {
+    throw MExceptionLuaArguments("setScriptPath(folder, luaFile = oldLuaFile)", getTop());
+  }
+
+  if (getTop() == 2)
   {
     cJeu->cNiveau.setLevelMainFile(lua_tostring(l, 2));
   }

@@ -104,7 +104,7 @@ void CNiveau::addEnigme(std::string nom, std::string description, std::string im
 {
   if (enigmes.count(nom) == 0)
   {
-  enigmes[nom] = MEnigme(nom, description, image);
+    enigmes.try_emplace(nom, nom, description, image);
   }
 }
 
