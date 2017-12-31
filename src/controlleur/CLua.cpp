@@ -39,6 +39,7 @@ CLua::CLua(CJeu* cJeu)
   registerTerrainFunctions();
   registerEntiteFunctions();
   registerItemFunctions();
+  registerEnigmeFunctions();
 }
 
 CLua::~CLua()
@@ -80,11 +81,16 @@ int CLua::loadCouche(lua_State* l)
  */
 int CLua::setScriptPath(lua_State* l)
 {
-  if (getTop() >= 1)
+  if (getTop() == 1 || getTop() == 2)
   {
     cJeu->cNiveau.setScriptFolder(lua_tostring(l, 1));
   }
-  else if (getTop() == 2)
+  else
+  {
+    throw MExceptionLuaArguments("setScriptPath(folder, luaFile = oldLuaFile)", getTop());
+  }
+
+  if (getTop() == 2)
   {
     cJeu->cNiveau.setLevelMainFile(lua_tostring(l, 2));
   }
@@ -388,6 +394,24 @@ int CLua::addActionMining(lua_State* l)
   return 0;
 }
 
+int CLua::newEnigme(lua_State* l)
+{
+  testArgs(3);
+  std::string nom = lua_tostring(l, 1);
+  std::string description = lua_tostring(l, 2);
+  std::string image = lua_tostring(l, 3);
+  cJeu->cNiveau.addEnigme(nom, description, image);
+  return 0;
+}
+
+int CLua::afficherEnigme(lua_State* l)
+{
+  testArgs(1);
+  std::string nom = lua_tostring(l, 1);
+  cJeu->cNiveau.afficherEnigme(nom);
+  return 0;
+}
+
 void CLua::registerBaseFunctions()
 {
   lua_register(lua, "setScriptPath", setScriptPath);
@@ -424,6 +448,12 @@ void CLua::registerItemFunctions()
   lua_register(lua, "giveNewItemToEntity", giveNewItemToEntity);
   lua_register(lua, "putNewItemOn", putNewItemOn);
   lua_register(lua, "addActionUtilisation", addActionUtilisation);
+}
+
+void CLua::registerEnigmeFunctions()
+{
+  lua_register(lua, "newEnigme", newEnigme);
+  lua_register(lua, "afficherEnigme", afficherEnigme);
 }
 
 void CLua::executeScript(std::string script)
@@ -543,6 +573,8 @@ void CLua::testArgs(int nbExcpected)
   }
 
 }
+
+
 
 std::string CLua::getCurFunction()
 {

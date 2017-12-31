@@ -18,6 +18,8 @@ end)
 
 giveNewItemToPerso(getCurrentPerso())
 
+newEnigme("nom", "desc", "img/img.png")
+
 newEntity("test", 2, 1, 0.9)
 
 addActionDefense("test", function(entiteAtt, degat)
