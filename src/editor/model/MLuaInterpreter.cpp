@@ -9,12 +9,12 @@
  */
 
 
-#include "../../editor/model/MLuaInterpreter.hpp"
+#include "MLuaInterpreter.hpp"
+#include "MParameters.hpp"
 
-#include "../../editor/model/MParameters.hpp"
-#include "../../editor/tools/utils.hpp"
+#include "../../model/MCoordonnees.hpp"
+#include "../../model/MRobot.hpp"
 
-#include <iostream>
 
 extern "C"
 {
@@ -28,10 +28,14 @@ using namespace AssEditor;
 //========================>Constants<=========================
 //------------------------------------------------------------
 std::stringstream MLuaInterpreter::output;
+MTerrain* MLuaInterpreter::terrain = nullptr;
+MRobot* MLuaInterpreter::robot = nullptr;
 
 int MLuaInterpreter::avancer(lua_State* l)
 {
   output << "Avance d'une case" << '\n';
+  Mouvement mouv = MouvementT::getDirection(robot->getDirection());
+  robot->deplacer(*terrain, mouv);
   return 0;
 }
 
@@ -63,8 +67,9 @@ int MLuaInterpreter::print(lua_State* l)
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MLuaInterpreter::MLuaInterpreter()
+MLuaInterpreter::MLuaInterpreter(MTerrain* terrain)
 {
+  MLuaInterpreter::terrain = terrain;
   lua = luaL_newstate();
   luaL_openlibs(lua);
   registerFonctions();

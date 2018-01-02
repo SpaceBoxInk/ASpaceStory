@@ -42,7 +42,8 @@ private:
   MCompetence competences;
   MInventaire inventaire;
 
-  std::function<void(std::string, int)> actionDefense;
+  std::function<void(std::string entite, int degat)> actionDefense;
+  std::function<void(MEntite const& entite)> actionInteraction;
 //=======================>Constructors<=======================
 public:
   MEntite(std::string const& nom, std::string const& texture, MTuile* tuile = nullptr,
@@ -59,6 +60,7 @@ public:
   void attaquer(MTerrain& terrain);
   void seDefendre(MEntite& attaquant, int degats);
   void interagirTuile(MTerrain& terrain);
+  void interagirEntite(MTerrain& terrain);
 
   int defenseTotale() const;
   int forceTotale() const;
@@ -80,7 +82,8 @@ public:
 
   MCompetence const& getCompetences() const;
 
-  void setActionDefense(std::function<void(std::string, int)> actionDefense);
+  void setActionDefense(std::function<void(std::string entite, int degat)> actionDefense);
+  void setActionInteraction(std::function<void(MEntite const& entite)> actionInteraction);
 private:
   void setDirection(int direction);
   void setDirection(Mouvement direction);
@@ -98,6 +101,12 @@ inline int MEntite::getDirection() const
 inline void MEntite::setActionDefense(std::function<void(std::string, int)> actionDefense)
 {
   this->actionDefense = actionDefense;
+}
+
+inline void MEntite::setActionInteraction(
+    std::function<void(MEntite const & entite)> actionInteraction)
+{
+  this->actionInteraction = actionInteraction;
 }
 
 inline void MEntite::setDirection(Mouvement direction)

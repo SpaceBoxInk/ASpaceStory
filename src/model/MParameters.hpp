@@ -27,6 +27,7 @@ enum class Lang
 enum class MActionsKey
 {
   INTERACT_ENV_KEY,
+  INTERACT_ENTITY_KEY,
   ATTACK,
 };
 

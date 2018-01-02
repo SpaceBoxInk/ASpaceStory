@@ -266,7 +266,7 @@ std::string Editor::getIndentation() const
   for (int i = 0; isblank(getChar(pos)); ++i, --pos)
   {
     indent += getChar(pos);
-    printLog("Current char : " + getChar(pos), LogType::DEBUG);
+    printLog(std::string("Current char : ") + getChar(pos), LogType::DEBUG);
   }
   printLog("indent size : " + std::to_string(indent.size()), LogType::DEBUG);
   return indent;

@@ -25,7 +25,8 @@
 
 MEntite::MEntite(std::string const& nom, std::string const& texture, MTuile* tuile,
                  float taille) :
-    MObjetTexture(texture), nom(nom), direction(0), taille(taille), actionDefense(nullptr)
+    MObjetTexture(texture), nom(nom), direction(90), taille(taille), actionDefense(nullptr),
+    actionInteraction(nullptr)
 {
   setTuile(tuile);
 }
@@ -96,6 +97,24 @@ void MEntite::interagirTuile(MTerrain& terrain)
   catch (MExceptionOutOfTerrain& e)
   {
   }
+}
+
+void MEntite::interagirEntite(MTerrain& terrain)
+{
+  try
+  {
+    MEntite* entite = terrain(
+        getTuile()->getPosition() + MouvementT::getDirectionCoords(direction)).getEntite();
+
+    if (entite && entite->actionInteraction)
+    {
+      entite->actionInteraction(*this);
+    }
+  }
+  catch (MExceptionOutOfTerrain& e)
+  {
+  }
+
 }
 
 bool MEntite::isAccessible(MTuile const & tuile)

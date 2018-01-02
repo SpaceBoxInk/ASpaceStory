@@ -19,6 +19,8 @@
 #include <string>
 #include <vector>
 
+class MTerrain;
+
 class Editor;
 
 enum class Event
@@ -42,7 +44,7 @@ private:
   Editor* ihmEditor;
 //=======================>Constructors<=======================
 public:
-  CEditor();
+  CEditor(MTerrain* terrain);
   // TODO: rule of five ? copyandswap
   virtual ~CEditor();
 
@@ -50,7 +52,7 @@ private:
 
 //=========================>Methods<==========================
 public:
-  void setProgramName(std::string programName);
+  void setProgramName(std::string programName, MRobot* robot);
   void loadMethods(std::string method);
   void showEditor(bool show = true);
 private:

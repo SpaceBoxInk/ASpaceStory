@@ -19,6 +19,9 @@ class MTuile;
 
 class MPersonnage;
 
+/**
+ * Nothing special, maybe some specific behavior is becoming later
+ */
 class MRobot : public MEntite
 {
 //========================>Attributes<========================

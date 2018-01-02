@@ -11,8 +11,11 @@
 #ifndef M_LUA_INTERPRETER
 #define M_LUA_INTERPRETER
 
-#include <string>
 #include <sstream>
+#include <string>
+
+class MRobot;
+class MTerrain;
 
 struct lua_State;
 
@@ -23,9 +26,12 @@ private:
   static std::stringstream output;
   lua_State* lua;
 
+  static MTerrain* terrain;
+  static MRobot* robot;
+
 //=======================>Constructors<=======================
 public:
-  MLuaInterpreter();
+  MLuaInterpreter(MTerrain* terrain);
   // TODO: rule of five ? copyandswap
   virtual ~MLuaInterpreter();
 
@@ -43,10 +49,16 @@ private:
 
 //=====================>Getters&Setters<======================
 public:
+  void setRobot(MRobot* robot);
   void clearOutput();
   std::stringstream const& getOutput() const;
 private:
 
 };
+
+inline void MLuaInterpreter::setRobot(MRobot* robot)
+{
+  MLuaInterpreter::robot = robot;
+}
 
 #endif

@@ -18,12 +18,16 @@
 #include <wx/chartype.h>
 #include <wx/gtk/colour.h>
 #include <wx/gtk/textctrl.h>
+#include <wx/gtk/toplevel.h>
+#include <wx/textentry.h>
 #include <cctype>
 #include <fstream>
 #include <map>
 #include <regex>
 #include <sstream>
 #include <utility>
+
+class MTerrain;
 
 using namespace AssEditor;
 using namespace std;
@@ -38,8 +42,9 @@ wxColour CEditor::keywordColor;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-CEditor::CEditor() :
-    methodsLoader("all" + MParameters::getLang()), save("defaultProgram.lua")
+CEditor::CEditor(MTerrain* terrain) :
+    methodsLoader("all" + MParameters::getLang()), save("defaultProgram.lua"),
+    luaInterpreter(terrain)
 {
   keywordColor = wxColour(MParameters::getKeywordColor());
   addEvents();
@@ -190,13 +195,19 @@ wxTextCoord CEditor::formatMethod(std::string& method, vector<wxTextCoord> & wor
   printLog("Transformation : " + method);
 }
 
-void CEditor::setProgramName(std::string programName)
+void CEditor::setProgramName(std::string programName, MRobot* robot)
 {
+  luaInterpreter.setRobot(robot);
+
   save.save(ihmEditor->getEditContent());
+
   save.setFileName(programName);
 
   std::string content;
   save.load(content);
+
+  ihmEditor->getEdit()->Clear();
+  ihmEditor->SetLabel("Editeur : " + programName);
   writeColoredMet(content);
 }
 

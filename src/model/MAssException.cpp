@@ -88,7 +88,8 @@ MExceptionInvalidTypeCouche::MExceptionInvalidTypeCouche(MTypeCouche expectedTyp
 
 std::string MExceptionInvalidTypeCouche::what() const noexcept
 {
-  return std::string("Type couche invalide, type attendu : ") + to_string(type) + '\n';
+  return std::string("Type couche invalide, type attendu : ") + to_string(expectedType)
+      + ", type donné : " + to_string(type) + '\n';
 }
 
 //------------------------------------------------------------

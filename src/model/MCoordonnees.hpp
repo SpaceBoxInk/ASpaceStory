@@ -60,6 +60,26 @@ namespace MouvementT
     return directions[int(m)];
   }
 
+  constexpr Mouvement getDirection(int direction)
+  {
+    switch (direction) {
+    case 0:
+      return Mouvement::HAUT;
+      break;
+    case 180:
+      return Mouvement::BAS;
+      break;
+    case 90:
+      return Mouvement::DROITE;
+      break;
+    case -90:
+      return Mouvement::GAUCHE;
+      break;
+    default:
+      return Mouvement::HAUT;
+    }
+  }
+
   /**
    * @return les coordonées de déplacement pour la direction donnée
    */

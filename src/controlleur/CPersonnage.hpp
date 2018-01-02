@@ -50,6 +50,8 @@ public:
   MPersonnage* getPersonnage(std::string nom);
   MPersonnage* getCurrentPerso();
   void addPersonnage(std::string nom);
+  void addRobot(std::string const& nom, std::string const& texture, MTuile* tuile,
+                float taille);
 private:
   void setEventMethods();
 
@@ -58,6 +60,10 @@ public:
 
 private:
 };
+
+//------------------------------------------------------------
+//=====================>Implementations<======================
+//------------------------------------------------------------
 
 inline bool CPersonnage::setPersonnage(std::string nom)
 try
@@ -87,7 +93,7 @@ inline MPersonnage* CPersonnage::getCurrentPerso()
 
 inline void CPersonnage::addPersonnage(std::string nom)
 {
-auto [it, isInserted] = personnages.emplace(nom, nom);
+  auto [it, isInserted] = personnages.emplace(nom, nom);
   if (!isInserted)
     throw MExceptionEntiteDejaCreee(nom);
   else
@@ -96,6 +102,3 @@ auto [it, isInserted] = personnages.emplace(nom, nom);
   }
 }
 
-//------------------------------------------------------------
-//=====================>Implementations<======================
-//------------------------------------------------------------

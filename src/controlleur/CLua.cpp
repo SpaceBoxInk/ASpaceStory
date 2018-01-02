@@ -283,6 +283,18 @@ int CLua::getCurrentPerso(lua_State* l)
   return 1;
 }
 
+int CLua::newRobot(lua_State* l)
+{
+  std::string nom = lua_tostring(l, 1);
+  std::string texture = lua_tostring(l, 2);
+  MTuile* tuile = getTuile(3);
+  float taille = lua_tonumber(l, 5);
+
+  cJeu->cPersonnage.addRobot(nom, texture, tuile, taille);
+
+  return 0;
+}
+
 void CLua::registerBaseFunctions()
 {
   lua_register(lua, "setScriptPath", setScriptPath);
@@ -300,6 +312,7 @@ void CLua::registerTerrainFunctions()
 void CLua::registerEntiteFunctions()
 {
   lua_register(lua, "newEntity", newEntity);
+  lua_register(lua, "newRobot", newRobot);
 
   lua_register(lua, "setTaille", setTaille);
   lua_register(lua, "setPosition", setPosition);

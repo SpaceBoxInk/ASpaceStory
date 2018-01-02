@@ -71,7 +71,9 @@ private:
 
   static int getCurrentPerso(lua_State* l);
 
-//==================Register functions========================
+  static int newRobot(lua_State* l);
+
+  //==================Register functions========================
   void registerBaseFunctions();
   void registerTerrainFunctions();
   void registerEntiteFunctions();
