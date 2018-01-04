@@ -133,6 +133,9 @@ std::string MExceptionEntiteInexistante::what() const noexcept
   return "entite " + entite + "non présente !";
 }
 
+//------------------------------------------------------------
+//================>MExceptionEntiteDejaCreee<=================
+//------------------------------------------------------------
 MExceptionEntiteDejaCreee::MExceptionEntiteDejaCreee(std::string entite) :
     entite(entite)
 {
@@ -141,4 +144,29 @@ MExceptionEntiteDejaCreee::MExceptionEntiteDejaCreee(std::string entite) :
 std::string MExceptionEntiteDejaCreee::what() const noexcept
 {
   return "Entite " + entite + "déjà créée !!\n";
+}
+
+//------------------------------------------------------------
+//================>MExceptionEntiteDejaCreee<=================
+//------------------------------------------------------------
+MExceptionNullPtr::MExceptionNullPtr(std::string desc) :
+    desc(desc)
+{
+}
+
+std::string MExceptionNullPtr::what() const noexcept
+{
+  return "nullptr dereferencement ! caused by : " + desc;
+}
+//------------------------------------------------------------
+//==============>MExceptionArgumentsInvalides<================
+//------------------------------------------------------------
+MExceptionArgumentsInvalides::MExceptionArgumentsInvalides(std::string desc) :
+    desc(desc)
+{
+}
+
+std::string MExceptionArgumentsInvalides::what() const noexcept
+{
+  return "Invalid Arguments : " + desc;
 }

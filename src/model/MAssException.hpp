@@ -142,3 +142,27 @@ public:
   virtual std::string what() const noexcept override;
 };
 
+class MExceptionNullPtr : public MAssException
+{
+private:
+  std::string desc;
+public:
+  MExceptionNullPtr(std::string desc);
+  // TODO: rule of five ? copyandswap
+  virtual ~MExceptionNullPtr() = default;
+
+  virtual std::string what() const noexcept override;
+};
+
+class MExceptionArgumentsInvalides : public MAssException
+{
+private:
+  std::string desc;
+public:
+  MExceptionArgumentsInvalides(std::string desc);
+  // TODO: rule of five ? copyandswap
+  virtual ~MExceptionArgumentsInvalides() = default;
+
+  virtual std::string what() const noexcept override;
+};
+

@@ -15,11 +15,13 @@
 #include "../model/MParameters.hpp"
 #include "../model/MTerrain.hpp"
 #include "../outils/ObserverPattern/Observer.hpp"
+#include "../model/MEnigme.hpp"
 
 #include <map>
 #include <string>
 
 class AppFrameInterface;
+class VPrimitif;
 
 /**
  * controleur pour les niveaux
@@ -42,6 +44,7 @@ private:
    * main level script, executed to construct the level
    */
   std::string levelMainFile;
+  std::map<std::string, MEnigme> enigmes;
 //=======================>Constructors<=======================
 public:
   CNiveau(AppFrameInterface* vuePrincipale, std::string levelFolder =
@@ -56,6 +59,8 @@ private:
 public:
   MEntite* getEntite(std::string name);
   void addEntite(std::string name, std::string texture, MTuile* tuile, float taille);
+  void addEnigme(std::string nom, std::string description, std::string image);
+  void afficherEnigme(std::string nom);
 private:
   void setEventMethods();
 //=====================>Getters&Setters<======================
@@ -65,7 +70,7 @@ public:
   void setScriptFolder(std::string levelFolder);
   std::string getScriptFolder() const;
   void setLevelMainFile(std::string levelMainFile);
-  std::string getLevelMainFile();
+  std::string getLevelMainFile() const;
 
   std::string getScript() const;
 private:

@@ -11,6 +11,7 @@
 
 #include "MPersonnage.hpp"
 #include "MAssException.hpp"
+#include "MItem.hpp"
 
 #include <utility>
 
@@ -27,7 +28,6 @@ class MTuile;
 MPersonnage::MPersonnage(std::string const& nom) :
     MEntite(nom, "")
 {
-
 }
 
 MPersonnage::~MPersonnage()

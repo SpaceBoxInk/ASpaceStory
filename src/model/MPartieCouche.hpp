@@ -13,6 +13,7 @@
 #include "MEntite.hpp"
 
 #include <array>
+#include <exception>
 #include <functional>
 #include <string>
 
@@ -75,6 +76,8 @@ public:
   bool isTypeOf(MTypeCouche type) const;
   void passageDe(MEntite* entite);
   void declenchementDe(MEntite* entite);
+
+  virtual void mine(MEntite* entite, int item);
 private:
 
 //=====================>Getters&Setters<======================
@@ -85,13 +88,17 @@ public:
   std::string const& getName() const;
   std::string const& getFichierImg() const;
   float getPlaceDispo() const;
+  virtual int getMiningLevel() const;
 
   void setFichierImg(std::string const & fichierImg);
 
   void setActionDeclenchement(std::function<void(std::string entite)> actionDeclenchement);
   void setActionPassage(std::function<void(std::string entite)> actionPassage);
+  virtual void setActionMining(
+      std::function<void(MEntite* entite, int item)> actionMining);
   void unSetActionDeclenchement();
   void unSetActionPassage();
+  virtual void unSetActionMining();
 
 private:
 

@@ -11,6 +11,8 @@
 
 #include "CNiveau.hpp"
 
+#include <iostream>
+
 #include "../model/MAssException.hpp"
 #include "../model/MEvents.hpp"
 #include "../model/MPartieCouche.hpp"
@@ -75,7 +77,7 @@ void CNiveau::setLevelMainFile(std::string levelMainFile)
   this->levelMainFile = levelMainFile;
 }
 
-std::string CNiveau::getLevelMainFile()
+std::string CNiveau::getLevelMainFile() const
 {
   return levelMainFile;
 }
@@ -117,3 +119,15 @@ MTerrain& CNiveau::getTerrain()
   return terrain;
 }
 
+void CNiveau::addEnigme(std::string nom, std::string description, std::string image)
+{
+  if (enigmes.count(nom) == 0)
+  {
+    enigmes.try_emplace(nom, nom, description, image);
+  }
+}
+
+void CNiveau::afficherEnigme(std::string nom)
+{
+  // TODO : faire cette fonction
+}

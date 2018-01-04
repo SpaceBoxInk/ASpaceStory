@@ -13,14 +13,13 @@
 
 #include <exception>
 #include <cxxabi.h>
-#include <luaconf.h>
 #include <any>
 #include <iostream>
 #include <string>
 #include <typeinfo>
 
 class MEntite;
-
+class MItem;
 class CJeu;
 class MTuile;
 
@@ -59,6 +58,8 @@ private:
    * utilisé pour les fonctions appelées depuis le lua (eg: pour faire les niveaux)
    */
   static CJeu* cJeu;
+  static MItem* item;
+
 //=======================>Constructors<=======================
 public:
   CLua(CJeu* cJeu);
@@ -76,9 +77,12 @@ private:
   static int setScriptPath(lua_State* l);
   static int getScriptPath(lua_State* l);
   static int getResourcesPath(lua_State* l);
+  static int loadfile(lua_State* l);
 
   static int addActionDeclenchement(lua_State* l);
   static int addActionPassage(lua_State* l);
+
+  static int addActionMining(lua_State* l);
 
   static int newEntity(lua_State* l);
   static int addActionDefense(lua_State* l);
@@ -93,20 +97,41 @@ private:
   static int newRobot(lua_State* l);
 
   //==================Register functions========================
+  static int newItem(lua_State* l);
+
+  static int giveNewItemToPerso(lua_State* l);
+  static int giveNewItemToEntity(lua_State* l);
+  static int putNewItemOn(lua_State* l);
+
+  static int addActionUtilisation(lua_State* l);
+
+  static int newEnigme(lua_State* l);
+  static int afficherEnigme(lua_State* l);
+
+
+
+//==================Register functions========================
   void registerBaseFunctions();
   void registerTerrainFunctions();
   void registerEntiteFunctions();
+  void registerItemFunctions();
+  void registerEnigmeFunctions();
 //======================Lua/ASS function helper===================
   static MTuile* getTuile(int index);
+  static MItem* getItem();
 //======================Lua function helper===================
   static void push(lua_Number n);
   static void push(lua_Integer n);
+  static void push(lua_Unsigned n);
   static void push(int n);
   static void push(lua_String str);
   static void push(lua_CFunction f);
   static void push(lua_Boolean b);
   static int getTop();
+  static int storeFunction();
+  static void pushFunctionFrom(int index);
   static void testArgs(int nbExcpected);
+  static std::string getCurFunction();
 
   template<class T>
   T getTableData(lua_State* l, char const* key, int paramNb = 1);
@@ -130,7 +155,6 @@ private:
 template<class T>
 T CLua::getTableData(lua_State* l, char const* key, int paramNb)
 {
-// TODO : verifier que si la pile n'est pas vide ca fonctionne toujours
   lua_getfield(l, paramNb, key);
   std::any any;
   switch (lua_type(l, -1)) {

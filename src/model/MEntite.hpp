@@ -65,12 +65,16 @@ public:
   void seDefendre(MEntite& attaquant, int degats);
   void interagirTuile(MTerrain& terrain);
   void interagirEntite(MTerrain& terrain);
+  void utiliserObjet();
+  void mine(MTerrain& terrain);
 
   int defenseTotale() const;
   int forceTotale() const;
+  void addItemToInventaire(MItem* item);
+  void equipe(Id idItem);
 
 private:
-  bool isAccessible(MTuile const& tuile);
+  bool isAccessible(MTuile const& tuile) const;
 
 //=====================>Getters&Setters<======================
 public:
@@ -86,11 +90,14 @@ public:
   void setTaille(float taille);
 
   MCompetence const& getCompetences() const;
+  MInventaire& getInventaire();
+
+
 
   void setActionDefense(std::function<void(std::string entite, int degat)> actionDefense);
   void setActionInteraction(std::function<void(MEntite const& entite)> actionInteraction);
 private:
-
+  int getMiningPower();
 };
 //------------------------------------------------------------
 //=====================>Implementations<======================
