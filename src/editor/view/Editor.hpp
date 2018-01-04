@@ -7,14 +7,14 @@
 
 #pragma once
 
+#include "../../outils/ObserverPattern/Observed.hpp"
+
+#include <wx/wx.h>
+#include <future>
 #include <map>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <wx/wx.h>
-#include <wx/settings.h>
-#include "../../editor/view/zones.hpp"
-#include "../../outils/ObserverPattern/Observed.hpp"
 
 #define wxUSE_UNICODE 1
 
@@ -43,7 +43,7 @@ private:
   /**
    *
    */
-  std::string motCourant; //sert a rien
+  std::future<void> thread;
 
 public:
   //=======================>Constructors<=======================

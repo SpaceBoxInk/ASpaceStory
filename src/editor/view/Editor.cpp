@@ -58,12 +58,13 @@ Editor::Editor(wxString const & title) :
   SetIcon(wxIcon(MParameters::getRootPath() + "/pictures/icon.png")); //on met le logo sympa
 
   //les boutons
-  hbox3->Add(new wxButton(bouttons, wxID_ADD, wxT("executer"), wxPoint(-1, -1)), 1, wxEXPAND);
-  hbox3->Add(new wxButton(bouttons, wxID_ABORT, wxT("arreter"), wxPoint(-1, -1)), 1, wxEXPAND);
-  hbox3->Add(new wxButton(bouttons, wxID_EXIT, wxT("fermer"), wxPoint(-1, -1)), 1, wxEXPAND);
+  hbox3->Add(new wxButton(bouttons, wxID_ADD, wxT("Executer"), wxPoint(-1, -1)), 1, wxEXPAND);
+  hbox3->Add(new wxButton(bouttons, wxID_CANCEL, wxT("Arreter/Recommencer"), wxPoint(-1, -1)),
+             1, wxEXPAND);
+  hbox3->Add(new wxButton(bouttons, wxID_EXIT, wxT("Fermer"), wxPoint(-1, -1)), 1, wxEXPAND);
 
   Connect(wxID_EXIT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Editor::OnQuit));
-  Connect(wxID_ABORT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Editor::OnAbort));
+  Connect(wxID_CANCEL, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Editor::OnAbort));
   Connect(wxID_ADD, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Editor::OnAdd));
 
   //la zone du bas
@@ -93,7 +94,8 @@ Editor::Editor(wxString const & title) :
  */
 void Editor::OnAbort(wxCommandEvent & WXUNUSED(event))
 {
-  //TODO
+  setChanged();
+  notifyObservers(Event::ABORT);
 }
 
 /**
@@ -102,8 +104,14 @@ void Editor::OnAbort(wxCommandEvent & WXUNUSED(event))
  */
 void Editor::OnAdd(wxCommandEvent & WXUNUSED(event))
 {
+
+  if (thread.valid())
+  {
+    thread.wait();
+  }
   setChanged();
-  notifyObservers(Event::EXECUTE_EDITOR, getEditContent());
+  thread = std::async(std::launch::async, [&]
+  { notifyObservers(Event::EXECUTE_EDITOR, getEditContent());});
 }
 /**
  *
@@ -220,8 +228,12 @@ void Editor::writeMet(std::string methode, wxColour const* color)
 void Editor::writeRes(std::string retur, wxColour const* color)
 {
   wxTextCtrl* text = getRes(); //on recupere la zone de retour
-  text->SetDefaultStyle(wxTextAttr(*color));
-  text->AppendText(wxString(retur.c_str(), wxConvUTF8));
+  // SEE : to call with parallelism !
+  text->CallAfter([&, color, retur]
+  {
+    getRes()->SetDefaultStyle(wxTextAttr(*color));
+    getRes()->AppendText(wxString(retur.c_str(), wxConvUTF8));
+  });
 }
 
 void Editor::clearRes()

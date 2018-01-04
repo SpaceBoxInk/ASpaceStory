@@ -8,13 +8,17 @@
  *  @brief TODO complete
  */
 
-
 #include "MLuaInterpreter.hpp"
 #include "MParameters.hpp"
 
+#include "../../model/MAssException.hpp"
 #include "../../model/MCoordonnees.hpp"
 #include "../../model/MRobot.hpp"
+#include "../../model/MTerrain.hpp"
+#include "../view/Editor.hpp"
 
+#include <thread>
+#include <typeinfo>
 
 extern "C"
 {
@@ -27,14 +31,37 @@ using namespace AssEditor;
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
-std::stringstream MLuaInterpreter::output;
+bool MLuaInterpreter::abort = false;
+std::string MLuaInterpreter::output;
+
+Editor* MLuaInterpreter::ihmEditor = nullptr;
 MTerrain* MLuaInterpreter::terrain = nullptr;
+
 MRobot* MLuaInterpreter::robot = nullptr;
+using namespace std::chrono_literals;
+
+template<class Type>
+std::string& operator<<(std::string& ss, Type t)
+{
+  using namespace std;
+  if constexpr(!std::is_arithmetic<Type>::value || sizeof(Type) == 1)
+  {
+    ss += t;
+  }
+  else
+  {
+    ss += std::to_string(t);
+  }
+  MLuaInterpreter::ihmEditor->writeRes(ss);
+  ss = "";
+  return ss;
+}
 
 int MLuaInterpreter::avancer(lua_State* l)
 {
+  std::this_thread::sleep_for(robot->getSpeed());
   output << "Avance d'une case" << '\n';
-  Mouvement mouv = MouvementT::getDirection(robot->getDirection());
+  Mouvement mouv = robot->getDirection();
   robot->deplacer(*terrain, mouv);
   return 0;
 }
@@ -48,8 +75,23 @@ int MLuaInterpreter::avancerDe(lua_State* l)
 
 int MLuaInterpreter::tournerDe(lua_State* l)
 {
+  std::this_thread::sleep_for(robot->getSpeed());
   int direction = lua_tonumber(l, 1);
-  output << "Tourne de " << direction << " degrés" << '\n';
+  try
+  {
+    int newDir = (int(robot->getDirection()) + direction / 90) % 4;
+    robot->setDirection(Mouvement(newDir >= 0 ? newDir : 4 - newDir));
+    output << "Tourne de " << direction << " degrés" << '\n';
+    if (direction != 0 && direction != 90 && direction != -90 && direction != 180)
+    {
+      output << "Attention, " << direction
+          << " degrés n'est pas conventionnel, choisi plutôt parmi ceux la : \n0, 90, -90, 180\n";
+    }
+  }
+  catch (MAssException& e)
+  {
+    output << e.what();
+  }
   return 0;
 }
 
@@ -67,12 +109,22 @@ int MLuaInterpreter::print(lua_State* l)
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MLuaInterpreter::MLuaInterpreter(MTerrain* terrain)
+MLuaInterpreter::MLuaInterpreter(MTerrain* terrain, Editor* ihmEditor)
 {
   MLuaInterpreter::terrain = terrain;
+  MLuaInterpreter::ihmEditor = ihmEditor;
+
   lua = luaL_newstate();
   luaL_openlibs(lua);
   registerFonctions();
+  lua_sethook(lua, [](lua_State *L, lua_Debug *ar)
+  {
+    if (abort)
+    {
+      luaL_error(L, "");
+    }
+  },
+              LUA_HOOKLINE, 0);
 }
 
 MLuaInterpreter::~MLuaInterpreter()
@@ -85,7 +137,24 @@ MLuaInterpreter::~MLuaInterpreter()
 //------------------------------------------------------------
 void MLuaInterpreter::execute(std::string const& exePath)
 {
+  robot->launch();
+  abort = false;
+  running.lock();
   luaL_dofile(lua, exePath.c_str());
+  running.unlock();
+  abort = false;
+}
+
+void MLuaInterpreter::interrupt()
+{
+  if (isRunning())
+  {
+    abort = true;
+  }
+  else
+  {
+    robot->reset();
+  }
 }
 
 void MLuaInterpreter::registerFonctions()
@@ -111,10 +180,10 @@ void MLuaInterpreter::registerFonctions()
 //------------------------------------------------------------
 void MLuaInterpreter::clearOutput()
 {
-  output.str(std::string());
+  output = "";
 }
 
-std::stringstream const& MLuaInterpreter::getOutput() const
+std::string const& MLuaInterpreter::getOutput() const
 {
 //  lua_Debug dbg;
 //

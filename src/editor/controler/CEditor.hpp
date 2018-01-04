@@ -15,6 +15,7 @@
 #include "../model/MSave.hpp"
 
 #include <wx/textctrl.h>
+#include <future>
 #include <set>
 #include <string>
 #include <vector>
@@ -29,6 +30,7 @@ enum class Event
   SAVE_AND_CLOSE_EDITOR,
   EXECUTE_EDITOR,
   SYNTAX,
+  ABORT,
 };
 
 class CEditor : public Observer
@@ -40,8 +42,8 @@ private:
   MMethodsLoader methodsLoader;
   std::set<std::string> listeKey;
   MSave save;
-  MLuaInterpreter luaInterpreter;
   Editor* ihmEditor;
+  MLuaInterpreter luaInterpreter;
 //=======================>Constructors<=======================
 public:
   CEditor(MTerrain* terrain);

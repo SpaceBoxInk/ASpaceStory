@@ -37,7 +37,7 @@ private:
    * -90 : gauche
    * 180 : bas
    */
-  int direction;
+  Mouvement direction;
   float taille;
   MCompetence competences;
   MInventaire inventaire;
@@ -70,7 +70,8 @@ private:
 
 //=====================>Getters&Setters<======================
 public:
-  int getDirection() const;
+  Mouvement getDirection() const;
+  void setDirection(Mouvement direction);
 
   std::string const & getNom() const;
 
@@ -85,15 +86,13 @@ public:
   void setActionDefense(std::function<void(std::string entite, int degat)> actionDefense);
   void setActionInteraction(std::function<void(MEntite const& entite)> actionInteraction);
 private:
-  void setDirection(int direction);
-  void setDirection(Mouvement direction);
 
 };
 //------------------------------------------------------------
 //=====================>Implementations<======================
 //------------------------------------------------------------
 
-inline int MEntite::getDirection() const
+inline Mouvement MEntite::getDirection() const
 {
   return direction;
 }
@@ -111,7 +110,7 @@ inline void MEntite::setActionInteraction(
 
 inline void MEntite::setDirection(Mouvement direction)
 {
-  this->direction = MouvementT::getDirection(direction);
+  this->direction = direction;
 }
 
 inline std::string const & MEntite::getNom() const

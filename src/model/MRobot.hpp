@@ -11,8 +11,10 @@
 
 #pragma once
 
+#include "MCoordonnees.hpp"
 #include "MEntite.hpp"
 
+#include <chrono>
 #include <string>
 
 class MTuile;
@@ -27,6 +29,9 @@ class MRobot : public MEntite
 //========================>Attributes<========================
 private:
   MPersonnage& proprietaire;
+  std::chrono::seconds speed;
+  MTuile* posDepart;
+  Mouvement dirDepart;
 //=======================>Constructors<=======================
 public:
   MRobot(MPersonnage* proprietaire, std::string const& texture, std::string const& nom,
@@ -38,16 +43,30 @@ private:
 
 //=========================>Methods<==========================
 public:
-
+  bool launch();
+  bool reset();
+  bool isReset();
 private:
 
 //=====================>Getters&Setters<======================
 public:
+  std::chrono::seconds const & getSpeed() const;
 
 private:
+  void setSpeed(std::chrono::seconds const & speed);
 
 };
 //------------------------------------------------------------
 //=====================>Implementations<======================
 //------------------------------------------------------------
+
+inline std::chrono::seconds const & MRobot::getSpeed() const
+{
+  return speed;
+}
+
+inline void MRobot::setSpeed(std::chrono::seconds const & speed)
+{
+  this->speed = speed;
+}
 

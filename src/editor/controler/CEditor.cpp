@@ -24,7 +24,6 @@
 #include <fstream>
 #include <map>
 #include <regex>
-#include <sstream>
 #include <utility>
 
 class MTerrain;
@@ -44,7 +43,8 @@ wxColour CEditor::keywordColor;
 
 CEditor::CEditor(MTerrain* terrain) :
     methodsLoader("all" + MParameters::getLang()), save("defaultProgram.lua"),
-    luaInterpreter(terrain)
+    ihmEditor(new Editor(wxT("Editeur"))),
+    luaInterpreter(terrain, ihmEditor)
 {
   keywordColor = wxColour(MParameters::getKeywordColor());
   addEvents();
@@ -60,7 +60,6 @@ CEditor::CEditor(MTerrain* terrain) :
   keywords.close();
 
   // IHM init
-  ihmEditor = new Editor(wxT("Editeur"));
   ihmEditor->getMethodes()->addObserver(this);
   ihmEditor->addObserver(this);
   ihmEditor->ajouterMethode(methodsLoader.getListCatMeth());
@@ -119,13 +118,14 @@ void CEditor::addEvents()
   {
     printLog("Save and execute : yeah", LogType::INFO);
     save.save(content);
-    luaInterpreter.execute(save.getFilePath());
-
     ihmEditor->clearRes();
-    ihmEditor->writeRes(luaInterpreter.getOutput().str());
-    luaInterpreter.clearOutput();
+    luaInterpreter.execute(save.getFilePath());
   });
 
+  addAction(Event::ABORT, [&](Observed const&)
+  {
+    luaInterpreter.interrupt();
+  });
 }
 
 void CEditor::writeColoredMet(std::string const& method)

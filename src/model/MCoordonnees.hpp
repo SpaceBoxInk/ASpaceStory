@@ -38,8 +38,8 @@ private:
 enum class Mouvement
 {
   HAUT = 0,
-  BAS,
   DROITE,
+  BAS,
   GAUCHE,
   SIZE
 };
@@ -56,28 +56,8 @@ namespace MouvementT
 
   constexpr int getDirection(Mouvement m)
   {
-    constexpr std::array<int, MouvementT::size()> directions = { 0, 180, 90, -90 };
+    constexpr std::array<int, MouvementT::size()> directions = { 0, 90, 180, -90 };
     return directions[int(m)];
-  }
-
-  constexpr Mouvement getDirection(int direction)
-  {
-    switch (direction) {
-    case 0:
-      return Mouvement::HAUT;
-      break;
-    case 180:
-      return Mouvement::BAS;
-      break;
-    case 90:
-      return Mouvement::DROITE;
-      break;
-    case -90:
-      return Mouvement::GAUCHE;
-      break;
-    default:
-      return Mouvement::HAUT;
-    }
   }
 
   /**

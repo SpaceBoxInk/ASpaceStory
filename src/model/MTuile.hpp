@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "MAssException.hpp"
 #include "MCoordonnees.hpp"
 #include "MEntite.hpp"
 #include "MPartieCouche.hpp"
@@ -134,6 +135,10 @@ inline MPartieCouche const* MTuile::getPartieCouche(MTypeCouche type) const
 
 inline void MTuile::placeEntite(MEntite* entite)
 {
+  if (this->entite)
+  {
+    throw MExceptionEntiteDejaCreee(this->entite->getNom());
+  }
   this->entite = entite;
   for (int i = 0; i < (int)MTypeCouche::SIZE; ++i)
   {

@@ -25,8 +25,8 @@
 
 MEntite::MEntite(std::string const& nom, std::string const& texture, MTuile* tuile,
                  float taille) :
-    MObjetTexture(texture), nom(nom), direction(90), taille(taille), actionDefense(nullptr),
-    actionInteraction(nullptr)
+    MObjetTexture(texture), nom(nom), tuile(nullptr), direction(Mouvement::DROITE),
+    taille(taille), actionDefense(nullptr), actionInteraction(nullptr)
 {
   setTuile(tuile);
 }
@@ -87,25 +87,22 @@ void MEntite::seDefendre(MEntite& attaquant, int degats)
 }
 
 void MEntite::interagirTuile(MTerrain& terrain)
+try
 {
-  try
-  {
-    MTuile& tuileInt = terrain(
-        tuile->getPosition() + MouvementT::getDirectionCoords(direction));
-    tuileInt.interagirTuile(this);
-  }
-  catch (MExceptionOutOfTerrain& e)
-  {
-  }
+  using MouvementT::operator *;
+  MTuile& tuileInt = terrain(tuile->getPosition() + *direction);
+  tuileInt.interagirTuile(this);
+}
+catch (MExceptionOutOfTerrain& e)
+{
 }
 
 void MEntite::interagirEntite(MTerrain& terrain)
 {
   try
   {
-    MEntite* entite = terrain(
-        getTuile()->getPosition() + MouvementT::getDirectionCoords(direction)).getEntite();
-
+    using MouvementT::operator *;
+    MEntite* entite = terrain(getTuile()->getPosition() + *direction).getEntite();
     if (entite && entite->actionInteraction)
     {
       entite->actionInteraction(*this);
@@ -125,8 +122,8 @@ bool MEntite::isAccessible(MTuile const & tuile)
 void MEntite::attaquer(MTerrain& terrain)
 try
 {
-  MEntite* entiteCible = terrain(
-      getTuile()->getPosition() + MouvementT::getDirectionCoords(direction)).getEntite(); // FIXME : add direction
+  using MouvementT::operator *;
+  MEntite* entiteCible = terrain(getTuile()->getPosition() + *direction).getEntite(); // FIXME : add direction
   if (entiteCible)
   {
     entiteCible->seDefendre(*this, this->forceTotale());
@@ -156,19 +153,13 @@ MCompetence const& MEntite::getCompetences() const
 
 void MEntite::setTuile(MTuile* tuile)
 {
-  this->tuile = tuile;
-  if (tuile)
+  if (this->tuile && tuile)
+  {
+    this->tuile->deplacerEntiteVers(*tuile);
+  }
+  else if (tuile)
   {
     tuile->placeEntite(this);
   }
-}
-
-void MEntite::setDirection(int direction)
-{
-  // FIXME do something for negatives or fix direction to 4 positions
-  if (direction != 0 || direction != 90 || direction != -90 || direction != 180)
-  {
-    throw MAssException("Direction not viable ! : " + std::to_string(direction));
-  }
-  this->direction = direction % 360;
+  this->tuile = tuile;
 }
