@@ -6,16 +6,16 @@
  */
 
 #include "Caneva.hpp"
-#include "VInventory.hpp"
-
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <wx/window.h>
 #include <iostream>
 #include <utility>
+#include "VInventory.hpp"
 
 #include "../model/MCoordonnees.hpp"
+#include "VEnigma.hpp"
 
 Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, long style,
                int tailleTexture) :
@@ -208,8 +208,10 @@ void Canvas::onRight(wxMouseEvent& event)
 {
   std::cout << "bonjour" << std::endl;
 //  this->move("hitler", MCoordonnees(1, 0));
-  inventory *custom = new inventory("wallah", wxT("joseph-staline.png"), "bonjour");
-  custom->Show(true);
+//  VEnigma *custom = new VEnigma("wallah", wxT("joseph-staline.png"), "bonjour");
+//  custom->Show(true);
+  VInventory* custom = new VInventory("inventory", MCoordonnees(20, 20));
+  custom->show(true);
 //  this->setPositionOf("Joseph Stalin", MCoordonnees(0, 0));
 
 

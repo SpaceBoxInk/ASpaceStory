@@ -4,6 +4,7 @@
  *  Created on: 27 déc. 2017
  *      Author: lordofkawaiii
  */
+
 #include "ImagePanel.hpp"
 
 wxImagePanel::wxImagePanel(wxFrame* parent, wxString file, wxBitmapType format) :
@@ -11,7 +12,11 @@ wxImagePanel::wxImagePanel(wxFrame* parent, wxString file, wxBitmapType format) 
 {
   // load the file... ideally add a check to see if loading was successful
   image.LoadFile(file, format);
+  assert(image.IsOk());
   this->Bind(wxEVT_PAINT, &wxImagePanel::paintEvent, this);
+  this->Bind(wxEVT_SIZE, &wxImagePanel::OnSize, this);
+  w = -1;
+  h = -1;
 }
 
 /*
@@ -22,7 +27,6 @@ wxImagePanel::wxImagePanel(wxFrame* parent, wxString file, wxBitmapType format) 
 
 void wxImagePanel::paintEvent(wxPaintEvent & evt)
 {
-  std::cout << "meh";
   // depending on your system you may need to look at double-buffered dcs
   wxPaintDC dc(this);
   render(dc);
@@ -50,6 +54,34 @@ void wxImagePanel::paintNow()
  */
 void wxImagePanel::render(wxDC& dc)
 {
-  dc.DrawBitmap(image, 0, 0, false);
+  int neww, newh;
+  dc.GetSize(&neww, &newh);
+
+  if (neww != w || newh != h)
+  {
+    resized = wxBitmap(image.ConvertToImage().Scale(neww, newh /*, wxIMAGE_QUALITY_HIGH*/));
+    w = neww;
+    h = newh;
+    dc.DrawBitmap(resized, 0, 0, false);
+  }
+  else
+  {
+    dc.DrawBitmap(resized, 0, 0, false);
+  }
 }
 
+/*
+ * Here we call refresh to tell the panel to draw itself again.
+ * So when the user resizes the image panel the image should be resized too.
+ */
+void wxImagePanel::OnSize(wxSizeEvent& event)
+{
+  Refresh();
+  //skip the event.
+  event.Skip();
+}
+
+void wxImagePanel::LoadImage(std::string file)
+{
+  this->image.LoadFile(file, wxBITMAP_TYPE_PNG);
+}

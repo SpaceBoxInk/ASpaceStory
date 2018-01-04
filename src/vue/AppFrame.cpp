@@ -6,9 +6,8 @@
  */
 
 #include "AppFrame.hpp"
-#include "VInventory.hpp"
-
 #include "../model/MParameters.hpp"
+#include "VEnigma.hpp"
 
 AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size, int tailleTexture) :
 wxFrame(NULL, wxID_ANY, title, pos, size),
@@ -129,6 +128,6 @@ void AppFrame::setPositionOf(std::string entityName, MCoordonnees const& positio
 
 void AppFrame::showEnigma(std::string title, std::string file, std::string textInside)
 {
-  inventory *custom = new inventory(title, file, textInside);
+  VEnigma *custom = new VEnigma(title, file, textInside);
   custom->Show(true);
 }

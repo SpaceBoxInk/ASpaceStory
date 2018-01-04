@@ -1,5 +1,5 @@
 /**
- * @file VInventaireInterface.hpp
+ * @file VPlayerInventaireInterface.hpp
  *
  * Early optimization is the root of all evil
  * DRY ! Don't repeat yourself
@@ -11,14 +11,15 @@
 
 #pragma once
 
-#include "../model/MCoordonnees.hpp"
-#include "../outils/ObserverPattern/Observed.hpp"
+#include "VInventaireInterface.hpp"
 
-class VInventaireInterface : public Observed
+class MCoordonnees;
+
+
+class VPlayerInventaireInterface : public virtual VInventaireInterface
 {
 //========================>Attributes<========================
 private:
-  MCoordonnees size;
 
 //=======================>Constructors<=======================
 public:
@@ -33,12 +34,12 @@ public:
    *
    * □□□ // barre d'inventaire rapide
    */
-  VInventaireInterface(MCoordonnees const& size) :
-      size(size)
+  VPlayerInventaireInterface(MCoordonnees const& size) :
+      VInventaireInterface(size)
   {
   }
 	// TODO: rule of five ? copyandswap
-  virtual ~VInventaireInterface() = default;
+  virtual ~VPlayerInventaireInterface() = default;
 
 private:
 
@@ -49,11 +50,9 @@ public:
    * @param image image de l'objet
    * @param position la position dans l'inventaire ligne par ligne, si @a -1 l'objet va dans la première case disponible
    */
-  virtual void addObjInv(unsigned long long id, std::string name,
-                               std::string description, std::string image,
-                               int position = -1) = 0;
-  virtual void delObjInv(unsigned long long id) = 0;
-  virtual void show(bool show) = 0;
+  virtual void addObjPlayerQuickInv(unsigned long long id, std::string name,
+                                    std::string description, std::string image, int position =
+                                        -1) = 0;
 private:
 
 //=====================>Getters&Setters<======================
