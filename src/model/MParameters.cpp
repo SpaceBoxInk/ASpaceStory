@@ -10,6 +10,11 @@ std::string MParameters::rootPath;
 std::map<char, Mouvement> MParameters::mouvKeys;
 std::map<char, MActionsKey> MParameters::keys;
 
+/**
+ * set and check the configroot path
+ * @param path new path
+ * @return true if we can open this new configRoot path
+ */
 bool MParameters::checkConfFile(std::string path)
 {
   // set the new path
@@ -23,6 +28,9 @@ bool MParameters::checkConfFile(std::string path)
   return isOp;
 }
 
+/**
+ * init the rootPath with the rootPath itself, it seeking for the rootFile in another known folders
+ */
 void MParameters::setRootPath()
 {
   // check different location for config file
@@ -48,7 +56,7 @@ char MParameters::getKeyFor(std::string const & action)
 }
 
 
-std::string const & MParameters::getRootPath()
+std::string MParameters::getRootPath()
 {
   return rootPath;
 }
@@ -167,4 +175,109 @@ try
 catch (...)
 {
   return false;
+}
+
+std::string MParameters::getTextureFor(MTypeCouche couche)
+{
+  return getTuilePath() + conf["textureCouche" + std::to_string((int)couche)];
+}
+
+int MParameters::getTailleTuile()
+{
+  return std::stoi(conf["tailleTuilePx"]);
+}
+
+int MParameters::getNbTuileX()
+{
+  return std::stoi(conf["nbTuileX"]);
+}
+
+int MParameters::getNbTuileY()
+{
+  return std::stoi(conf["nbTuileY"]);
+}
+
+std::string MParameters::getSpritesPath()
+{
+  return getRootPath() + conf["spritesPath"];;
+}
+
+void MParameters::load(std::string exePath)
+{
+  rootPath = exePath.substr(0, exePath.rfind('/') + 1);
+  setRootPath();
+
+  // load file
+  std::ifstream file;
+  try
+  {
+    file.open(getConfPath());
+    if (file.is_open())
+    {
+      while (!file.eof())
+      {
+        std::string key;
+        std::string val;
+        file >> key >> val >> val;
+        conf[key] = val;
+      }
+    }
+    else
+    {
+      std::cerr << "Impossible de charger le fichier de configuration " + getConfPath()
+          << '\n';
+    }
+  }
+  catch (std::exception& e)
+  {
+    std::cerr << "Impossible de charger le fichier de configuration " + getConfPath() << '\n';
+  }
+  file.close();
+  //=========================================================================================
+  // set configurations
+  
+}
+void MParameters::load(std::string exePath)
+{
+  rootPath = exePath.substr(0, exePath.rfind('/') + 1);
+  setRootPath();
+
+  // load file
+  std::ifstream file;
+  try
+  {
+    file.open(getConfPath());
+    if (file.is_open())
+    {
+      while (!file.eof())
+      {
+        std::string key;
+        std::string val;
+        file >> key >> val >> val;
+        conf[key] = val;
+      }
+    }
+    else
+    {
+      std::cerr << "Impossible de charger le fichier de configuration " + getConfPath()
+          << '\n';
+    }
+  }
+  catch (std::exception& e)
+  {
+    std::cerr << "Impossible de charger le fichier de configuration " + getConfPath() << '\n';
+  }
+  file.close();
+  //=========================================================================================
+  // set configurations
+  mouvKeys[getKeyFor("upKey")] = Mouvement::HAUT;
+  mouvKeys[getKeyFor("downKey")] = Mouvement::BAS;
+  mouvKeys[getKeyFor("leftKey")] = Mouvement::GAUCHE;
+  mouvKeys[getKeyFor("rightKey")] = Mouvement::DROITE;
+
+  keys[getKeyFor("interactEnvKey")] = MActionsKey::INTERACT_ENV_KEY;
+  keys[getKeyFor("interactEntityKey")] = MActionsKey::INTERACT_ENTITY_KEY;
+  keys[getKeyFor("attackKey")] = MActionsKey::ATTACK;
+  keys[getKeyFor("mineKey")] = MActionsKey::MINE;
+  keys[getKeyFor("useKey")] = MActionsKey::USE_MAIN_OBJECT;
 }

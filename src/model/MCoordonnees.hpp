@@ -38,8 +38,8 @@ private:
 enum class Mouvement
 {
   HAUT = 0,
-  BAS,
   DROITE,
+  BAS,
   GAUCHE,
   SIZE
 };
@@ -49,6 +49,7 @@ namespace MouvementT
   /// retourne les coordonnees de mouvement à appliquer en fonction du mouvement
   MCoordonnees operator *(Mouvement m);
 
+
   constexpr int size()
   {
     return (int)(Mouvement::SIZE);
@@ -56,7 +57,7 @@ namespace MouvementT
 
   constexpr int getDirection(Mouvement m)
   {
-    constexpr std::array<int, MouvementT::size()> directions = { 0, 180, 90, -90 };
+    constexpr std::array<int, MouvementT::size()> directions = { 0, 90, 180, -90 };
     return directions[int(m)];
   }
 

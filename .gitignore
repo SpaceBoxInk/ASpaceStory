@@ -6,6 +6,9 @@
 .project
 .settings/
 
+# images
+*.pal
+
 # Prerequisites
 *.d
 
@@ -43,3 +46,8 @@
 /Debug Gcov/
 /ASpaceStory.xml
 /Win/
+/IHM/
+/src/ressources/programs/*
+!/src/ressources/programs/defaultProgram.lua
+/IHMDoxy/
+/doxygen/

@@ -46,6 +46,7 @@ VPrimitif::VPrimitif(MCoordonnees const& coordMax) :
 
 VPrimitif::~VPrimitif()
 {
+  std::cout << "remove vprim" << '\n';
 }
 
 //------------------------------------------------------------

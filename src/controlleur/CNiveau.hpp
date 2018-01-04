@@ -20,16 +20,22 @@
 #include <map>
 #include <string>
 
-
+class AppFrameInterface;
 class VPrimitif;
 
+/**
+ * controleur pour les niveaux
+ */
 class CNiveau : public Observer
 {
 //========================>Attributes<========================
 private:
   MTerrain terrain;
+  AppFrameInterface* vuePrincipale;
+  /**
+   * entité du niveau courant créer par le lua (sans les perso ni les robots)
+   */
   std::map<std::string, MEntite> entites;
-  VPrimitif* vuePrincipale;
   /**
    * folder for level resources
    */
@@ -41,7 +47,7 @@ private:
   std::map<std::string, MEnigme> enigmes;
 //=======================>Constructors<=======================
 public:
-  CNiveau(VPrimitif* vuePrincipale, std::string levelFolder =
+  CNiveau(AppFrameInterface* vuePrincipale, std::string levelFolder =
               MParameters::getMainScriptFolder(),
           std::string levelMainFile = MParameters::getMainScript());
   // TODO: rule of five ? copyandswap
@@ -52,7 +58,7 @@ private:
 //=========================>Methods<==========================
 public:
   MEntite* getEntite(std::string name);
-  void addEntite(std::string name, MTuile* tuile, float taille);
+  void addEntite(std::string name, std::string texture, MTuile* tuile, float taille);
   void addEnigme(std::string nom, std::string description, std::string image);
   void afficherEnigme(std::string nom);
 private:

@@ -12,10 +12,13 @@
 #include <string>
 
 #include "MInventaire.hpp"
+#include "MObjetTexture.hpp"
+
+#include <string>
 
 class MEntite;
 
-class MItem
+class MItem: public MObjetTexture
 {
   //========================>Attributes<========================
 private:
@@ -32,7 +35,7 @@ private:
 
   //=======================>Constructors<=======================
 public:
-  MItem(std::string nom, std::string description, MTypeEquipement type = MTypeEquipement::MAIN,
+  MItem(std::string nom, std::string const& texture, std::string description, MTypeEquipement type = MTypeEquipement::MAIN,
         int degats = 0, int protection = 0, bool supprimable = true, int miningLevel = 0);
 
   //=========================>Methods<==========================

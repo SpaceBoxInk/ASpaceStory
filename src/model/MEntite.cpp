@@ -11,6 +11,7 @@
 
 #include "MEntite.hpp"
 #include "MAssException.hpp"
+#include "MEvents.hpp"
 #include "MItem.hpp"
 #include "MTerrain.hpp"
 #include "MTuile.hpp"
@@ -23,9 +24,13 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MEntite::MEntite(std::string const& nom, MTuile* tuile, float taille) :
-    nom(nom), direction(0), taille(taille), inventaire(70), actionDefense(nullptr)
+MEntite::MEntite(std::string const& nom, std::string const& texture, MTuile* tuile,
+                 float taille) :
+    MObjetTexture(texture), nom(nom), tuile(nullptr), direction(Mouvement::DROITE),
+    taille(0),inventaire(70)
+    actionDefense(nullptr), actionInteraction(nullptr)
 {
+  setTaille(taille);
   setTuile(tuile);
 }
 
@@ -65,6 +70,8 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
       if (tuile->deplacerEntiteVers(tuileDst))
       {
         tuile = &terrain(tuile->getPosition() + *deplacement);
+        setChanged();
+        notifyObservers(MModelEvents::ENTITY_MOVED, *this);
       }
     }
   }
@@ -90,8 +97,23 @@ void MEntite::seDefendre(MEntite& attaquant, int degats)
 void MEntite::interagirTuile(MTerrain& terrain)
 try
 {
-  MTuile& tuileInt = terrain(tuile->getPosition() + MouvementT::getDirectionCoords(direction));
+  using MouvementT::operator *;
+  MTuile& tuileInt = terrain(tuile->getPosition() + *direction);
   tuileInt.interagirTuile(this);
+}
+catch (MExceptionOutOfTerrain& e)
+{
+}
+
+void MEntite::interagirEntite(MTerrain& terrain)
+try
+{
+  using MouvementT::operator *;
+  MEntite* entite = terrain(getTuile()->getPosition() + *direction).getEntite();
+  if (entite && entite->actionInteraction)
+  {
+    entite->actionInteraction(*this);
+  }
 }
 catch (MExceptionOutOfTerrain& e)
 {
@@ -124,8 +146,8 @@ bool MEntite::isAccessible(MTuile const & tuile) const
 void MEntite::attaquer(MTerrain& terrain)
 try
 {
-  MEntite* entiteCible = terrain(
-      getTuile()->getPosition() + MouvementT::getDirectionCoords(direction)).getEntite();
+  using MouvementT::operator *;
+  MEntite* entiteCible = terrain(getTuile()->getPosition() + *direction).getEntite();
   if (entiteCible)
   {
     entiteCible->seDefendre(*this, this->forceTotale());
@@ -168,11 +190,15 @@ MCompetence const& MEntite::getCompetences() const
 
 void MEntite::setTuile(MTuile* tuile)
 {
-  this->tuile = tuile;
-  if (tuile)
+  if (this->tuile && tuile)
+  {
+    this->tuile->deplacerEntiteVers(*tuile);
+  }
+  else if (tuile)
   {
     tuile->placeEntite(this);
   }
+  this->tuile = tuile;
 }
 
 MInventaire& MEntite::getInventaire()
@@ -187,14 +213,4 @@ int MEntite::getMiningPower()
     return inventaire.getEquipement(MTypeEquipement::MAIN)->getMiningLevel();
   }
   return 0;
-}
-
-void MEntite::setDirection(int direction)
-{
-  // FIXME do something for negatives or fix direction to 4 positions
-  if (direction != 0 || direction != 90 || direction != -90 || direction != 180)
-  {
-    throw MAssException("Direction not viable ! : " + std::to_string(direction));
-  }
-  this->direction = direction % 360;
 }

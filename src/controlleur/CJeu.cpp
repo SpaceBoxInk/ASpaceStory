@@ -13,7 +13,6 @@
 
 #include "../model/MCoordonnees.hpp"
 #include "../model/MPersonnage.hpp"
-#include "../vue/VPrimitif.hpp"
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -24,26 +23,48 @@
 //------------------------------------------------------------
 
 CJeu::CJeu() :
-vuePrincipale(cNiveau.getTerrain().getTaille()), cNiveau(&vuePrincipale),
-    cPersonnage(&vuePrincipale, &cNiveau.getTerrain()), cLua(this)
+    vuePrincipale(new AppFrame("A Space Story", wxPoint(0, 0), wxSize(1536, 1020), 32)),
+    cNiveau(vuePrincipale), cPersonnage(vuePrincipale, &cNiveau.getTerrain()), cLua(this)
 {
   cPersonnage.addPersonnage("name");
   cPersonnage.setPersonnage("name");
-  cLua.executeScript(cNiveau.getScript());
+  try
+  {
+    cLua.executeScript(cNiveau.getScript());
+  }
+  catch (MAssException& e)
+  {
+    std::cout << e.what() << '\n';
+  }
   // TODO : to change (lua)
-  cPersonnage.launchPersonnage();
+  vuePrincipale->addEntite(cPersonnage.getCurrentPerso()->getNom(),
+                           cPersonnage.getCurrentPerso()->getTexture());
+  vuePrincipale->setPositionOf(cPersonnage.getCurrentPerso()->getNom(),
+                               cPersonnage.getCurrentPerso()->getTuile()->getPosition());
+  dynamic_cast<AppFrame*>(vuePrincipale)->Show();
 }
 
 CJeu::~CJeu()
 {
+  delete vuePrincipale;
 }
 
+/**
+ *
+ * @param name le nom de l'entité
+ * @return l'entité du nom @var name et du niveau courant
+ */
 MEntite* CJeu::getEntite(std::string name)
 {
   MEntite* ent = cNiveau.getEntite(name);
   return ent;
 }
 
+/**
+ *
+ * @param name le nom du personnage à get
+ * @return le personnage du nom spécifié
+ */
 MPersonnage* CJeu::getPersonnage(std::string name)
 {
   return cPersonnage.getPersonnage(name);

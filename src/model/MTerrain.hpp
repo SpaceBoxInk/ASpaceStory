@@ -32,7 +32,7 @@ class MTerrain : public Observed
 //========================>Attributes<========================
 private:
   /**
-   * map pour avoir la partie couche(lu dans les fichiers *list des tuiles)\
+   * map pour avoir la partie couche(lu dans les fichiers *list des tuiles)\n
    * en fonction d'un index(lu dans les fichiers .n*)
    */
   static std::unordered_map<std::uint8_t, MPartieCouche*> solsType;
@@ -65,7 +65,7 @@ public:
 
   std::vector<MTuile*> getAdjacentes(MTuile const& tuile);
 
-  std::vector<std::string const*> getImagesList(MTypeCouche typeCouche) const;
+  std::vector<int> getImagesList(MTypeCouche typeCouche) const;
 
   MEntite* procheEntite(MCoordonnees coordonneeJoueur);
   MCoordonnees toCoords(int index) const;

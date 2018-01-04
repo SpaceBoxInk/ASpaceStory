@@ -11,9 +11,13 @@
 
 #pragma once
 
+#include "MAssException.hpp"
 #include "MCompetence.hpp"
 #include "MCoordonnees.hpp"
 #include "MInventaire.hpp"
+#include "MObjetTexture.hpp"
+
+#include "../outils/ObserverPattern/Observed.hpp"
 
 #include <functional>
 #include <string>
@@ -21,7 +25,7 @@
 class MTerrain;
 class MTuile;
 
-class MEntite
+class MEntite : public MObjetTexture, public Observed
 {
 //========================>Attributes<========================
 private:
@@ -29,20 +33,25 @@ private:
   MTuile* tuile;
   /**
    * en degrée,
-   * 0 : en haut,
-   * 90 : droite
-   * -90 : gauche
-   * 180 : bas
+   * 0 : en haut (0),
+   * 90 : droite (1)
+   * 180 : bas (2)
+   * -90 : gauche (3)
    */
-  int direction;
+  Mouvement direction;
+  /**
+   * allant de 0 à 1 pour savoir quel pourcentage d'une tuile prend une entité
+   */
   float taille;
   MCompetence competences;
   MInventaire inventaire;
 
-  std::function<void(std::string, int)> actionDefense;
+  std::function<void(std::string entite, int degat)> actionDefense;
+  std::function<void(MEntite const& entite)> actionInteraction;
 //=======================>Constructors<=======================
 public:
-  MEntite(std::string const& nom, MTuile* tuile = nullptr, float taille = 1);
+  MEntite(std::string const& nom, std::string const& texture, MTuile* tuile = nullptr,
+          float taille = 1);
   // TODO: rule of five ? copyandswap
   virtual ~MEntite();
 
@@ -55,6 +64,7 @@ public:
   void attaquer(MTerrain& terrain);
   void seDefendre(MEntite& attaquant, int degats);
   void interagirTuile(MTerrain& terrain);
+  void interagirEntite(MTerrain& terrain);
   void utiliserObjet();
   void mine(MTerrain& terrain);
 
@@ -68,7 +78,8 @@ private:
 
 //=====================>Getters&Setters<======================
 public:
-  int getDirection() const;
+  Mouvement getDirection() const;
+  void setDirection(Mouvement direction);
 
   std::string const & getNom() const;
 
@@ -83,19 +94,16 @@ public:
 
 
 
-  void setActionDefense(std::function<void(std::string, int)> actionDefense);
+  void setActionDefense(std::function<void(std::string entite, int degat)> actionDefense);
+  void setActionInteraction(std::function<void(MEntite const& entite)> actionInteraction);
 private:
   int getMiningPower();
-
-  void setDirection(int direction);
-  void setDirection(Mouvement direction);
-
 };
 //------------------------------------------------------------
 //=====================>Implementations<======================
 //------------------------------------------------------------
 
-inline int MEntite::getDirection() const
+inline Mouvement MEntite::getDirection() const
 {
   return direction;
 }
@@ -105,9 +113,15 @@ inline void MEntite::setActionDefense(std::function<void(std::string, int)> acti
   this->actionDefense = actionDefense;
 }
 
+inline void MEntite::setActionInteraction(
+    std::function<void(MEntite const & entite)> actionInteraction)
+{
+  this->actionInteraction = actionInteraction;
+}
+
 inline void MEntite::setDirection(Mouvement direction)
 {
-  this->direction = MouvementT::getDirection(direction);
+  this->direction = direction;
 }
 
 inline std::string const & MEntite::getNom() const
@@ -127,6 +141,11 @@ inline float MEntite::getTaille() const
 
 inline void MEntite::setTaille(float taille)
 {
+  if (taille < 0 || taille > 1)
+  {
+    throw MAssException(
+        "Taille de " + std::to_string(taille) + " invalide pour l'entité" + getNom());
+  }
   this->taille = taille;
 }
 

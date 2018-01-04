@@ -30,6 +30,10 @@ MItem* CLua::item = nullptr;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
+/**
+ *
+ * @param cJeu
+ */
 CLua::CLua(CJeu* cJeu)
 {
   CLua::cJeu = cJeu;
@@ -51,8 +55,8 @@ CLua::~CLua()
 //=========================>Methods<==========================
 //------------------------------------------------------------
 /**
- * lua function signature :
- * void loadCouche(string coucheFile, int couche);
+ * lua function signature :\n
+ * void loadCouche(string coucheFile, int couche);\n
  *
  * @param l lua interpreter
  * @return number of returns
@@ -76,7 +80,7 @@ int CLua::loadCouche(lua_State* l)
 }
 
 /**
- * setScriptPath(folder, luaFile)
+ * setScriptPath(folder, luaFile)\n
  * set the current folder (and the luaFile to execute if 2 args are passed)
  */
 int CLua::setScriptPath(lua_State* l)
@@ -99,6 +103,7 @@ int CLua::setScriptPath(lua_State* l)
 }
 
 /**
+ * string getScriptPath()\n
  * return the current lua path and the current luaFile
  */
 int CLua::getScriptPath(lua_State* l)
@@ -109,6 +114,19 @@ int CLua::getScriptPath(lua_State* l)
   return 2;
 }
 
+/**
+ * string getResourcesPath()\n
+ * return le chemin vers le dossier de ressources
+ */
+int CLua::getResourcesPath(lua_State* l)
+{
+  push(MParameters::getRootPath().c_str());
+  return 1;
+}
+
+/**
+ * redefinie le comportement du loadfile pour prendre en compte le chemin vers le dossier du script "courant"
+ */
 int CLua::loadfile(lua_State* l)
 {
   std::string file = cJeu->cNiveau.getScriptFolder() + lua_tostring(l, 1);
@@ -116,6 +134,11 @@ int CLua::loadfile(lua_State* l)
   return 1;
 }
 
+/**
+ * addActionDeclenchement(int x, int y, int couche, fonction actionDeclenchement(entite))\n
+ * ajoute l'action actionDeclenchement à la couche n°couche en (x,y)
+ * déclenché lorsqu'une entité déclenche la couche(action volontaire)
+ */
 int CLua::addActionDeclenchement(lua_State* l)
 {
   testArgs(4);
@@ -143,6 +166,11 @@ int CLua::addActionDeclenchement(lua_State* l)
   return 0;
 }
 
+/**
+ * addActionPassage(int x, int y, int couche, fonction actionPassage(string entite))\n
+ * ajoute l'action actionPassage à la couche n°couche en (x,y)
+ * déclenché lorsqu'une entité passe sur la couche(action NON volontaire)
+ */
 int CLua::addActionPassage(lua_State* l)
 {
   testArgs(4);
@@ -170,17 +198,19 @@ int CLua::addActionPassage(lua_State* l)
   }
   return 0;
 }
+
 /**
- * newEntity(name, x, y, taille)
+ * newEntity(name, texture, x, y, taille)
  */
 int CLua::newEntity(lua_State* l)
 {
-  testArgs(4);
+  testArgs(5);
   std::string name = lua_tostring(l, 1);
-  MTuile* tuile = getTuile(2);
-  float taille = lua_tonumber(l, 3);
+  std::string texture = lua_tostring(l, 2);
+  MTuile* tuile = getTuile(3);
+  float taille = lua_tonumber(l, 5);
 
-  cJeu->cNiveau.addEntite(name, tuile, taille);
+  cJeu->cNiveau.addEntite(name, texture, tuile, taille);
   return 0;
 }
 
@@ -216,26 +246,42 @@ int CLua::addActionDefense(lua_State* l)
 }
 
 /**
+ * @param entiteName out: le nom de l'entité retourné
+ * @param nbArgsNoEntity: le nombre d'argument sans compter ce qu'il faut pour prendre une entité
+ * @return retourne l'entité nommée si le nom de l'entité est spécifié (getTop() - nbArgsNoEntity == 1)
+ * sinon retourne le personnage courant
+ */
+MEntite* CLua::getEntite(std::string& entiteName, int nbArgsNoEntity)
+{
+  if (getTop() - nbArgsNoEntity == 1)
+  {
+    entiteName = lua_tostring(lua, 1);
+    return cJeu->getEntite(entiteName);
+  }
+  else if (getTop() - nbArgsNoEntity == 0)
+  {
+    entiteName = cJeu->cPersonnage.getCurrentPerso()->getNom();
+    return cJeu->cPersonnage.getCurrentPerso();
+  }
+  else
+  {
+    throw MExceptionLuaArguments(
+        "one arg for personnage, \ntwo : string for entity, int for item", getTop());
+  }
+}
+
+/**
  * setPosition(string entiteName, int x, int y)
  */
-template<class T>
 int CLua::setPosition(lua_State* l)
 {
-  testArgs(3);
-  auto constexpr getEntite = [](std::string name) -> MEntite*
-  {
-    if (typeid(T) == typeid(MEntite))
-    return cJeu->getEntite(name);
-    else
-    return cJeu->cPersonnage.getPersonnage(name);
-  };
+  // FIXME : testNbArgs
+  std::string entiteName;
+  MEntite* e = getEntite(entiteName, 2);
 
-  std::string entiteName = lua_tostring(l, 1);
-
-  MEntite* e = getEntite(entiteName);
   if (e)
   {
-    e->setTuile(getTuile(2));
+    e->setTuile(getTuile(-2));
   }
   else
   {
@@ -245,24 +291,36 @@ int CLua::setPosition(lua_State* l)
 }
 
 /**
- * setTaille(string entiteName, int taille)
+ * setTexture(string entiteName, string texture)\n
+ * set la texture de l'entité spécifiée\n
+ *
+ * setTexture(string texture)\n
+ * set la texture du perso courant
+ *
  */
-template<class T>
+int CLua::setTexture(lua_State* l)
+{
+  std::string entiteName;
+  MEntite* e = getEntite(entiteName, 1);
+  e->setTexture(lua_tostring(l, -1));
+  return 0;
+}
+
+/**
+ * setTaille(string entiteName, int taille)\n
+ * set la taille de l'entité spécifiée\n
+ *
+ * setTaille(int taille)\n
+ * set la taille du perso courant
+ */
 int CLua::setTaille(lua_State* l)
 {
-  testArgs(2);
-  auto constexpr getEntite = [](std::string name) -> MEntite*
-  {
-    if (typeid(T) == typeid(MEntite))
-    return cJeu->getEntite(name);
-    else
-    return cJeu->cPersonnage.getPersonnage(name);
-  };
+  // FIXME : testNbArgs
+  std::string entiteName;
+  float taille = lua_tonumber(l, -1);
 
-  std::string entiteName = lua_tostring(l, 1);
-  float taille = lua_tonumber(l, 2);
+  MEntite* e = getEntite(entiteName, 1);
 
-  MEntite* e = getEntite(entiteName);
   if (e)
   {
     e->setTaille(taille);
@@ -274,6 +332,10 @@ int CLua::setTaille(lua_State* l)
   return 0;
 }
 
+/**
+ * string getCurrentPerso()\n
+ * retourne le nom du perso courant
+ */
 int CLua::getCurrentPerso(lua_State* l)
 {
   testArgs(0);
@@ -281,11 +343,30 @@ int CLua::getCurrentPerso(lua_State* l)
   return 1;
 }
 
+/**
+ * newRobot(string nom, string texture, int x, int y, float taille)\n
+ *
+ */
+int CLua::newRobot(lua_State* l)
+{
+  std::string nom = lua_tostring(l, 1);
+  std::string texture = lua_tostring(l, 2);
+  MTuile* tuile = getTuile(3);
+  float taille = lua_tonumber(l, 5);
+
+  cJeu->cPersonnage.addRobot(nom, texture, tuile, taille);
+  return 0;
+}
+
+/**
+ * newItem(nom, description, texture, degat = 0, equipement = MAIN(0), protection = 0, supprimable = true, miningLevel = 0)
+ */
 int CLua::newItem(lua_State* l)
 {
   // required parameters :
   std::string nom = lua_tostring(l, 1);
   std::string description = lua_tostring(l, 2);
+  std::string texture = lua_tostring(l, 3);
   // Default parameters :
   int degats = 0;
   MTypeEquipement equipement = MTypeEquipement::MAIN;
@@ -294,20 +375,23 @@ int CLua::newItem(lua_State* l)
   int miningLevel = 0;
 
   switch (getTop()) {
-  case 7:
+  case 8:
     miningLevel = lua_tointeger(l, 7);
     /* no break */
-  case 6:
+  case 7:
     supprimable = lua_toboolean(l, 6);
     /* no break */
-  case 5:
+  case 6:
     protection = lua_tointeger(l, 5);
     /* no break */
-  case 4:
+  case 5:
     degats = lua_tointeger(l, 4);
     /* no break */
-  case 3:
+  case 4:
     equipement = (MTypeEquipement)lua_tointeger(l, 3);
+    break;
+  case 3:
+      // default min parameters
     break;
   default:
     throw MExceptionLuaArguments("Nombre d'argument pour création d'item invalid ! ",
@@ -416,6 +500,7 @@ void CLua::registerBaseFunctions()
 {
   lua_register(lua, "setScriptPath", setScriptPath);
   lua_register(lua, "getScriptPath", getScriptPath);
+  lua_register(lua, "getResourcesPath", getResourcesPath);
   lua_register(lua, "loadfile", loadfile);
 }
 
@@ -432,11 +517,11 @@ void CLua::registerTerrainFunctions()
 void CLua::registerEntiteFunctions()
 {
   lua_register(lua, "newEntity", newEntity);
+  lua_register(lua, "newRobot", newRobot);
 
-  lua_register(lua, "setTailleEntity", setTaille<MEntite>);
-  lua_register(lua, "setTaillePersonnage", setTaille<MPersonnage>);
-  lua_register(lua, "setPositionEntity", setPosition<MEntite>);
-  lua_register(lua, "setPositionPersonnage", setPosition<MPersonnage>);
+  lua_register(lua, "setTaille", setTaille);
+  lua_register(lua, "setPosition", setPosition);
+  lua_register(lua, "setTexture", setTexture);
   lua_register(lua, "getCurrentPerso", getCurrentPerso);
   lua_register(lua, "addActionDefense", addActionDefense);
 }
@@ -458,12 +543,31 @@ void CLua::registerEnigmeFunctions()
 
 void CLua::executeScript(std::string script)
 {
-  luaL_dofile(lua, script.c_str());
+  try
+  {
+    luaL_dofile(lua, script.c_str());
+  }
+  catch (MAssException& e)
+  {
+    throw;
+  }
+  catch (...)
+  {
+    lua_Debug ar;
+    lua_getstack(lua, 0, &ar);
+    lua_getinfo(lua, "nfSl", &ar);
+    std::cout << "Error in " << ar.namewhat << " : " << ar.name << '\n';
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //-/////////////////////////Lua/ASS function Helpers/////////////////////////-//
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ *
+ * @param index a partir du quel sont rangé le x, y dans la pile lua
+ * @return la tuile en (x, y) pris depuis l'index
+ */
 MTuile* CLua::getTuile(int index)
 {
   int x = lua_tointeger(lua, index);

@@ -13,8 +13,8 @@
 
 #include "MRobot.hpp"
 
+#include <map>
 #include <string>
-#include <vector>
 
 class MTuile;
 
@@ -22,7 +22,7 @@ class MPersonnage : public MEntite
 {
 //========================>Attributes<========================
 private:
-  std::vector<MRobot> robots;
+  std::map<std::string, MRobot> robots;
 //=======================>Constructors<=======================
 public:
   MPersonnage(std::string const& nom);
@@ -33,12 +33,13 @@ private:
 
 //=========================>Methods<==========================
 public:
-
+  bool makeRobot(std::string const& nom, std::string const& texture, MTuile* tuile,
+                 float taille);
 private:
 
 //=====================>Getters&Setters<======================
 public:
-
+  MRobot& getRobot(std::string const& nom);
 private:
 
 };

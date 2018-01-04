@@ -16,8 +16,9 @@
 #include "../model/MAssException.hpp"
 #include "../model/MEvents.hpp"
 #include "../model/MPartieCouche.hpp"
-#include "../vue/VPrimitif.hpp"
+#include "../vue/AppFrameInterface.hpp"
 
+#include <utility>
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -27,7 +28,8 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-CNiveau::CNiveau(VPrimitif* vuePrincipale, std::string levelFolder, std::string levelMainFile) :
+CNiveau::CNiveau(AppFrameInterface* vuePrincipale, std::string levelFolder,
+                 std::string levelMainFile) :
     vuePrincipale(vuePrincipale), levelFolder(levelFolder), levelMainFile(levelMainFile)
 {
   terrain.addObserver(this);
@@ -43,10 +45,17 @@ CNiveau::~CNiveau()
 //------------------------------------------------------------
 void CNiveau::setEventMethods()
 {
-  addAction<MTerrainEvents, MTypeCouche>(
-      MTerrainEvents::COUCHE_LOADED, [this](MTypeCouche couche, Observed const& o)
+  addAction<MModelEvents, MTypeCouche>(
+      MModelEvents::COUCHE_LOADED,
+      [this](MTypeCouche couche, Observed const& o)
       {
-        vuePrincipale->setImg(couche,terrain.getImagesList(couche));
+        vuePrincipale->loadFileIntoGround(&terrain.getImagesList(couche)[0], MParameters::getTextureFor(couche),
+            couche, MParameters::getTailleTuile());
+      });
+  addAction<MModelEvents, MEntite>(
+      MModelEvents::ENTITY_MOVED, [this](MEntite const& entity, Observed const&)
+      {
+        vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition());
       });
 }
 
@@ -83,13 +92,23 @@ catch (...)
   return nullptr;
 }
 
-void CNiveau::addEntite(std::string name, MTuile* tuile, float taille)
+void CNiveau::addEntite(std::string name, std::string texture, MTuile* tuile, float taille)
 {
-  auto [it, isInserted] = entites.try_emplace(name, name, tuile, taille);
+  auto [it, isInserted] = entites.try_emplace(name, name, texture, tuile, taille);
   if (!isInserted)
     throw MExceptionEntiteDejaCreee(name);
+  else
+  {
+    it->second.addObserver(this);
+    vuePrincipale->addEntite(name, texture);
+    vuePrincipale->setPositionOf(name, tuile->getPosition());
+  }
 }
 
+/**
+ *
+ * @return le chemin du script lua du niveau courrant
+ */
 std::string CNiveau::getScript() const
 {
   return MParameters::getLevelPath() + "/" + levelFolder + "/" + levelMainFile;

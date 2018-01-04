@@ -6,7 +6,6 @@
  */
 
 #include "MItem.hpp"
-
 #include "MEntite.hpp"
 
 Id MItem::nextId = 0;
@@ -17,10 +16,10 @@ bool MItem::operator ==(MItem const& other) const
 }
 
 
-MItem::MItem(std::string nom, std::string description, MTypeEquipement type,
+MItem::MItem(std::string nom, std::string const& texture, std::string description, MTypeEquipement type,
     int degats,
              int protection, bool supprimable, int miningLevel) :
-    id(nextId++), nom(nom), type(type), description(description), degats(degats),
+    MObjetTexture(texture), id(nextId++), nom(nom), type(type), description(description), degats(degats),
     protection(protection), supprimable(supprimable), actionUtilisation(nullptr),
     miningLevel(miningLevel)
 {
@@ -59,3 +58,4 @@ void MItem::utilisation(MEntite* entite)
   }
 }
 
+M

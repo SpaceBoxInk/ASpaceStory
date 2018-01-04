@@ -12,11 +12,13 @@
 #include "../model/MCoordonnees.hpp"
 #include "../model/MEvents.hpp"
 #include "../model/MParameters.hpp"
-#include "../model/MPartieCouche.hpp"
+#include "../model/MRobot.hpp"
 #include "../model/MTerrain.hpp"
 #include "../model/MTuile.hpp"
+#include "../outils/ObserverPattern/Observer.hpp"
+#include "../vue/AppFrameInterface.hpp"
 
-#include <cstdlib>
+#include <utility>
 
 class MParameters;
 
@@ -30,30 +32,15 @@ using namespace std;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-CPersonnage::CPersonnage(VPrimitif* vuePrincipale, MTerrain* terrain) :
-    vuePrincipale(vuePrincipale), terrain(terrain), quit(false)
+CPersonnage::CPersonnage(AppFrameInterface* vuePrincipale, MTerrain* terrain) :
+    vuePrincipale(vuePrincipale), editor(terrain), terrain(terrain), quit(false)
 {
   setEventMethods();
 }
 
 CPersonnage::~CPersonnage()
 {
-  if (currentPerso)
-  {
-    delete currentPerso;
-    currentPerso = nullptr;
-  }
 }
-
-void CPersonnage::launchPersonnage()
-{
-  vuePrincipale->setImg(MTypeCouche::SOL, terrain->getImagesList(MTypeCouche::SOL));
-  do
-  {
-    this->vuePrincipale->show((MCoordonnees)*currentPerso->getTuile());
-  } while (!quit);
-}
-
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------
@@ -80,6 +67,8 @@ void CPersonnage::setEventMethods()
             case MActionsKey::INTERACT_ENV:
             currentPerso->interagirTuile(*terrain);
             break;
+            case MActionsKey::INTERACT_ENTITY_KEY:
+            currentPerso->interagirEntite(*terrain);
             case MActionsKey::MINE:
             currentPerso->mine(*terrain);
             break;
@@ -95,8 +84,36 @@ void CPersonnage::setEventMethods()
         }
 
       });
+
+  addAction<MModelEvents, MEntite>(
+      MModelEvents::ENTITY_MOVED, [this](MEntite const& entity, Observed const&)
+      {
+        vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition());
+      });
 }
 
+void CPersonnage::addRobot(std::string const & nom, std::string const & texture, MTuile* tuile,
+                           float taille)
+{
+  bool isInserted = currentPerso->makeRobot(nom, texture, tuile, taille);
+  if (isInserted)
+  {
+    currentPerso->getRobot(nom).addObserver(this);
+
+    currentPerso->getRobot(nom).setActionInteraction(
+        [&](MEntite const& entite)
+        {
+          editor.setProgramName(currentPerso->getNom() + "-" + nom + ".lua", &currentPerso->getRobot(nom));
+          editor.showEditor();
+        });
+
+    vuePrincipale->addEntite(nom, texture);
+    vuePrincipale->setPositionOf(nom, tuile->getPosition());
+
+    // FIXME :: to remove
+    currentPerso->interagirEntite(*terrain);
+  }
+}
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
