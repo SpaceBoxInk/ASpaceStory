@@ -66,50 +66,6 @@ std::string MParameters::getConfPath()
   return rootPath + configFile;
 }
 
-void MParameters::load(std::string exePath)
-{
-  rootPath = exePath.substr(0, exePath.rfind('/') + 1);
-  setRootPath();
-
-  // load file
-  std::ifstream file;
-  try
-  {
-    file.open(getConfPath());
-    if (file.is_open())
-    {
-      while (!file.eof())
-      {
-        std::string key;
-        std::string val;
-        file >> key >> val >> val;
-        conf[key] = val;
-      }
-    }
-    else
-    {
-      std::cerr << "Impossible de charger le fichier de configuration " + getConfPath()
-          << '\n';
-    }
-  }
-  catch (std::exception& e)
-  {
-    std::cerr << "Impossible de charger le fichier de configuration " + getConfPath() << '\n';
-  }
-  file.close();
-  //=========================================================================================
-  // set configurations
-  mouvKeys[getKeyFor("upKey")] = Mouvement::HAUT;
-  mouvKeys[getKeyFor("downKey")] = Mouvement::BAS;
-  mouvKeys[getKeyFor("leftKey")] = Mouvement::GAUCHE;
-  mouvKeys[getKeyFor("rightKey")] = Mouvement::DROITE;
-
-  keys[getKeyFor("interactEnvKey")] = MActionsKey::INTERACT_ENV;
-  keys[getKeyFor("mineKey")] = MActionsKey::MINE;
-  keys[getKeyFor("attackKey")] = MActionsKey::ATTACK;
-  keys[getKeyFor("useKey")] = MActionsKey::USE_MAIN_OBJECT;
-}
-
 std::string MParameters::getSolsPath()
 {
   return getTuilePath() + conf["solsInfo"];
@@ -235,47 +191,12 @@ void MParameters::load(std::string exePath)
   file.close();
   //=========================================================================================
   // set configurations
-  
-}
-void MParameters::load(std::string exePath)
-{
-  rootPath = exePath.substr(0, exePath.rfind('/') + 1);
-  setRootPath();
-
-  // load file
-  std::ifstream file;
-  try
-  {
-    file.open(getConfPath());
-    if (file.is_open())
-    {
-      while (!file.eof())
-      {
-        std::string key;
-        std::string val;
-        file >> key >> val >> val;
-        conf[key] = val;
-      }
-    }
-    else
-    {
-      std::cerr << "Impossible de charger le fichier de configuration " + getConfPath()
-          << '\n';
-    }
-  }
-  catch (std::exception& e)
-  {
-    std::cerr << "Impossible de charger le fichier de configuration " + getConfPath() << '\n';
-  }
-  file.close();
-  //=========================================================================================
-  // set configurations
   mouvKeys[getKeyFor("upKey")] = Mouvement::HAUT;
   mouvKeys[getKeyFor("downKey")] = Mouvement::BAS;
   mouvKeys[getKeyFor("leftKey")] = Mouvement::GAUCHE;
   mouvKeys[getKeyFor("rightKey")] = Mouvement::DROITE;
 
-  keys[getKeyFor("interactEnvKey")] = MActionsKey::INTERACT_ENV_KEY;
+  keys[getKeyFor("interactEnvKey")] = MActionsKey::INTERACT_ENV;
   keys[getKeyFor("interactEntityKey")] = MActionsKey::INTERACT_ENTITY_KEY;
   keys[getKeyFor("attackKey")] = MActionsKey::ATTACK;
   keys[getKeyFor("mineKey")] = MActionsKey::MINE;

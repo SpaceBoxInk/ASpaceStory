@@ -31,7 +31,7 @@ private:
 
 //=======================>Constructors<=======================
 public:
-  MPartieCoucheElement(MTypeCouche type, std::string name, std::string fichierImg,
+  MPartieCoucheElement(Id ID, MTypeCouche type, std::string name, std::string fichierImg,
                        float placeDispo, int miningLevel = -1);
   MPartieCoucheElement(MPartieCoucheElement const&) = default;
   // TODO: rule of five ? copyandswap

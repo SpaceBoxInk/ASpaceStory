@@ -27,7 +27,8 @@
 MEntite::MEntite(std::string const& nom, std::string const& texture, MTuile* tuile,
                  float taille) :
     MObjetTexture(texture), nom(nom), tuile(nullptr), direction(Mouvement::DROITE),
-    taille(0),inventaire(70)
+    taille(0),
+    inventaire(70),
     actionDefense(nullptr), actionInteraction(nullptr)
 {
   setTaille(taille);
@@ -126,7 +127,8 @@ catch (MExceptionOutOfTerrain& e)
 void MEntite::mine(MTerrain& terrain)
 try
 {
-  MTuile& tuileInt = terrain(tuile->getPosition() + MouvementT::getDirectionCoords(direction));
+  using namespace MouvementT;
+  MTuile& tuileInt = terrain(tuile->getPosition() + *direction);
   tuileInt.mine(this, getMiningPower());
 }
 catch (MExceptionOutOfTerrain& e)

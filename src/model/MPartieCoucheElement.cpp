@@ -19,10 +19,10 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MPartieCoucheElement::MPartieCoucheElement(MTypeCouche type, std::string name,
+MPartieCoucheElement::MPartieCoucheElement(Id ID, MTypeCouche type, std::string name,
                                            std::string fichierImg, float placeDispo,
                                            int miningLevel) :
-    MPartieCouche(type, name, fichierImg, placeDispo), miningLevel(miningLevel),
+    MPartieCouche(ID, type, name, fichierImg, placeDispo), miningLevel(miningLevel),
     actionMining(new std::function<void(MEntite* entite, int item)>(nullptr))
 {
 }

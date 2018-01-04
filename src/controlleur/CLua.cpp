@@ -397,7 +397,8 @@ int CLua::newItem(lua_State* l)
     throw MExceptionLuaArguments("Nombre d'argument pour création d'item invalid ! ",
                                  getTop());
   }
-  item = new MItem(nom, description, equipement, degats, protection, supprimable, miningLevel);
+  item = new MItem(nom, texture, description, equipement, degats, protection, supprimable,
+                   miningLevel);
   push(item->getId());
   return 1;
 }

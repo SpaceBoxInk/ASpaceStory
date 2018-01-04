@@ -129,5 +129,5 @@ void CNiveau::addEnigme(std::string nom, std::string description, std::string im
 
 void CNiveau::afficherEnigme(std::string nom)
 {
-  // TODO : faire cette fonction
+  // FIXME : faire cette fonction
 }

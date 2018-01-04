@@ -57,5 +57,3 @@ void MItem::utilisation(MEntite* entite)
     this->actionUtilisation(entite->getNom());
   }
 }
-
-M

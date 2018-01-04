@@ -36,9 +36,9 @@ MTuile::MTuile(MCoordonnees const& position, MPartieCouche const& couche) :
   {
     setPartieCouche(couche);
   }
-  else 
+  else
   {
-    throw MExceptionInvalidTypeCouche();
+    throw MExceptionInvalidTypeCouche(MTypeCouche::SOL, couche.getType());
   }
 }
 
