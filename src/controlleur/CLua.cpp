@@ -29,6 +29,10 @@ CJeu* CLua::cJeu;
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
+/**
+ *
+ * @param cJeu
+ */
 CLua::CLua(CJeu* cJeu)
 {
   CLua::cJeu = cJeu;
@@ -48,8 +52,8 @@ CLua::~CLua()
 //=========================>Methods<==========================
 //------------------------------------------------------------
 /**
- * lua function signature :
- * void loadCouche(string coucheFile, int couche);
+ * lua function signature :\n
+ * void loadCouche(string coucheFile, int couche);\n
  *
  * @param l lua interpreter
  * @return number of returns
@@ -73,7 +77,7 @@ int CLua::loadCouche(lua_State* l)
 }
 
 /**
- * setScriptPath(folder, luaFile)
+ * setScriptPath(folder, luaFile)\n
  * set the current folder (and the luaFile to execute if 2 args are passed)
  */
 int CLua::setScriptPath(lua_State* l)
@@ -91,6 +95,7 @@ int CLua::setScriptPath(lua_State* l)
 }
 
 /**
+ * string getScriptPath()\n
  * return the current lua path and the current luaFile
  */
 int CLua::getScriptPath(lua_State* l)
@@ -101,12 +106,21 @@ int CLua::getScriptPath(lua_State* l)
   return 2;
 }
 
+/**
+ * string getResourcesPath()\n
+ * return le chemin vers le dossier de ressources
+ */
 int CLua::getResourcesPath(lua_State* l)
 {
   push(MParameters::getRootPath().c_str());
   return 1;
 }
 
+/**
+ * addActionDeclenchement(int x, int y, int couche, fonction actionDeclenchement(entite))\n
+ * ajoute l'action actionDeclenchement à la couche n°couche en (x,y)
+ * déclenché lorsqu'une entité déclenche la couche(action volontaire)
+ */
 int CLua::addActionDeclenchement(lua_State* l)
 {
   testArgs(4);
@@ -134,6 +148,11 @@ int CLua::addActionDeclenchement(lua_State* l)
   return 0;
 }
 
+/**
+ * addActionPassage(int x, int y, int couche, fonction actionPassage(string entite))\n
+ * ajoute l'action actionPassage à la couche n°couche en (x,y)
+ * déclenché lorsqu'une entité passe sur la couche(action NON volontaire)
+ */
 int CLua::addActionPassage(lua_State* l)
 {
   testArgs(4);
@@ -161,6 +180,7 @@ int CLua::addActionPassage(lua_State* l)
   }
   return 0;
 }
+
 /**
  * newEntity(name, texture, x, y, taille)
  */
@@ -207,6 +227,12 @@ int CLua::addActionDefense(lua_State* l)
   return 0;
 }
 
+/**
+ * @param entiteName out: le nom de l'entité retourné
+ * @param nbArgsNoEntity: le nombre d'argument sans compter ce qu'il faut pour prendre une entité
+ * @return retourne l'entité nommée si le nom de l'entité est spécifié (getTop() - nbArgsNoEntity == 1)
+ * sinon retourne le personnage courant
+ */
 MEntite* CLua::getEntite(std::string& entiteName, int nbArgsNoEntity)
 {
   if (getTop() - nbArgsNoEntity == 1)
@@ -246,6 +272,14 @@ int CLua::setPosition(lua_State* l)
   return 0;
 }
 
+/**
+ * setTexture(string entiteName, string texture)\n
+ * set la texture de l'entité spécifiée\n
+ *
+ * setTexture(string texture)\n
+ * set la texture du perso courant
+ *
+ */
 int CLua::setTexture(lua_State* l)
 {
   std::string entiteName;
@@ -255,7 +289,11 @@ int CLua::setTexture(lua_State* l)
 }
 
 /**
- * setTaille(string entiteName, int taille)
+ * setTaille(string entiteName, int taille)\n
+ * set la taille de l'entité spécifiée\n
+ *
+ * setTaille(int taille)\n
+ * set la taille du perso courant
  */
 int CLua::setTaille(lua_State* l)
 {
@@ -276,6 +314,10 @@ int CLua::setTaille(lua_State* l)
   return 0;
 }
 
+/**
+ * string getCurrentPerso()\n
+ * retourne le nom du perso courant
+ */
 int CLua::getCurrentPerso(lua_State* l)
 {
   testArgs(0);
@@ -283,6 +325,10 @@ int CLua::getCurrentPerso(lua_State* l)
   return 1;
 }
 
+/**
+ * newRobot(string nom, string texture, int x, int y, float taille)\n
+ *
+ */
 int CLua::newRobot(lua_State* l)
 {
   std::string nom = lua_tostring(l, 1);
@@ -343,6 +389,11 @@ void CLua::executeScript(std::string script)
 ////////////////////////////////////////////////////////////////////////////////
 //-/////////////////////////Lua/ASS function Helpers/////////////////////////-//
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ *
+ * @param index a partir du quel sont rangé le x, y dans la pile lua
+ * @return la tuile en (x, y) pris depuis l'index
+ */
 MTuile* CLua::getTuile(int index)
 {
   int x = lua_tointeger(lua, index);

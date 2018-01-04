@@ -17,6 +17,9 @@
 
 #include "../vue/AppFrame.hpp"
 
+/**
+ * Controller for controllers
+ */
 class CJeu
 {
   friend class CLua;

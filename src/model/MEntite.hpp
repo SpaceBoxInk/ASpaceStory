@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "MAssException.hpp"
 #include "MCompetence.hpp"
 #include "MCoordonnees.hpp"
 #include "MInventaire.hpp"
@@ -32,12 +33,15 @@ private:
   MTuile* tuile;
   /**
    * en degrée,
-   * 0 : en haut,
-   * 90 : droite
-   * -90 : gauche
-   * 180 : bas
+   * 0 : en haut (0),
+   * 90 : droite (1)
+   * 180 : bas (2)
+   * -90 : gauche (3)
    */
   Mouvement direction;
+  /**
+   * allant de 0 à 1 pour savoir quel pourcentage d'une tuile prend une entité
+   */
   float taille;
   MCompetence competences;
   MInventaire inventaire;
@@ -130,6 +134,11 @@ inline float MEntite::getTaille() const
 
 inline void MEntite::setTaille(float taille)
 {
+  if (taille < 0 || taille > 1)
+  {
+    throw MAssException(
+        "Taille de " + std::to_string(taille) + " invalide pour l'entité" + getNom());
+  }
   this->taille = taille;
 }
 

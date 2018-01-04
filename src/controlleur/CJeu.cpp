@@ -49,12 +49,22 @@ CJeu::~CJeu()
   delete vuePrincipale;
 }
 
+/**
+ *
+ * @param name le nom de l'entité
+ * @return l'entité du nom @var name et du niveau courant
+ */
 MEntite* CJeu::getEntite(std::string name)
 {
   MEntite* ent = cNiveau.getEntite(name);
   return ent;
 }
 
+/**
+ *
+ * @param name le nom du personnage à get
+ * @return le personnage du nom spécifié
+ */
 MPersonnage* CJeu::getPersonnage(std::string name)
 {
   return cPersonnage.getPersonnage(name);

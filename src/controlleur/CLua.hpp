@@ -30,15 +30,34 @@ extern "C"
 #include <lauxlib.h>
 #include <lualib.h>
 }
-
+/**
+ * to define a lua string
+ */
 using lua_String = char const*;
+/**
+ * to define a lua bool
+ */
 using lua_Boolean = bool;
 
+/**
+ * interpreteur lua pour créer et gerer les niveaux
+ */
 class CLua
 {
 //========================>Attributes<========================
 private:
+  /**
+   * l'interpreteur lua
+   *
+   * @see [le manuel lua](http://www.lua.org/manual/5.3/)
+   * @see [la pile lua](http://www.lua.org/manual/5.3/manual.html#4.1)
+   * @see [detail de la pile](http://gamerboom.com/wp-content/uploads/2012/02/lua-Stack-1-from-altdevblogaday.com_.png)
+   */
   static lua_State* lua;
+  /**
+   * pointeur vers la "racine" du jeu\n
+   * utilisé pour les fonctions appelées depuis le lua (eg: pour faire les niveaux)
+   */
   static CJeu* cJeu;
 //=======================>Constructors<=======================
 public:
@@ -101,6 +120,13 @@ private:
 //------------------------------------------------------------
 //=====================>Implementations<======================
 //------------------------------------------------------------
+/**
+ *
+ * @param l l'interpreteur lua
+ * @param key la clé que l'on veut récupérer (like : map["key"])
+ * @param paramNb là où se trouve la table (map) dans la pile lua
+ * @return
+ */
 template<class T>
 T CLua::getTableData(lua_State* l, char const* key, int paramNb)
 {

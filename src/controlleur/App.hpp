@@ -6,7 +6,9 @@
  */
 #include "../vue/AppFrame.hpp"
 
-
+/**
+ * Main
+ */
 struct App : public wxApp
 {
   bool OnInit() override;

@@ -49,6 +49,7 @@ namespace MouvementT
   /// retourne les coordonnees de mouvement à appliquer en fonction du mouvement
   MCoordonnees operator *(Mouvement m);
 
+
   constexpr int size()
   {
     return (int)(Mouvement::SIZE);

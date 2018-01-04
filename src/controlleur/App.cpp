@@ -15,6 +15,10 @@
 #include <wx/string.h>
 
 IMPLEMENT_APP(App);
+/**
+ * Main load parameters and launch the game
+ * @return true if initialization is well passed
+ */
 bool App::OnInit()
 {
   MParameters::load(argv[0].ToStdString());

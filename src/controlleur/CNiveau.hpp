@@ -21,12 +21,18 @@
 
 class AppFrameInterface;
 
+/**
+ * controleur pour les niveaux
+ */
 class CNiveau : public Observer
 {
 //========================>Attributes<========================
 private:
   MTerrain terrain;
   AppFrameInterface* vuePrincipale;
+  /**
+   * entité du niveau courant créer par le lua (sans les perso ni les robots)
+   */
   std::map<std::string, MEntite> entites;
   /**
    * folder for level resources

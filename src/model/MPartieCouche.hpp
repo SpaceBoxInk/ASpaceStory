@@ -39,13 +39,24 @@ public:
 
 //========================>Attributes<========================
 private:
+  /**
+   * l'id de couleur indexée définie par gimp pour le lien avec une image définie dans la *List (*=sol|element|ciel)
+   */
   int id;
   MTypeCouche type;
   std::string name;
   std::string fichierImg;
   float placeDispo;
 
+  /**
+   * action set by lua
+   * @see CLua#addActionPassage
+   */
   std::function<void(std::string entite)> actionPassage;
+  /**
+   * action set by lua
+   * @see CLua#addActionDeclenchement
+   */
   std::function<void(std::string entite)> actionDeclenchement;
 
 //=======================>Constructors<=======================

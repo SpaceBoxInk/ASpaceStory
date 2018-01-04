@@ -26,8 +26,10 @@
 MEntite::MEntite(std::string const& nom, std::string const& texture, MTuile* tuile,
                  float taille) :
     MObjetTexture(texture), nom(nom), tuile(nullptr), direction(Mouvement::DROITE),
-    taille(taille), actionDefense(nullptr), actionInteraction(nullptr)
+    taille(0),
+    actionDefense(nullptr), actionInteraction(nullptr)
 {
+  setTaille(taille);
   setTuile(tuile);
 }
 

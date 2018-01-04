@@ -103,6 +103,10 @@ void CNiveau::addEntite(std::string name, std::string texture, MTuile* tuile, fl
   }
 }
 
+/**
+ *
+ * @return le chemin du script lua du niveau courrant
+ */
 std::string CNiveau::getScript() const
 {
   return MParameters::getLevelPath() + "/" + levelFolder + "/" + levelMainFile;

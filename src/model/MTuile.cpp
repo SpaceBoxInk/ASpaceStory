@@ -22,8 +22,8 @@
 //------------------------------------------------------------
 
 /**
- *
  * @param position la position de la tuile sur le #MTerrain
+ * @param id l'id de la couche sol (définie dans la solList)
  * @param nameCoucheSol le nom de la couche sol de la tuile
  * @param fichierImg le nom du fichier image de la COUCHE SOL
  * @param placeDispoSol sa place disponible
@@ -71,7 +71,7 @@ float MTuile::getPlaceDispo() const
 /**
  *
  * @param tuileOther la tuile à comparer avec this
- * @retval @e true si tuileOther est à coté de la tuile this (diagonales non comprises)
+ * @retval true si tuileOther est à coté de la tuile this (diagonales non comprises)
  */
 bool MTuile::isAdjacente(MTuile const & tuileOther)
 {
@@ -90,7 +90,7 @@ bool MTuile::isAdjacente(MTuile const & tuileOther)
 /**
  * déplace l'entite de la tuile this vers la tuile tuileDst
  * @param tuileDst la tuile de destination de l'entité
- * @retval @e true si l'entité à été déplacée
+ * @retval true si l'entité à été déplacée
  */
 bool MTuile::deplacerEntiteVers(MTuile& tuileDst)
 {
@@ -109,6 +109,10 @@ bool MTuile::deplacerEntiteVers(MTuile& tuileDst)
   return false;
 }
 
+/**
+ * permet de déclancher les effet de la tuile
+ * @param entite entité interagissant
+ */
 void MTuile::interagirTuile(MEntite* entite)
 {
   for (int i = 0; i < (int)MTypeCouche::SIZE; ++i)
@@ -142,8 +146,11 @@ void MTuile::deletePartieCouche(MTypeCouche typeCouche)
 }
 
 /**
- *
- * @param couche la couche de la tuile à set
+ * @param id l'id définie dans la *List (eg: solList), permet de récupérer une image en fonction d'une couleur indéxée (gimp ^^)
+ * @param type le type de la couche (sol, element, ciel)
+ * @param name le nom (eg: montagne, herbe)
+ * @param fichierImg doit être carré
+ * @param placeDispo de 0 à 1 définie la place qu'il y a sur cette couche
  */
 void MTuile::setPartieCouche(int id, MTypeCouche type, std::string name,
                              std::string fichierImg,

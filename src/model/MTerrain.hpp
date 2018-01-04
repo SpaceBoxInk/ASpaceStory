@@ -32,7 +32,7 @@ class MTerrain : public Observed
 //========================>Attributes<========================
 private:
   /**
-   * map pour avoir la partie couche(lu dans les fichiers *list des tuiles)\
+   * map pour avoir la partie couche(lu dans les fichiers *list des tuiles)\n
    * en fonction d'un index(lu dans les fichiers .n*)
    */
   static std::unordered_map<std::uint8_t, MPartieCouche> solsType;

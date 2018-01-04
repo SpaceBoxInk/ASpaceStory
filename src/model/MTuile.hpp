@@ -86,7 +86,7 @@ private:
 /**
  * Opérateur de cast
  * permet de caster la tuile en position:\
- * (#MPosition)tuile
+ * (#MCoordonnees)tuile
  * @return la position de la tuile
  */
 inline MTuile::operator MCoordonnees() const
@@ -106,7 +106,7 @@ inline MEntite* MTuile::getEntite()
 
 /**
  *
- * @retval @e true si une entité est sur la tuile
+ * @retval true si une entité est sur la tuile
  */
 inline bool MTuile::isEntitePresente()
 {

@@ -16,7 +16,9 @@
 
 #include <string>
 
-
+/**
+ * interface pour contrôleur <-> vue
+ */
 class AppFrameInterface : public Observed
 {
 //========================>Attributes<========================

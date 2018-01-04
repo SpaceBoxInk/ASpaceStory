@@ -50,3 +50,4 @@
 /src/ressources/programs/*
 !/src/ressources/programs/defaultProgram.lua
 /IHMDoxy/
+/doxygen/

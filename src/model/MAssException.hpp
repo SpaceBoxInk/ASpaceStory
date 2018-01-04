@@ -86,8 +86,8 @@ public:
 };
 
 /**
- * Exception relative aux fichiers\
- * format\
+ * Exception relative aux fichiers\n
+ * format\n
  * ouverture
  */
 class MExceptionFile : public MAssException
@@ -103,6 +103,9 @@ public:
   virtual std::string what() const noexcept override;
 };
 
+/**
+ * erreur des arguments lua
+ */
 class MExceptionLuaArguments : public MAssException
 {
 private:

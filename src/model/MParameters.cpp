@@ -10,6 +10,11 @@ std::string MParameters::rootPath;
 std::map<char, Mouvement> MParameters::mouvKeys;
 std::map<char, MActionsKey> MParameters::keys;
 
+/**
+ * set and check the configroot path
+ * @param path new path
+ * @return true if we can open this new configRoot path
+ */
 bool MParameters::checkConfFile(std::string path)
 {
   // set the new path
@@ -23,6 +28,9 @@ bool MParameters::checkConfFile(std::string path)
   return isOp;
 }
 
+/**
+ * init the rootPath with the rootPath itself, it seeking for the rootFile in another known folders
+ */
 void MParameters::setRootPath()
 {
   // check different location for config file

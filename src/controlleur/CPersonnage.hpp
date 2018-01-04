@@ -35,6 +35,9 @@ private:
   std::map<std::string, MPersonnage> personnages;
   MPersonnage* currentPerso;
   MTerrain* terrain;
+  /**
+   * @deprecated ne sert plus, version non graphique
+   */
   bool quit;
 //=======================>Constructors<=======================
 public:

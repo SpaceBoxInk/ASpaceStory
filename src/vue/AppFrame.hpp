@@ -10,7 +10,9 @@
 #include "Caneva.hpp"
 
 
-
+/**
+ * La racine de la vue (application)
+ */
 struct AppFrame : public AppFrameInterface, public wxFrame
 {
 public:
