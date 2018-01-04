@@ -53,10 +53,13 @@ std::string& operator<<(std::string& ss, Type t)
     ss += std::to_string(t);
   }
   MLuaInterpreter::ihmEditor->writeRes(ss);
-  ss = "";
+  ss.clear();
   return ss;
 }
 
+/**
+ *
+ */
 int MLuaInterpreter::avancer(lua_State* l)
 {
   std::this_thread::sleep_for(robot->getSpeed());
@@ -92,6 +95,12 @@ int MLuaInterpreter::tournerDe(lua_State* l)
   {
     output << e.what();
   }
+  return 0;
+}
+
+int MLuaInterpreter::activer(lua_State* l)
+{
+  robot->interagirTuile(*terrain);
   return 0;
 }
 
@@ -164,6 +173,7 @@ void MLuaInterpreter::registerFonctions()
     lua_register(lua, "moveForward", MLuaInterpreter::avancer);
     lua_register(lua, "moveForwardBy", MLuaInterpreter::avancerDe);
     lua_register(lua, "print", MLuaInterpreter::print);
+    lua_register(lua, "activate", MLuaInterpreter::activer);
     lua_register(lua, "turn", MLuaInterpreter::tournerDe);
   }
   else
@@ -171,6 +181,7 @@ void MLuaInterpreter::registerFonctions()
     lua_register(lua, "avancer", MLuaInterpreter::avancer);
     lua_register(lua, "avancerDe", MLuaInterpreter::avancerDe);
     lua_register(lua, "ecrire", MLuaInterpreter::print);
+    lua_register(lua, "activer", MLuaInterpreter::activer);
     lua_register(lua, "tournerDe", MLuaInterpreter::tournerDe);
   }
 }

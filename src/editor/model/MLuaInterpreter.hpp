@@ -51,6 +51,7 @@ public:
   static int avancer(lua_State* l);
   static int avancerDe(lua_State* l);
   static int tournerDe(lua_State* l);
+  static int activer(lua_State* l);
   static int print(lua_State* l);
 
   template<class Type>

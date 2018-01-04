@@ -81,6 +81,7 @@ void Canvas::loadFileIntoGround(int const* idList, std::string texture, int leve
     sky.load(texture, sf::Vector2u(tailleTexture, tailleTexture), idList, x / tailleTexture,
              y / tailleTexture);
 
+  drawAll();
 }
 
 TileMap& Canvas::getGround()
