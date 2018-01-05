@@ -35,6 +35,7 @@ CJeu::CJeu() :
   catch (MAssException& e)
   {
     std::cout << e.what() << '\n';
+    throw;
   }
   // TODO : to change (lua)
   vuePrincipale->addEntite(cPersonnage.getCurrentPerso()->getNom(),

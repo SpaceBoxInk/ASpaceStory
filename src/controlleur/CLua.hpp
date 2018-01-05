@@ -130,7 +130,8 @@ private:
   static int getTop();
   static int storeFunction();
   static void pushFunctionFrom(int index);
-  static void testArgs(int nbExcpected);
+  static void testArgs(int nbExpectedMin, int nbExpectedMax);
+  static void testArgs(int nbExpectedMin);
   static std::string getCurFunction();
 
   template<class T>

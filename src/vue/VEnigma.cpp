@@ -25,7 +25,7 @@ VEnigma::VEnigma(wxString const & title, wxString file, std::string texte) :
 
   hbox->Add(picture, 9, wxEXPAND);
   hbox->Add(text, 1, wxEXPAND);
-  hbox->Add(new wxButton(this, wxID_EXIT, wxT("ok"), wxPoint(-1, -1)), 1, wxEXPAND);
+  hbox->Add(new wxButton(this, wxID_EXIT, wxT("Ok"), wxPoint(-1, -1)), 1, wxEXPAND);
 
   Connect(wxID_EXIT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VEnigma::OnQuit));
 
@@ -34,12 +34,13 @@ VEnigma::VEnigma(wxString const & title, wxString file, std::string texte) :
 
 VEnigma::~VEnigma()
 {
-  // TODO Auto-generated destructor stub
+  delete text;
+  delete picture;
 }
 
 void VEnigma::OnQuit(wxCommandEvent&)
 {
-  Close(true);
+  Show(false);
 }
 //------------------------------------------------------------
 //=========================>Methods<==========================

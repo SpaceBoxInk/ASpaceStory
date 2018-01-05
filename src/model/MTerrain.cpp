@@ -136,9 +136,8 @@ std::unordered_map<uint8_t, MPartieCouche*>& MTerrain::getTypeList(
 }
 
 /**
- * FIXME : complete all comments
- * @param fichier
- * @param type
+ * @param fichier le fichier de couche à charger (.data : .nbg, nvc, nsk)
+ * @param type le type de couche (0,1,2 : sol, element ciel)
  */
 void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
 {

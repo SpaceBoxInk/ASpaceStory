@@ -7,19 +7,25 @@
 
 #include "AppFrame.hpp"
 #include "../model/MParameters.hpp"
+#include "../editor/tools/utils.hpp"
+#include "../model/MEvents.hpp"
 #include "VEnigma.hpp"
 
-AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size, int tailleTexture) :
+#include <sstream>
+
+
+AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size,
+                   int tailleTexture) :
     wxFrame(NULL, wxID_ANY, title, pos, size),
 
     _canvas(
-        new Canvas(this, wxNewId(), wxPoint(-1, -1),
+        new Canvas(
+            this,
+            wxNewId(),
+            wxPoint(-1, -1),
             wxSize(MParameters::getNbTuileX() * tailleTexture,
                    MParameters::getNbTuileY() * tailleTexture))),
-    _panel2(
-        new wxPanel(this, wxID_ANY
-                    , wxPoint(-1, -1), wxSize(-1, -1)
-        ))
+    _panel2(new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, -1)))
 {
   this->SetMinSize(size);
 
@@ -30,10 +36,9 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
   wxBoxSizer* hbox = new wxBoxSizer(wxVERTICAL);
   wxBoxSizer* hbox2 = new wxBoxSizer(wxHORIZONTAL);
 
-
   hbox->Add(_canvas, 9, wxEXPAND);
   hbox->Add(_panel2, 1, wxEXPAND);
-  hbox2->Add(new wxButton(_panel2, wxID_ADD, wxT("sert a rien"), wxPoint(-1, -1)), 1,
+  hbox2->Add(new wxButton(_panel2, wxID_ADD, wxT("Sert a rien"), wxPoint(-1, -1)), 1,
              wxEXPAND);
   this->SetSizer(hbox);
 //  Connect(this->GetId(), wxEVT_CHAR_HOOK, wxKeyEventHandler(AppFrame::onKey));
@@ -79,32 +84,14 @@ void AppFrame::onKey(wxKeyEvent& event)
   wxChar uc = event.GetUnicodeKey();
   if (uc != WXK_NONE)
   {
-    // It's a "normal" character. Notice that this includes
-    // control characters in 1..31 range, e.g. WXK_RETURN or
-    // WXK_BACK, so check for them explicitly.
-    if (uc >= 32)
-    {
-      wxLogMessage
-      ("You pressed '%c'", uc);
-    }
-    else
-    {
-      // It's a control character
-      wxLogMessage
-      ("MEH");
+    setChanged();
+    std::stringstream str;
+    std::wstring ws;
+    ws = uc;
+    str << ws;
+    printLog(str.str() + " pressed", LogType::INFO);
+    notifyObservers(MUserEvents::KEY_PRESSED, str.str()[0]);
   }
-}
-else // No Unicode equivalent.
-{
-  // It's a special key, deal with all the known ones:
-  switch (event.GetKeyCode()) {
-  case WXK_LEFT:
-  case WXK_RIGHT:
-  break;
-  case WXK_F1:
-  break;
-}
-}
 }
 
 void AppFrame::onFocus(wxFocusEvent& event)
@@ -130,4 +117,10 @@ void AppFrame::showEnigma(std::string title, std::string file, std::string textI
 {
   VEnigma *custom = new VEnigma(title, file, textInside);
   custom->Show(true);
+}
+
+AppFrame::~AppFrame()
+{
+//  delete _canvas;
+//  delete _panel2;
 }

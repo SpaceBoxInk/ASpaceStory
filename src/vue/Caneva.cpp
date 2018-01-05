@@ -36,7 +36,6 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
 //      2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1 };
 //  this->loadFileIntoGround(level, MParameters::getTuilePath() + "textureCouche0.png", 0, 32);
 //  this->loadFileIntoGround(level2, "texture3.png", 1, 32);
-  this->addEntite("hitler", "perso_face_32.png");
 //  this->addEntite("24", "241890516020212.png");
 
   Connect(this->GetId(), wxEVT_SIZE, wxSizeEventHandler(Canvas::onResize));
@@ -45,6 +44,10 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
 
 Canvas::~Canvas()
 {
+  for (auto texture : textures)
+  {
+    delete texture;
+  }
 }
 
 void Canvas::onUpdate()
@@ -134,7 +137,7 @@ void Canvas::addEntite(std::string name, std::string file)
   auto pair = sprites.try_emplace(name);
   if (pair.second)
   {
-    sprites.at(name).setTexture(*getTexture(texture.size() - 1));
+    sprites.at(name).setTexture(*getTexture(textures.size() - 1));
   }
 }
 
@@ -175,13 +178,13 @@ int Canvas::getTailleTexture()
 
 void Canvas::setTexture(std::string const& file)
 {
-  texture.push_back(new sf::Texture());
-  getTexture(texture.size() - 1)->loadFromFile(file);
+  textures.push_back(new sf::Texture());
+  getTexture(textures.size() - 1)->loadFromFile(file);
 }
 
 sf::Texture* Canvas::getTexture(int index)
 {
-  return texture.at(index);
+  return textures.at(index);
 }
 
 void Canvas::drawAll()
@@ -203,16 +206,6 @@ void Canvas::drawAll()
 
 void Canvas::onRight(wxMouseEvent& event)
 {
-  std::cout << "bonjour" << std::endl;
-//  this->move("hitler", MCoordonnees(1, 0));
-//  VEnigma *custom = new VEnigma("wallah", wxT("joseph-staline.png"), "bonjour");
-//  custom->Show(true);
-  VInventaireInterface* custom = new VInventory("inventory", MCoordonnees(20, 20));
-  custom->addObjInv(1, "d", "", "joseph-staline.png", -1);
-  custom->delObjInv(1);
-  custom->show(true);
-//  this->setPositionOf("Joseph Stalin", MCoordonnees(0, 0));
-
 
 }
 

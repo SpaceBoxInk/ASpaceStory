@@ -69,6 +69,7 @@ void CPersonnage::setEventMethods()
             break;
             case MActionsKey::INTERACT_ENTITY_KEY:
             currentPerso->interagirEntite(*terrain);
+            break;
             case MActionsKey::MINE:
             currentPerso->mine(*terrain);
             break;
@@ -110,8 +111,6 @@ void CPersonnage::addRobot(std::string const & nom, std::string const & texture,
     vuePrincipale->addEntite(nom, texture);
     vuePrincipale->setPositionOf(nom, tuile->getPosition());
 
-    // FIXME :: to remove
-    currentPerso->interagirEntite(*terrain);
   }
 }
 //------------------------------------------------------------

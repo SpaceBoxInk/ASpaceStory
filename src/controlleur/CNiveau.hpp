@@ -15,10 +15,12 @@
 #include "../model/MParameters.hpp"
 #include "../model/MTerrain.hpp"
 #include "../outils/ObserverPattern/Observer.hpp"
-#include "../model/MEnigme.hpp"
+#include "../vue/VEnigma.hpp"
 
 #include <map>
 #include <string>
+
+class MTuile;
 
 class AppFrameInterface;
 class VPrimitif;
@@ -44,7 +46,7 @@ private:
    * main level script, executed to construct the level
    */
   std::string levelMainFile;
-  std::map<std::string, MEnigme> enigmes;
+  std::map<std::string, VEnigma*> enigmes;
 //=======================>Constructors<=======================
 public:
   CNiveau(AppFrameInterface* vuePrincipale, std::string levelFolder =

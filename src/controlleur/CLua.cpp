@@ -85,6 +85,7 @@ int CLua::loadCouche(lua_State* l)
  */
 int CLua::setScriptPath(lua_State* l)
 {
+  testArgs(1, 2);
   if (getTop() == 1 || getTop() == 2)
   {
     cJeu->cNiveau.setScriptFolder(lua_tostring(l, 1));
@@ -120,6 +121,7 @@ int CLua::getScriptPath(lua_State* l)
  */
 int CLua::getResourcesPath(lua_State* l)
 {
+  testArgs(0);
   push(MParameters::getRootPath().c_str());
   return 1;
 }
@@ -129,6 +131,7 @@ int CLua::getResourcesPath(lua_State* l)
  */
 int CLua::loadfile(lua_State* l)
 {
+  testArgs(1);
   std::string file = cJeu->cNiveau.getScriptFolder() + lua_tostring(l, 1);
   luaL_loadfile(l, file.c_str());
   return 1;
@@ -272,10 +275,14 @@ MEntite* CLua::getEntite(std::string& entiteName, int nbArgsNoEntity)
 
 /**
  * setPosition(string entiteName, int x, int y)
+ * set la position de l'entite de nom entiteName\n
+ *
+ * setPosition(int x, int y)\n
+ * set la position du perso
  */
 int CLua::setPosition(lua_State* l)
 {
-  // FIXME : testNbArgs
+  testArgs(2, 3);
   std::string entiteName;
   MEntite* e = getEntite(entiteName, 2);
 
@@ -300,6 +307,7 @@ int CLua::setPosition(lua_State* l)
  */
 int CLua::setTexture(lua_State* l)
 {
+  testArgs(1, 2);
   std::string entiteName;
   MEntite* e = getEntite(entiteName, 1);
   e->setTexture(lua_tostring(l, -1));
@@ -315,6 +323,7 @@ int CLua::setTexture(lua_State* l)
  */
 int CLua::setTaille(lua_State* l)
 {
+  testArgs(1, 2);
   // FIXME : testNbArgs
   std::string entiteName;
   float taille = lua_tonumber(l, -1);
@@ -349,6 +358,7 @@ int CLua::getCurrentPerso(lua_State* l)
  */
 int CLua::newRobot(lua_State* l)
 {
+  testArgs(5);
   std::string nom = lua_tostring(l, 1);
   std::string texture = lua_tostring(l, 2);
   MTuile* tuile = getTuile(3);
@@ -364,6 +374,7 @@ int CLua::newRobot(lua_State* l)
 int CLua::newItem(lua_State* l)
 {
   // required parameters :
+  testArgs(3, 8);
   std::string nom = lua_tostring(l, 1);
   std::string description = lua_tostring(l, 2);
   std::string texture = lua_tostring(l, 3);
@@ -405,6 +416,7 @@ int CLua::newItem(lua_State* l)
 
 int CLua::giveNewItemToPerso(lua_State* l)
 {
+  testArgs(0);
   cJeu->cPersonnage.getCurrentPerso()->addItemToInventaire(getItem());
   item = nullptr;
   return 0;
@@ -455,6 +467,10 @@ int CLua::addActionUtilisation(lua_State* l)
   return 0;
 }
 
+/**
+ * addActionMining(string element, function(string entite, int itemId))
+ * element est le nom d'un element définie dans elementList
+ */
 int CLua::addActionMining(lua_State* l)
 {
   testArgs(2);
@@ -479,6 +495,9 @@ int CLua::addActionMining(lua_State* l)
   return 0;
 }
 
+/**
+ * newEnigme(nom, description, image)
+ */
 int CLua::newEnigme(lua_State* l)
 {
   testArgs(3);
@@ -489,6 +508,9 @@ int CLua::newEnigme(lua_State* l)
   return 0;
 }
 
+/**
+ * afficherEnigme(nom)
+ */
 int CLua::afficherEnigme(lua_State* l)
 {
   testArgs(1);
@@ -558,6 +580,7 @@ void CLua::executeScript(std::string script)
     lua_getstack(lua, 0, &ar);
     lua_getinfo(lua, "nfSl", &ar);
     std::cout << "Error in " << ar.namewhat << " : " << ar.name << '\n';
+    throw;
   }
 }
 
@@ -655,19 +678,21 @@ void CLua::pushFunctionFrom(int index)
   }
 }
 
-void CLua::testArgs(int nbExcpected)
+void CLua::testArgs(int nbExpectedMin, int nbExpectedMax)
 {
 
   int nb = lua_gettop(lua);
   try
   {
-    if (nb != nbExcpected)
+    if (nb < nbExpectedMin || nb > nbExpectedMax)
     {
       lua_Debug ar;
       lua_getstack(lua, 0, &ar);
       lua_getinfo(lua, "nf", &ar);
       throw MExceptionLuaArguments(
-          "Expect " + std::to_string(nbExcpected) + " arguments for " + std::string(ar.name),
+          "Expect between " + std::to_string(nbExpectedMin) + " arguments and "
+              + std::to_string(nbExpectedMax) + " for "
+              + std::string(ar.name),
           nb);
     }
   }
@@ -679,6 +704,10 @@ void CLua::testArgs(int nbExcpected)
 
 }
 
+void CLua::testArgs(int nbExpectedMin)
+{
+  testArgs(nbExpectedMin, nbExpectedMin);
+}
 
 
 std::string CLua::getCurFunction()
@@ -688,6 +717,7 @@ std::string CLua::getCurFunction()
   lua_getinfo(lua, "nf", &ar);
   return ar.name;
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 
 //------------------------------------------------------------

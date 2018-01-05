@@ -12,6 +12,7 @@
 #include "../model/MParameters.hpp"
 
 #include <wx/app.h>
+#include <exception>
 #include <wx/string.h>
 
 IMPLEMENT_APP(App);
@@ -23,6 +24,17 @@ bool App::OnInit()
 {
   MParameters::load(argv[0].ToStdString());
   AssEditor::MParameters::load(argv[0].ToStdString());
-  new CJeu();
+  try
+  {
+    new CJeu();
+  }
+  catch (MAssException& e)
+  {
+    std::cerr << e.what();
+  }
+  catch (std::exception& e)
+  {
+    std::cerr << e.what();
+  }
   return true;
 };

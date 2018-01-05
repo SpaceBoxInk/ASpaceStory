@@ -76,9 +76,9 @@ public:
   static MCoordonnees getTaille();
   static void setTaille(MCoordonnees taille);
   static MPartieCouche& getElement(std::string element);
-private:
   static std::unordered_map<uint8_t, MPartieCouche*>& getTypeList(
       MTypeCouche const& typeCouche);
+private:
 };
 
 inline MCoordonnees MTerrain::getTaille()

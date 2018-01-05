@@ -8,11 +8,14 @@
  */
 
 #include "MTuile.hpp"
-#include "MAssException.hpp"
 #include "MPartieCoucheElement.hpp"
+#include "MTerrain.hpp"
 
+#include <unordered_map>
 #include <algorithm>
+#include <unordered_map>
 #include <utility>
+#include <vector>
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -151,11 +154,16 @@ void MTuile::deletePartieCouche(MTypeCouche typeCouche)
 {
   if (couches[(int)typeCouche])
   {
-    delete couches[(int)typeCouche];
-    couches[(int)typeCouche] = nullptr;
+    auto vide = MTerrain::getTypeList(typeCouche)[0];
+    *couches[(int)typeCouche] = *vide;
   }
 }
 
+/**
+ * active l'action de minage de la couche puis la "supprime"
+ * @param entite entité qui mine
+ * @param item item qui mine
+ */
 void MTuile::mine(MEntite* entite, int item)
 {
   MPartieCouche* elem = getPartieCouche(MTypeCouche::ELEMENT);
@@ -177,7 +185,7 @@ void MTuile::setPartieCouche(MPartieCouche const& couche)
 {
   if (couches.at((int)couche.getType()))
   {
-    deletePartieCouche(couche.getType());
+    delete couches.at((int)couche.getType());
   }
   if (couche.isTypeOf(MTypeCouche::ELEMENT))
   {

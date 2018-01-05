@@ -30,7 +30,7 @@ private:
   TileMap sky;
   int x;
   int y;
-  std::vector<sf::Texture*> texture;
+  std::vector<sf::Texture*> textures;
   std::map<std::string, sf::Sprite> sprites;
   int tailleTexture;
   //=======================>Constructors<=======================

@@ -123,11 +123,11 @@ void CNiveau::addEnigme(std::string nom, std::string description, std::string im
 {
   if (enigmes.count(nom) == 0)
   {
-    enigmes.try_emplace(nom, nom, description, image);
+    enigmes.insert( { nom, new VEnigma(nom, image, description) });
   }
 }
 
 void CNiveau::afficherEnigme(std::string nom)
 {
-  // FIXME : faire cette fonction
+  enigmes.at(nom)->Show();
 }

@@ -19,6 +19,8 @@ public:
   AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size,
            int tailleTexture);
 
+  virtual ~AppFrame();
+
   void loadFileIntoGround(int const* idList, std::string texture, MTypeCouche level,
                           int tailleTexture) override;
 
