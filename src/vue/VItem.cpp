@@ -17,7 +17,7 @@
 
 VItem::VItem(wxFrame* parent, wxString file, wxBitmapType format, std::string nom,
              std::string description, unsigned long long int ID) :
-    wxImagePanel(parent, file, format), nom(nom), description(description), ID(ID)
+    wxImagePanel(parent, file, format), nom(nom), description(description), ID(ID), file(file)
 {
   // load the file... ideally add a check to see if loading was successful
 }
@@ -63,7 +63,11 @@ void VItem::setFile(std::string file)
 }
 
 
-
+void VItem::LoadImage(std::string file)
+{
+  wxImagePanel::LoadImage(file);
+  setFile(file);
+}
 
 VItem::~VItem()
 {

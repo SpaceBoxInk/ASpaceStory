@@ -23,7 +23,7 @@ public:
   void OnSize(wxSizeEvent& event);
   void render(wxDC& dc);
 
-  void LoadImage(std::string file);
+  virtual void LoadImage(std::string file);
 
 };
 

@@ -26,7 +26,6 @@ public:
                  std::string image, int position = -1) override;
   void delObjInv(unsigned long long id) override;
   void show(bool show) override;
-
 private:
 
 //=========================>Methods<==========================

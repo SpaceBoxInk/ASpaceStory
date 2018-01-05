@@ -43,6 +43,7 @@ public:
   void setID(unsigned long long int ID);
   void setFile(std::string file);
 
+  void LoadImage(std::string file) override;
 private:
 
 //=====================>Getters&Setters<======================

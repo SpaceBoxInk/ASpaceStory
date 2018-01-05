@@ -60,31 +60,38 @@ void VInventory::addObjInv(unsigned long long id, std::string name, std::string 
   }
   else
   {
-    VItem* itemToDel = *std::find_if(items.begin(), items.end(), [id](VItem* item) -> bool
+    auto ite = std::find_if(items.begin(), items.end(), [id](VItem* item) -> bool
     {
       return item->getFile() == "nothingInventory.png";
     });
-    itemToDel->LoadImage(image);
-    itemToDel->SetName(name);
-    itemToDel->setDescription(description);
-    itemToDel->setID(id);
+    if (ite == items.end())
+    {
+      throw MAssException("plus de place dans l'inventaire");
+    }
+    else
+    {
+      (*ite)->LoadImage(image);
+      (*ite)->SetName(name);
+      (*ite)->setDescription(description);
+      (*ite)->setID(id);
+    }
   }
 }
 
 
 void VInventory::delObjInv(unsigned long long id)
 {
-  VItem* itemToDel = *std::find_if(items.begin(), items.end(), [id](VItem* item) -> bool
+  auto itemToDel = std::find_if(items.begin(), items.end(), [id](VItem* item) -> bool
   {
     return item->getID() == id;
   });
-  if (itemToDel == *items.end())
+  if (itemToDel == items.end())
   {
     throw MAssException("je n'ai pas pu trouver l'objet à supprimer");
   }
   else
   {
-    delete itemToDel;
+    (*itemToDel)->LoadImage("nothingInventory.png");
   }
 }
 
@@ -92,6 +99,7 @@ void VInventory::show(bool show)
 {
   this->Show(show);
 }
+
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------

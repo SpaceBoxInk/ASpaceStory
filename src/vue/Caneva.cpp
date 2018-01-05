@@ -210,7 +210,9 @@ void Canvas::onRight(wxMouseEvent& event)
 //  this->move("hitler", MCoordonnees(1, 0));
 //  VEnigma *custom = new VEnigma("wallah", wxT("joseph-staline.png"), "bonjour");
 //  custom->Show(true);
-  VInventory* custom = new VInventory("inventory", MCoordonnees(20, 20));
+  VInventaireInterface* custom = new VInventory("inventory", MCoordonnees(20, 20));
+  custom->addObjInv(1, "d", "", "joseph-staline.png", -1);
+  custom->delObjInv(1);
   custom->show(true);
 //  this->setPositionOf("Joseph Stalin", MCoordonnees(0, 0));
 
