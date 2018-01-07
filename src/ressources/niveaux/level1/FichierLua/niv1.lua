@@ -1,5 +1,5 @@
 
-loadfile("testLoad.lua")();
+loadfile("../testLoad.lua")();
 
 cppAddActionMining("montagne", function(entite, item)
   print(entite.." mine montagne avec "..item)
@@ -29,8 +29,8 @@ cppAddActionDefense("test", function(entiteAtt, degat)
 end)
 
 cppAddActionDeclenchement(10, 8, 0, function(entite)
-  cppLoadCouche("level1.2.nbg", 0)
-  cppLoadCouche("level1.2.nvc", 1)
+  cppLoadCouche("../FichierCouche/level1.2.nbg", 0)
+  cppLoadCouche("../FichierCouche/level1.2.nvc", 1)
 end);
 
 cppAddActionPassage(1, 1, 0, function(entite)
