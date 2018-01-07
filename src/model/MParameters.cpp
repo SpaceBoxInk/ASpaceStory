@@ -201,4 +201,6 @@ void MParameters::load(std::string exePath)
   keys[getKeyFor("attackKey")] = MActionsKey::ATTACK;
   keys[getKeyFor("mineKey")] = MActionsKey::MINE;
   keys[getKeyFor("useKey")] = MActionsKey::USE_MAIN_OBJECT;
+  keys[getKeyFor("openEditorKey")] = MActionsKey::OPEN_EDITOR;
+  keys[getKeyFor("openInventoryKey")] = MActionsKey::OPEN_INVENTORY;
 }

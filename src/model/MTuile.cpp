@@ -49,7 +49,10 @@ MTuile::~MTuile()
 {
   for (unsigned int i = 0; i < couches.size(); ++i)
   {
-    deletePartieCouche((MTypeCouche)i);
+    if (couches[i])
+    {
+      delete couches[i];
+    }
   }
 }
 
@@ -155,7 +158,15 @@ void MTuile::deletePartieCouche(MTypeCouche typeCouche)
   if (couches[(int)typeCouche])
   {
     auto vide = MTerrain::getTypeList(typeCouche)[0];
-    *couches[(int)typeCouche] = *vide;
+    if (typeCouche == MTypeCouche::ELEMENT)
+    {
+      *dynamic_cast<MPartieCoucheElement*>(couches[(int)typeCouche]) =
+          *dynamic_cast<MPartieCoucheElement*>(vide);
+    }
+    else
+    {
+      *couches[(int)typeCouche] = *vide;
+    }
   }
 }
 

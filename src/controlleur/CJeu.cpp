@@ -47,7 +47,7 @@ CJeu::CJeu() :
 
 CJeu::~CJeu()
 {
-  delete vuePrincipale;
+  dynamic_cast<AppFrame*>(vuePrincipale)->Close();
 }
 
 /**

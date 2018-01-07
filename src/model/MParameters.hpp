@@ -31,6 +31,8 @@ enum class MActionsKey
   MINE,
   ATTACK,
   USE_MAIN_OBJECT,
+  OPEN_EDITOR,
+  OPEN_INVENTORY,
 };
 
 /**

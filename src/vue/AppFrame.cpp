@@ -24,9 +24,9 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
             wxNewId(),
             wxPoint(-1, -1),
             wxSize(MParameters::getNbTuileX() * tailleTexture,
-                   MParameters::getNbTuileY() * tailleTexture))),
-    _panel2(new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, -1)))
+                   MParameters::getNbTuileY() * tailleTexture)))
 {
+  _panel2 = new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, -1));
   this->SetMinSize(size);
 
 //  getCaneva()->Connect(getCaneva()->GetId(), wxEVT_SIZE,
@@ -121,6 +121,6 @@ void AppFrame::showEnigma(std::string title, std::string file, std::string textI
 
 AppFrame::~AppFrame()
 {
-//  delete _canvas;
-//  delete _panel2;
+  delete _canvas;
+  delete _panel2;
 }

@@ -38,6 +38,10 @@ CNiveau::CNiveau(AppFrameInterface* vuePrincipale, std::string levelFolder,
 
 CNiveau::~CNiveau()
 {
+  for (auto enigma : enigmes)
+  {
+    delete enigma.second;
+  }
 }
 
 //------------------------------------------------------------

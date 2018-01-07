@@ -43,8 +43,7 @@ wxColour CEditor::keywordColor;
 
 CEditor::CEditor(MTerrain* terrain) :
     methodsLoader("all" + MParameters::getLang()), save("defaultProgram.lua"),
-    ihmEditor(new Editor(wxT("Editeur"))),
-    luaInterpreter(terrain, ihmEditor)
+    ihmEditor(new Editor(wxT("Editeur"))), luaInterpreter(terrain, ihmEditor)
 {
   keywordColor = wxColour(MParameters::getKeywordColor());
   addEvents();
@@ -218,7 +217,8 @@ void CEditor::loadMethods(std::string method)
 
 void CEditor::showEditor(bool show)
 {
-  ihmEditor->Show(show);
+  if (ihmEditor->GetLabel() != "Editeur")
+    ihmEditor->Show(show);
 }
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
