@@ -185,6 +185,11 @@ void MTuile::mine(MEntite* entite, int item)
   }
 }
 
+MEntite const * MTuile::getEntite() const
+{
+  return entite;
+}
+
 /**
  * @param id l'id définie dans la *List (eg: solList), permet de récupérer une image en fonction d'une couleur indéxée (gimp ^^)
  * @param type le type de la couche (sol, element, ciel)

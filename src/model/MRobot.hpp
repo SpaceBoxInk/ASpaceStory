@@ -51,7 +51,7 @@ private:
 //=====================>Getters&Setters<======================
 public:
   std::chrono::seconds const & getSpeed() const;
-
+  MTuile const* getBeginPos() const;
 private:
   void setSpeed(std::chrono::seconds const & speed);
 
@@ -63,6 +63,11 @@ private:
 inline std::chrono::seconds const & MRobot::getSpeed() const
 {
   return speed;
+}
+
+inline MTuile const * MRobot::getBeginPos() const
+{
+  return posDepart;
 }
 
 inline void MRobot::setSpeed(std::chrono::seconds const & speed)

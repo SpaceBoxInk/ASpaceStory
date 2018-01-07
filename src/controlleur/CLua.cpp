@@ -470,6 +470,9 @@ int CLua::cppAddActionUtilisation(lua_State* l)
 /**
  * addActionMining(string element, function(string entite, int itemId))
  * element est le nom d'un element définie dans elementList
+ *
+ * la fonction passée en paramètre peut retourner l'id du dernier item créé (dans cette fonction par exemple)
+ * pour mettre cet item dans l'inventaire de l'entité mineuse
  */
 int CLua::cppAddActionMining(lua_State* l)
 {
@@ -567,7 +570,11 @@ void CLua::executeScript(std::string script)
 {
   try
   {
-    luaL_dofile(lua, script.c_str());
+    if (luaL_dofile(lua, script.c_str()))
+    {
+      std::cerr << "\nError : " << lua_tostring(lua, -1) << '\n';
+      throw MAssException("Erreur lors de l'execution du script lua");
+    }
   }
   catch (MAssException& e)
   {
@@ -578,7 +585,7 @@ void CLua::executeScript(std::string script)
     lua_Debug ar;
     lua_getstack(lua, 0, &ar);
     lua_getinfo(lua, "nfSl", &ar);
-    std::cout << "Error in " << ar.namewhat << " : " << ar.name << '\n';
+    std::cerr << "Error in " << ar.namewhat << " : " << ar.name << '\n';
     throw;
   }
 }

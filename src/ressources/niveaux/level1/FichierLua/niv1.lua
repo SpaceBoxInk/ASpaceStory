@@ -4,6 +4,8 @@ loadfile("../testLoad.lua")();
 cppAddActionMining("montagne", function(entite, item)
   print(entite.." mine montagne avec "..item)
   local id = cppNewItem("Montagne", "Ceci est gros", cppGetResourcesPath() .. "pictures/epee_niv1.png")
+  
+  -- le fait de retourner l'id permet de mettre dans l'inventaire l'item créé
   return id
 end)
 
@@ -38,3 +40,5 @@ cppAddActionPassage(1, 1, 0, function(entite)
 end);
 
 print("done")
+
+

@@ -194,13 +194,16 @@ void MEntite::setTuile(MTuile* tuile)
 {
   if (this->tuile && tuile)
   {
-    this->tuile->deplacerEntiteVers(*tuile);
+    if (this->tuile->deplacerEntiteVers(*tuile))
+    {
+      this->tuile = tuile;
+    }
   }
   else if (tuile)
   {
     tuile->placeEntite(this);
+    this->tuile = tuile;
   }
-  this->tuile = tuile;
 }
 
 MInventaire& MEntite::getInventaire()
