@@ -29,6 +29,7 @@ cppAddActionMining("piece_robot",getPiece) -- lorsque l'objet est ramassé(miné
 getCoffre = function() -- on créée une fonction qui renvoie un coffre
   return getCouche(1,-15,-7)
 end
+
 coffre = getCoffre()
 
 -- Création d'une épée
@@ -67,11 +68,14 @@ dire("Il faut que je bouge...")
 -- GESTION DES CONDITIONS DANS LE NIVEAU
 
 -- TODO : finir fonction Enigme: Evenement de la sortie
+entreePossible = function() 
+  return Perso.x == 21 or Perso.x == 22 and Perso.y == 15 
+end 
 
-if not enigme1.whenInput and (Perso.x == 21 or Perso.x == 22)  and Perso.y == 15 then -- positionDeSortie à fixer
+if not enigme1.whenInput and entreePossible() then -- positionDeSortie à fixer
   dire("*VISION* ... Je pense qu'il y a encore des choses à regarder ")
   sendMessageToUser("Compétence: curiosité maximale atteinte")
-elseif enigme1.whenInput and Perso.x == positionDeSortieX and Perso.y == positionDeSortieY then
+elseif enigme1.whenInput and entreePossible() then
   chargerTerrain("niv2.nbg",0)
   chargerTerrain("niv2.nvc",0)
   -- charger alpha
