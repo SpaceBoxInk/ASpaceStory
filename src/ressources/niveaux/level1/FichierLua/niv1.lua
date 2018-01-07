@@ -8,7 +8,7 @@ cppAddActionMining("montagne", function(entite, item)
 end)
 
 cppSetTaille(0.9);
-cppSetPosition(5, 2);
+cppSetPosition(28, 2);
 cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png");
 
 cppNewEntity("test", cppGetResourcesPath() .. "sprites/texture3.png", 2, 1, 0.9)

@@ -1,16 +1,15 @@
-loadfile("Robot.lua")
-loadfile("Perso.lua")
-loadfile("Enigme.lua")
-loadfile("Objet.lua")
+loadfile("../testLoad.lua")();
+
 
 
 
 -- Création niveau 1
 
 --  Création des énigmes du niveau (positions, informations et tout ça)
-
+-- [[
 enigme1 = newEnigme("enigme1","description","test.png",type,{1,2},objd,dec,res)
 joueur = getJoueur("profilGauche.png","profilDroit.png","profilBas.png","profilHaut.png")
+--]]
 --  Création des objets du niveau (positions, noms et tous les attributs)
 
 -- /!\ Modifier comportements des entites
