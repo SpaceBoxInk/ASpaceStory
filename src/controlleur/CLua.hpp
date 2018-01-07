@@ -205,3 +205,6 @@ T CLua::getTableData(lua_State* l, char const* key, int paramNb)
     return 0;
   }
 }
+/** @example niv1.lua
+ * an example to use lua function from CLua class
+ */
