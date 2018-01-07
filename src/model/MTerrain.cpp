@@ -1,5 +1,5 @@
 /**
- * MTerrain.cpp
+ * @file MTerrain.cpp
  *
  * Early optimization is the root of all evil
  *
@@ -11,28 +11,31 @@
 #include "MAssException.hpp"
 #include "MEvents.hpp"
 #include "MParameters.hpp"
+#include "MPartieCoucheElement.hpp"
 
-#include <bits/unordered_map.h>
 #include <fstream>
 #include <iostream>
 #include <iterator>
 #include <stdexcept>
+#include <unordered_map>
 #include <utility>
 
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
-std::unordered_map<std::uint8_t, MPartieCouche> MTerrain::solsType;
-std::unordered_map<std::uint8_t, MPartieCouche> MTerrain::elementsType;
-std::unordered_map<std::uint8_t, MPartieCouche> MTerrain::cielsType;
+std::unordered_map<std::uint8_t, MPartieCouche*> MTerrain::solsType;
+std::unordered_map<std::uint8_t, MPartieCouche*> MTerrain::elementsType;
+std::unordered_map<std::uint8_t, MPartieCouche*> MTerrain::cielsType;
 
-MCoordonnees MTerrain::taille(40, 20);
+MCoordonnees MTerrain::taille(16, 8);
 //------------------------------------------------------------
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
 MTerrain::MTerrain()
 {
+  taille =
+  { MParameters::getNbTuileX(), MParameters::getNbTuileY()};
   loadTypes();
 }
 
@@ -55,7 +58,7 @@ void MTerrain::loadTypes()
   loadSpecificPath(MParameters::getCielsPath(), MTypeCouche::CIEL);
 }
 
-MCoordonnees MTerrain::toCoords(int index)
+MCoordonnees MTerrain::toCoords(int index) const
 {
   return MCoordonnees(index % taille.getX(), index / taille.getX());
 }
@@ -67,6 +70,8 @@ void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
   std::string imgFile;
   unsigned short ID;
   float placeDispo;
+
+  int miningLevel;
 
   fichierType.open(fichier);
   if (fichierType)
@@ -84,7 +89,17 @@ void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
       fichierType >> imgFile;
       fichierType >> ID;
       fichierType >> placeDispo;
-      getTypeList(type).insert( { ID, MPartieCouche(type, name, imgFile, placeDispo) });
+      // FIXME to remove : getTypeList(type).insert( { ID, MPartieCouche(ID, type, name, imgFile, placeDispo) });
+      if (type == MTypeCouche::ELEMENT)
+      {
+        fichierType >> miningLevel;
+        getTypeList(type).insert(
+            { ID, new MPartieCoucheElement(ID, type, name, imgFile, placeDispo, miningLevel) });
+      }
+      else
+      {
+        getTypeList(type).insert( { ID, new MPartieCouche(ID, type, name, imgFile, placeDispo) });
+      }
     }
   }
   else
@@ -94,7 +109,17 @@ void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
   fichierType.close();
 }
 
-std::unordered_map<uint8_t, MPartieCouche>& MTerrain::getTypeList(
+MPartieCouche& MTerrain::getElement(std::string element)
+{
+  auto elemMap = getTypeList(MTypeCouche::ELEMENT);
+  return *std::find_if(elemMap.begin(), elemMap.end(),
+                       [element](std::pair<uint8_t, MPartieCouche*> pair)
+  {
+    return pair.second->getName() == element;
+  })->second;
+}
+
+std::unordered_map<uint8_t, MPartieCouche*>& MTerrain::getTypeList(
     MTypeCouche const& typeCouche)
 {
   switch (typeCouche) {
@@ -111,9 +136,8 @@ std::unordered_map<uint8_t, MPartieCouche>& MTerrain::getTypeList(
 }
 
 /**
- * FIXME : complete all comments
- * @param fichier
- * @param type
+ * @param fichier le fichier de couche à charger (.data : .nbg, nvc, nsk)
+ * @param type le type de couche (0,1,2 : sol, element ciel)
  */
 void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
 {
@@ -139,23 +163,30 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
         }
         else if (ID == 0 && type == MTypeCouche::SOL)
         {
-          throw std::invalid_argument(
+          throw MExceptionArgumentsInvalides(
               std::string("Id 0 not expected for couche SOL in offset ") + std::to_string(i));
         }
-        MPartieCouche const & couche = getTypeList(type).at(ID);
+        MPartieCouche const& couche = *getTypeList(type).at(ID);
         // si on veut mettre une couche à une tuile pas existante
         // il faut aussi que le type soit le sol, on commence par le sol !
         if (tuiles.size() <= i && type == MTypeCouche::SOL)
         {
           // SEE : push_back may be replaced by something related to the position "i"
-          tuiles.push_back(
-              new MTuile(toCoords(i), couche.getName(), couche.getFichierImg(),
-                         couche.getPlaceDispo()));
+// <<<<<<< feature/linkIHM-Model
+//           tuiles.push_back(
+//               new MTuile(toCoords(i), couche.getId(), couche.getName(), couche.getFichierImg(),
+//                          couche.getPlaceDispo()));
+//         }
+//         else if (tuiles.size() > i)
+//         {
+//           tuiles[i]->setPartieCouche(couche.getId(), couche.getType(), couche.getName(),
+//                                      couche.getFichierImg(), couche.getPlaceDispo());
+// =======
+          tuiles.push_back(new MTuile(toCoords(i), couche));
         }
         else if (tuiles.size() > i)
         {
-          tuiles[i]->setPartieCouche(couche.getType(), couche.getName(),
-                                     couche.getFichierImg(), couche.getPlaceDispo());
+          tuiles[i]->setPartieCouche(couche);
         }
         else
         {
@@ -175,15 +206,25 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
   {
     throw MExceptionFile(fichier, "ne peut etre ouvert");
   }
-
-  notifyObservers(MTerrainEvents::COUCHE_LOADED, type);
+  setChanged();
+  notifyObservers(MModelEvents::COUCHE_LOADED, type);
 }
 
+/**
+ * pour pouvoir faire : terrain(1,1)
+ * @return la tuile spécifiée aux coordonnées (x, y)
+ * @throw MExceptionOutOfTerrain si les coordonnées sortent du terrain
+ */
 MTuile& MTerrain::operator ()(int x, int y)
 {
   return (*this)(MCoordonnees(x, y));
 }
 
+/**
+ * pour pouvoir faire : terrain(MCoordonnees(1,1))
+ * @return la tuile spécifiée aux coordonnées coord
+ * @throw MExceptionOutOfTerrain si les coordonnées sortent du terrain
+ */
 MTuile& MTerrain::operator ()(MCoordonnees const & coord)
 {
   if (coord.getX() >= 0 && coord.getY() >= 0 && coord.getX() < taille.getX()
@@ -194,6 +235,11 @@ MTuile& MTerrain::operator ()(MCoordonnees const & coord)
   throw MExceptionOutOfTerrain(coord);
 }
 
+/**
+ * pour pouvoir faire : terrain(15)
+ * @return la tuile spécifiée a l'index index
+ * @throw MExceptionOutOfTerrain si l'index sortent du terrain
+ */
 MTuile& MTerrain::operator ()(int index)
 try
 {
@@ -204,6 +250,11 @@ catch (...)
   throw MExceptionOutOfTerrain(index);
 }
 
+/**
+ *
+ * @param tuile
+ * @return un vecteur des tuiles adjacentes (en croix sans les diagonales définie par les #Mouvement)
+ */
 std::vector<MTuile*> MTerrain::getAdjacentes(MTuile const & tuile)
 {
   using MouvementT::operator *;
@@ -227,19 +278,19 @@ std::vector<MTuile*> MTerrain::getAdjacentes(MTuile const & tuile)
   return tuiles;
 }
 
-std::vector<std::string const*> MTerrain::getImagesList(MTypeCouche typeCouche) const
+std::vector<int> MTerrain::getImagesList(MTypeCouche typeCouche) const
 {
-  std::vector<std::string const*> imgs;
+  std::vector<int> imgs;
   for (MTuile const* tuile : tuiles)
   {
     MPartieCouche const* couche = tuile->getPartieCouche(typeCouche);
     if (couche)
     {
-      imgs.push_back(&couche->getFichierImg());
+      imgs.push_back(couche->getId());
     }
     else
     {
-      imgs.push_back(nullptr);
+      imgs.push_back(0);
     }
   }
   return imgs;

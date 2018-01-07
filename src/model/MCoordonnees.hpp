@@ -9,6 +9,7 @@
 #define SRC_MODEL_MCOORDONNEES_HPP_
 
 #include <string>
+#include <array>
 
 
 class MCoordonnees
@@ -37,8 +38,8 @@ private:
 enum class Mouvement
 {
   HAUT = 0,
-  BAS,
   DROITE,
+  BAS,
   GAUCHE,
   SIZE
 };
@@ -48,12 +49,26 @@ namespace MouvementT
   /// retourne les coordonnees de mouvement à appliquer en fonction du mouvement
   MCoordonnees operator *(Mouvement m);
 
+
   constexpr int size()
   {
     return (int)(Mouvement::SIZE);
   }
 
-  int getDirection(Mouvement m);
+  constexpr int getDirection(Mouvement m)
+  {
+    constexpr std::array<int, MouvementT::size()> directions = { 0, 90, 180, -90 };
+    return directions[int(m)];
+  }
+
+  /**
+   * @return les coordonées de déplacement pour la direction donnée
+   */
+  inline MCoordonnees getDirectionCoords(int direction)
+  {
+    int dir = (direction / 90);
+    return MCoordonnees(dir % 2, (dir - 1) % 2);
+  }
 
 }
 

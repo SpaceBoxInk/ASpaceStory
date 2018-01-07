@@ -13,6 +13,7 @@
 #include "MEntite.hpp"
 
 #include <array>
+#include <exception>
 #include <functional>
 #include <string>
 
@@ -39,17 +40,30 @@ public:
 
 //========================>Attributes<========================
 private:
+  /**
+   * l'id de couleur indexée définie par gimp pour le lien avec une image définie dans la *List (*=sol|element|ciel)
+   */
+  int id;
   MTypeCouche type;
   std::string name;
   std::string fichierImg;
   float placeDispo;
 
+  /**
+   * action set by lua
+   * @see CLua#addActionPassage
+   */
   std::function<void(std::string entite)> actionPassage;
+  /**
+   * action set by lua
+   * @see CLua#addActionDeclenchement
+   */
   std::function<void(std::string entite)> actionDeclenchement;
 
 //=======================>Constructors<=======================
 public:
-  MPartieCouche(MTypeCouche type, std::string name, std::string fichierImg, float placeDispo);
+  MPartieCouche(int id, MTypeCouche type, std::string name, std::string fichierImg,
+                float placeDispo);
   MPartieCouche(MPartieCouche const&) = default;
   // TODO: rule of five ? copyandswap
   virtual ~MPartieCouche();
@@ -62,21 +76,29 @@ public:
   bool isTypeOf(MTypeCouche type) const;
   void passageDe(MEntite* entite);
   void declenchementDe(MEntite* entite);
+
+  virtual void mine(MEntite* entite, int item);
 private:
 
 //=====================>Getters&Setters<======================
 public:
+  int getId() const;
+
   MTypeCouche const& getType() const;
   std::string const& getName() const;
   std::string const& getFichierImg() const;
   float getPlaceDispo() const;
+  virtual int getMiningLevel() const;
 
   void setFichierImg(std::string const & fichierImg);
 
   void setActionDeclenchement(std::function<void(std::string entite)> actionDeclenchement);
   void setActionPassage(std::function<void(std::string entite)> actionPassage);
+  virtual void setActionMining(
+      std::function<void(MEntite* entite, int item)> actionMining);
   void unSetActionDeclenchement();
   void unSetActionPassage();
+  virtual void unSetActionMining();
 
 private:
 
@@ -84,6 +106,10 @@ private:
 //--------------------------------------------------------------
 //========================>Definitions<=========================
 //--------------------------------------------------------------
+inline int MPartieCouche::getId() const
+{
+  return id;
+}
 
 inline void MPartieCouche::setFichierImg(std::string const & fichierImg)
 {

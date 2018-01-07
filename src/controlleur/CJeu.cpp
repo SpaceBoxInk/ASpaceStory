@@ -13,7 +13,6 @@
 
 #include "../model/MCoordonnees.hpp"
 #include "../model/MPersonnage.hpp"
-#include "../vue/VPrimitif.hpp"
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -24,19 +23,53 @@
 //------------------------------------------------------------
 
 CJeu::CJeu() :
-vuePrincipale(cNiveau.getTerrain().getTaille()), cNiveau(&vuePrincipale),
-    cPersonnage(&vuePrincipale, &cNiveau.getTerrain()), cLua(this)
+    vuePrincipale(new AppFrame("A Space Story", wxPoint(0, 0), wxSize(1536, 1020), 32)),
+    cNiveau(vuePrincipale), cPersonnage(vuePrincipale, &cNiveau.getTerrain()), cLua(this)
 {
-  cLua.executeScript(cNiveau.getScript());
+  cPersonnage.addPersonnage("name");
+  cPersonnage.setPersonnage("name");
+  try
+  {
+    cLua.executeScript(cNiveau.getScript());
+  }
+  catch (MAssException& e)
+  {
+    std::cout << e.what() << '\n';
+    throw;
+  }
   // TODO : to change (lua)
-  cPersonnage.setPersonnage("name", &cNiveau.getTerrain()(2, 1), 0.9);
-  cPersonnage.launchPersonnage();
+  vuePrincipale->addEntite(cPersonnage.getCurrentPerso()->getNom(),
+                           cPersonnage.getCurrentPerso()->getTexture());
+  vuePrincipale->setPositionOf(cPersonnage.getCurrentPerso()->getNom(),
+                               cPersonnage.getCurrentPerso()->getTuile()->getPosition());
+  dynamic_cast<AppFrame*>(vuePrincipale)->Show();
 }
 
 CJeu::~CJeu()
 {
+  dynamic_cast<AppFrame*>(vuePrincipale)->Close();
 }
 
+/**
+ *
+ * @param name le nom de l'entité
+ * @return l'entité du nom @var name et du niveau courant
+ */
+MEntite* CJeu::getEntite(std::string name)
+{
+  MEntite* ent = cNiveau.getEntite(name);
+  return ent;
+}
+
+/**
+ *
+ * @param name le nom du personnage à get
+ * @return le personnage du nom spécifié
+ */
+MPersonnage* CJeu::getPersonnage(std::string name)
+{
+  return cPersonnage.getPersonnage(name);
+}
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------

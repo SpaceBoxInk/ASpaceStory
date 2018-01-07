@@ -10,6 +10,12 @@
  */
 
 #include "MPersonnage.hpp"
+#include "MAssException.hpp"
+#include "MItem.hpp"
+
+#include <utility>
+
+class MTuile;
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -19,13 +25,32 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MPersonnage::MPersonnage(std::string const& nom, MTuile* tuile, float taille) :
-    MEntite(nom, tuile, taille)
+MPersonnage::MPersonnage(std::string const& nom) :
+    MEntite(nom, "")
 {
 }
 
 MPersonnage::~MPersonnage()
 {
+}
+
+bool MPersonnage::makeRobot(std::string const& nom, std::string const& texture,
+                                      MTuile* tuile,
+                            float taille)
+{
+  return robots.try_emplace(nom, this, nom, texture, tuile, taille).second;
+}
+
+MRobot& MPersonnage::getRobot(std::string const & nom)
+{
+  if (robots.count(nom))
+  {
+    return robots.at(nom);
+  }
+  else
+  {
+    throw MExceptionEntiteInexistante(nom);
+  }
 }
 
 //------------------------------------------------------------

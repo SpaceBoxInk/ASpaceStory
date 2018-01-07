@@ -46,6 +46,7 @@ VPrimitif::VPrimitif(MCoordonnees const& coordMax) :
 
 VPrimitif::~VPrimitif()
 {
+  std::cout << "remove vprim" << '\n';
 }
 
 //------------------------------------------------------------
@@ -58,7 +59,7 @@ void clear(istream& in)
 }
 void clearScreen()
 {
-  if (!system("clear"))
+  if (system("clear"))
   {
     system("CLS");
   }
@@ -125,7 +126,6 @@ void VPrimitif::sendInput()
 void VPrimitif::setImg(MTypeCouche const& typeCouche,
                        std::vector<std::string const*> const& imgs)
 {
-  // todo Clear string pointer !
   switch (typeCouche) {
   case MTypeCouche::SOL:
     imgSols.clear();

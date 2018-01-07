@@ -15,13 +15,17 @@
 #include "CNiveau.hpp"
 #include "CPersonnage.hpp"
 
+#include "../vue/AppFrame.hpp"
 
+/**
+ * Controller for controllers
+ */
 class CJeu
 {
   friend class CLua;
 //========================>Attributes<========================
 private:
-  VPrimitif vuePrincipale;
+  AppFrameInterface* vuePrincipale;
   CNiveau cNiveau;
   CPersonnage cPersonnage;
   CLua cLua;
@@ -35,7 +39,8 @@ private:
 
 //=========================>Methods<==========================
 public:
-
+  MEntite* getEntite(std::string name);
+  MPersonnage* getPersonnage(std::string name);
 private:
 
 //=====================>Getters&Setters<======================

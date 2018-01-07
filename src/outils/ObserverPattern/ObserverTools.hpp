@@ -14,6 +14,7 @@
 #include <any>
 #include <cstdio>
 #include <functional>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -111,6 +112,7 @@ BadActionMethod(char const * typeNameNotObs, char const * typeNameAddAct)
 
   msg = new char[msgT.str().size() + 1];
   sprintf(msg, msgT.str().c_str());
+  std::cerr << msg;
 }
 
 ~BadActionMethod()

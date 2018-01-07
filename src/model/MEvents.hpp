@@ -11,9 +11,10 @@
 
 #pragma once
 
-enum class MTerrainEvents
+enum class MModelEvents
 {
   COUCHE_LOADED,
+  ENTITY_MOVED,
 };
 
 enum class MUserEvents

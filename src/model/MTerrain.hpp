@@ -16,8 +16,8 @@
 #include "../outils/ObserverPattern/Observed.hpp"
 
 #include <cstdint>
-#include <string>
 #include <unordered_map>
+#include <string>
 #include <vector>
 
 class MCoordonnees;
@@ -32,12 +32,12 @@ class MTerrain : public Observed
 //========================>Attributes<========================
 private:
   /**
-   * map pour avoir la partie couche(lu dans les fichiers *list des tuiles)\
+   * map pour avoir la partie couche(lu dans les fichiers *list des tuiles)\n
    * en fonction d'un index(lu dans les fichiers .n*)
    */
-  static std::unordered_map<std::uint8_t, MPartieCouche> solsType;
-  static std::unordered_map<std::uint8_t, MPartieCouche> elementsType;
-  static std::unordered_map<std::uint8_t, MPartieCouche> cielsType;
+  static std::unordered_map<std::uint8_t, MPartieCouche*> solsType;
+  static std::unordered_map<std::uint8_t, MPartieCouche*> elementsType;
+  static std::unordered_map<std::uint8_t, MPartieCouche*> cielsType;
   /**
    * le point qui défini la taille du terrain\
    * le nombre d'element sur x et sur y
@@ -65,20 +65,20 @@ public:
 
   std::vector<MTuile*> getAdjacentes(MTuile const& tuile);
 
-  std::vector<std::string const*> getImagesList(MTypeCouche typeCouche) const;
+  std::vector<int> getImagesList(MTypeCouche typeCouche) const;
 
-
-  MCoordonnees toCoords(int index);
+  MEntite* procheEntite(MCoordonnees coordonneeJoueur);
+  MCoordonnees toCoords(int index) const;
 private:
   static void loadSpecificPath(std::string fichier, MTypeCouche const& type);
 //=====================>Getters&Setters<======================
 public:
   static MCoordonnees getTaille();
   static void setTaille(MCoordonnees taille);
-
-private:
-  static std::unordered_map<uint8_t, MPartieCouche>& getTypeList(
+  static MPartieCouche& getElement(std::string element);
+  static std::unordered_map<uint8_t, MPartieCouche*>& getTypeList(
       MTypeCouche const& typeCouche);
+private:
 };
 
 inline MCoordonnees MTerrain::getTaille()
