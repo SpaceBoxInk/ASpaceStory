@@ -1,20 +1,25 @@
 loadfile("../testLoad.lua")();
 
+loadfile("Robot.lua")();
+loadfile("Perso.lua")();
+loadfile("Enigme.lua")();
+loadfile("Objet.lua")();
 
 
 
 -- Création niveau 1
 
 --  Création des énigmes du niveau (positions, informations et tout ça)
--- [[
+
 enigme1 = newEnigme("enigme1","description","test.png",type,{1,2},objd,dec,res)
 joueur = getJoueur("profilGauche.png","profilDroit.png","profilBas.png","profilHaut.png")
---]]
+
 --  Création des objets du niveau (positions, noms et tous les attributs)
 
 -- /!\ Modifier comportements des entites
 
 local nbPieceRobotGet = 0
+
 
 getPiece = function() -- on créée une fonction qui renvoie la piece robot
   nbPieceRobotGet = nbPieceRobotGet + 1
@@ -88,7 +93,7 @@ end
 
 if robotReussi() then
   x, y = joueur:getCoordonnees()
-  robot = getRobot(x +1, y +1)
+  cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", x+1, y+1, 0.4)
   dire("Oh il se met à bouger !")
   sendMessageToUser("Le robot semble content de vous rencontrer, mais il ne se souvient plus de son nom, comment s'appelle-il ?")
   sendMessageToUser("Vous possédez désormais utilser la tablette de Programmation, elle vous permettra de communiquer avec le robot comme bon vous semble ! (comme pour passer dans des passaes étroits par exemple...")
