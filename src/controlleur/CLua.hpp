@@ -79,6 +79,8 @@ private:
   static int cppGetResourcesPath(lua_State* l);
   static int loadfile(lua_State* l);
 
+  static int cppGetKeyFor(lua_State* l);
+
   static int cppAddActionDeclenchement(lua_State* l);
   static int cppAddActionPassage(lua_State* l);
 

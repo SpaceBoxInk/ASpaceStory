@@ -204,3 +204,8 @@ void MParameters::load(std::string exePath)
   keys[getKeyFor("openEditorKey")] = MActionsKey::OPEN_EDITOR;
   keys[getKeyFor("openInventoryKey")] = MActionsKey::OPEN_INVENTORY;
 }
+
+std::string MParameters::getKey(std::string action)
+{
+  return conf[action];
+}

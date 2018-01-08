@@ -51,6 +51,7 @@ CLua::CLua(CJeu* cJeu)
   registerEntiteFunctions();
   registerItemFunctions();
   registerEnigmeFunctions();
+
 }
 
 CLua::~CLua()
@@ -141,6 +142,13 @@ int CLua::loadfile(lua_State* l)
   testArgs(1);
   std::string file = cJeu->cNiveau.getScriptFolder() + lua_tostring(l, 1);
   luaL_loadfile(l, file.c_str());
+  return 1;
+}
+
+int CLua::cppGetKeyFor(lua_State* l)
+{
+  testArgs(1);
+  push(MParameters::getKey(lua_tostring(l, 1)).c_str());
   return 1;
 }
 
@@ -579,6 +587,7 @@ void CLua::registerBaseFunctions()
   lua_register(lua, "cppSetScriptPath", cppSetScriptPath);
   lua_register(lua, "cppGetScriptPath", cppGetScriptPath);
   lua_register(lua, "cppGetResourcesPath", cppGetResourcesPath);
+  lua_register(lua, "cppGetKeyFor", cppGetKeyFor);
   lua_register(lua, "loadfile", loadfile);
 }
 
@@ -774,7 +783,6 @@ std::string CLua::getCurFunction()
   lua_getinfo(lua, "nf", &ar);
   return ar.name;
 }
-
 ////////////////////////////////////////////////////////////////////////////////
 
 //------------------------------------------------------------

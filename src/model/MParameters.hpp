@@ -50,13 +50,13 @@ private:
   static std::map<char, Mouvement> mouvKeys;
   static std::map<char, MActionsKey> keys;
 
+  static char getKeyFor(std::string const& action);
 //========================>Methods<========================
 private:
   static bool checkConfFile(std::string path);
 
   static void setRootPath();
 
-  static char getKeyFor(std::string const& action);
 public:
   // PATHS
   static std::string getRootPath();
@@ -77,6 +77,7 @@ public:
   static MActionsKey getActionFromKey(char key);
   static bool isMouvKey(char key);
   static bool isActionKey(char key);
+  static std::string getKey(std::string action);
 
   // GRAPHICS
   static std::string getTextureFor(MTypeCouche couche);

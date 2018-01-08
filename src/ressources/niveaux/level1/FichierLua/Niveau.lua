@@ -1,13 +1,22 @@
---loadfile("../classes/Robot.lua")
---loadfile("../classes/Perso.lua")
---loadfile("../classes/Enigme.lua")
---loadfile("../classes/Objet.lua")
+package.path = package.path .. ";" .. cppGetResourcesPath() .. "classes/?.lua"
+
+local Robot = require("Robot")
+local Personnage = require("Perso")
+local Enigme = require("Enigme")
+local Objet = require("Objet")
 
 cppLoadCouche("../FichierCouche/level1.1.nbg", 0)
 cppLoadCouche("../FichierCouche/level1.1.nvc", 1)
 
+-- recupere la clé d'une action :
+print("Est ce que je peux bouger...")
+print("Il faut que j'essaye...")
+print("Avec " .. cppGetKeyFor("upKey") .. " je devrais pouvoir avancer")
+print("Et avec " .. cppGetKeyFor("downKey") .. " reculer")
+print("Et puis aller à gauche et droite avec " .. cppGetKeyFor("leftKey") .. " et " .. cppGetKeyFor("rightKey"))
+
 -- Création niveau 1
--- Création perso 
+--Initialisation de la position
 cppSetPosition(2, 2)
 cppSetTaille(0.9)
 cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png")
@@ -16,22 +25,21 @@ cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png")
 -- enigme1 = NewEnigme("enigme1","description", cppGetResourcesPath() .. "pictures/tombe.png")
 
 cppNewEnigme("nom", "desc", cppGetResourcesPath() .. "pictures/tombe.png")
---Initialisaiton de la position
 
 --  Création des objets du niveau (positions, noms et tous les attributs)
 
 -- /!\ Modifier comportements des entites
 
-nbPieceRobotGet = 0
-  
+local nbPieceRobotGet = 0
+
 getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie la piece robot
   nbPieceRobotGet = nbPieceRobotGet + 1
 
   if nbPieceRobotGet == 3 then
-  cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", x, y, 0.4)
-  -- dire("Oh il se met à bouger !")
-  -- sendMessageToUser("Le robot semble content de vous rencontrer, mais il ne se souvient plus de son nom, comment s'appelle-il ?")
-  -- sendMessageToUser("Vous possédez désormais utilser la tablette de Programmation, elle vous permettra de communiquer avec le robot comme bon vous semble ! (comme pour passer dans des passaes étroits par exemple...")
+    cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", x, y, 0.4)
+    -- dire("Oh il se met à bouger !")
+    -- sendMessageToUser("Le robot semble content de vous rencontrer, mais il ne se souvient plus de son nom, comment s'appelle-il ?")
+    -- sendMessageToUser("Vous possédez désormais utilser la tablette de Programmation, elle vous permettra de communiquer avec le robot comme bon vous semble ! (comme pour passer dans des passaes étroits par exemple...")
   end
   return cppNewItem("pieceRobot","leak skvsf",  cppGetResourcesPath() .. "pictures/epee_niv1.png")
 end
@@ -39,20 +47,32 @@ end
 cppAddActionMining("piece_robot",getPiece) -- lorsque l'objet est ramassé(miné au niveau 0) la piece1 est mise dans l'inventaire du joueur par le C++
 -- création du coffre
 
-cppAddInventory(15, 7, 3, 3) 
+cppAddInventory(15, 7, 3, 3)
 idIt = cppNewItem("epee", "test",  cppGetResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
 cppPutNewItemOn(15, 7)
 
-if nbPieceRobotGet == 3 then 
+-- ca ca marche pas ^^
+--if nbPieceRobotGet == 3 then
+--
+--  actionOuvertureGrotte = function ()
+--    -- charge le fond
+--    cppLoadCouche("../FichierCouche/level1.2.nbg", 0)
+--    cppLoadCouche("../FichierCouche/level1.2.nvc", 1)
+--  end
+--
+--  cppAddActionDeclenchement(10, 9, 1, actionOuvertureGrotte)
+--end
 
- actionOuvertureGrotte = function ()
-  -- charge le fond
-  cppLoadCouche("../FichierCouche/level1.2.nbg", 0)
-  cppLoadCouche("../FichierCouche/level1.2.nvc", 1)
+-- ce serait plus comme ca :P
+actionOuvertureGrotte = function ()
+  if nbPieceRobotGet == 3 then
+    -- charge le fond
+    cppLoadCouche("../FichierCouche/level1.2.nbg", 0)
+    cppLoadCouche("../FichierCouche/level1.2.nvc", 1)
   end
-  
- cppAddActionDeclenchement(10, 9, 1, actionOuvertureGrotte)
-end 
+end
+cppAddActionDeclenchement(10, 9, 1, actionOuvertureGrotte)
+
  
 -- getCoffre = function() -- on créée une fonction qui renvoie un coffre
  -- return Objet.getCouche(1,-15,-7)

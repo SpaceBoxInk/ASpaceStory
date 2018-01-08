@@ -1,22 +1,24 @@
-function newItem(name,description, texture, degat, protection, supprimable, miningLevel )
-cppNewItem(name,description,texture,degat,protection, supprimable, miningLevel)
+local Objet = {}
+
+Objet.newItem = function (name,description, texture, degat, protection, supprimable, miningLevel )
+  cppNewItem(name,description,texture,degat,protection, supprimable, miningLevel)
   return {
-   id = cppNewItem(name, miningLevel),
-   
-   setActionUtilisation = function (self,action)
-    addActionUtilisation(action)
-   end,
-   
-   setActionAttaque = function (self, action)
-    self.actionAttaque = action
-   end
-   
-   } 
-   
+    id = cppNewItem(name, miningLevel),
+
+    setActionUtilisation = function (self,action)
+      addActionUtilisation(action)
+    end,
+
+    setActionAttaque = function (self, action)
+      self.actionAttaque = action
+    end
+
+  }
+
 end
 
 
-function getCouche(coucheLevel,x,y)
+Objet.getCouche = function (coucheLevel,x,y)
 
   return {
     cL = coucheLevel,
@@ -30,3 +32,5 @@ function getCouche(coucheLevel,x,y)
     end
   }
 end
+
+return Objet
