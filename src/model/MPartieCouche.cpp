@@ -56,7 +56,7 @@ void MPartieCouche::declenchementDe(MEntite* entite)
   }
 }
 
-void MPartieCouche::mine(MEntite* entite, int item)
+void MPartieCouche::mine(MEntite* entite, int item, MCoordonnees minedCoords)
 {
   throw std::logic_error("Cannot call mine on couche isn't ELEMENT !");
 }
@@ -90,7 +90,7 @@ int MPartieCouche::getMiningLevel() const
 }
 
 void MPartieCouche::setActionMining(
-    std::function<void(MEntite* entite, int item)> actionMining)
+    std::function<void(MEntite* entite, int item, int xMined, int yMined)> actionMining)
 {
   throw std::logic_error("Cannot call setActionMining on couche isn't ELEMENT !");
 }

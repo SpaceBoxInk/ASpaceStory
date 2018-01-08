@@ -468,7 +468,7 @@ int CLua::cppAddActionUtilisation(lua_State* l)
 }
 
 /**
- * addActionMining(string element, function(string entite, int itemId))
+ * addActionMining(string element, function(string entite, int itemId, int xMined, int yMined))
  * element est le nom d'un element définie dans elementList
  *
  * la fonction passée en paramètre peut retourner l'id du dernier item créé (dans cette fonction par exemple)
@@ -480,12 +480,14 @@ int CLua::cppAddActionMining(lua_State* l)
   std::string element = lua_tostring(l, 1);
   int curIndex = storeFunction();
   cJeu->cNiveau.getTerrain().getElement(element).setActionMining(
-      [curIndex, l](MEntite* entite, int item)
+      [curIndex, l](MEntite* entite, int item, int xMined, int yMined)
       {
         pushFunctionFrom(curIndex);
         // pass entity name on 1st parameter
         push(entite->getNom().c_str());
         lua_pushinteger(l, item);
+        lua_pushinteger(l, xMined);
+        lua_pushinteger(l, yMined);
         // call function defined by lua
         lua_call(l, 2, 1);
         if (!lua_isnil(l, -1))

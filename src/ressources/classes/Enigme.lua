@@ -15,6 +15,10 @@ resultat=res, -- resultat attendu de l'enigme
     self.positionDescription = {x,y}
   end,
   
+  setCpp = function(self) 
+    cppNewEnigme(self.nom, self.description, self.image)
+  end,
+  
   whenInput = function(userInput) -- renvoie true si egnime reussie
   
      if userInput == resultat then

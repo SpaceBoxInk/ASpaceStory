@@ -23,7 +23,8 @@ MPartieCoucheElement::MPartieCoucheElement(Id ID, MTypeCouche type, std::string 
                                            std::string fichierImg, float placeDispo,
                                            int miningLevel) :
     MPartieCouche(ID, type, name, fichierImg, placeDispo), miningLevel(miningLevel),
-    actionMining(new std::function<void(MEntite* entite, int item)>(nullptr))
+    actionMining(
+        new std::function<void(MEntite* entite, int item, int xMined, int yMined)>(nullptr))
 {
 }
 
@@ -34,11 +35,11 @@ MPartieCoucheElement::~MPartieCoucheElement()
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------
-void MPartieCoucheElement::mine(MEntite* entite, int item)
+void MPartieCoucheElement::mine(MEntite* entite, int item, MCoordonnees minedCoords)
 {
   if (*actionMining)
   {
-    (*actionMining)(entite, item);
+    (*actionMining)(entite, item, minedCoords.getX(), minedCoords.getY());
   }
 }
 
@@ -46,7 +47,7 @@ void MPartieCoucheElement::mine(MEntite* entite, int item)
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
 void MPartieCoucheElement::setActionMining(
-    std::function<void(MEntite* entite, int item)> actionMining)
+    std::function<void(MEntite* entite, int item, int xMined, int yMined)> actionMining)
 {
   *this->actionMining = actionMining;
 }

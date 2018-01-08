@@ -180,7 +180,7 @@ void MTuile::mine(MEntite* entite, int item)
   MPartieCouche* elem = getPartieCouche(MTypeCouche::ELEMENT);
   if (elem && elem->getMiningLevel() >= 0 && item >= elem->getMiningLevel())
   {
-    elem->mine(entite, item);
+    elem->mine(entite, item, getPosition());
     deletePartieCouche(MTypeCouche::ELEMENT);
   }
 }

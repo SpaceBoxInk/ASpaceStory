@@ -77,7 +77,7 @@ public:
   void passageDe(MEntite* entite);
   void declenchementDe(MEntite* entite);
 
-  virtual void mine(MEntite* entite, int item);
+  virtual void mine(MEntite* entite, int item, MCoordonnees minedCoords);
 private:
 
 //=====================>Getters&Setters<======================
@@ -95,7 +95,7 @@ public:
   void setActionDeclenchement(std::function<void(std::string entite)> actionDeclenchement);
   void setActionPassage(std::function<void(std::string entite)> actionPassage);
   virtual void setActionMining(
-      std::function<void(MEntite* entite, int item)> actionMining);
+      std::function<void(MEntite* entite, int item, int xMined, int yMined)> actionMining);
   void unSetActionDeclenchement();
   void unSetActionPassage();
   virtual void unSetActionMining();

@@ -2,8 +2,8 @@ function newItem(name, miningLevel)
   return {
    id = cppNewItem(name, miningLevel),
    
-   setActionUtilisation = function (self, action)
-    addActionUtilisation()
+   setActionUtilisation = function (self,action)
+    addActionUtilisation(action)
    end,
    
    setActionAttaque = function (self, action)
