@@ -17,7 +17,8 @@ struct AppFrame : public AppFrameInterface, public wxFrame
 {
 public:
   AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size,
-           int tailleTexture);
+           int tailleTexture,
+           MCoordonnees taille = MCoordonnees(10, 8));
 
   virtual ~AppFrame();
 
@@ -38,10 +39,11 @@ private:
   void onResize(wxSizeEvent& event);
 
   void showEnigma(std::string title, std::string file, std::string textInside);
-
+  void showDialog(std::string title, std::string file, std::string textInside);
   wxPanel* getPanel();
   Canvas* _canvas;
   wxPanel* _panel2;
+  MCoordonnees tailleInventory;
 };
 
 //inline wxPanel* AppFrame::getPanel()
