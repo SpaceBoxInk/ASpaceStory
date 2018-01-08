@@ -4,4 +4,5 @@ herbe : . 1 1.0
 terre : # 2 1.0
 cheminTerre : = 3 1.0
 eau : ~ 4 0.0
-pierre : pierre.png 5 1.0
+gravier : gravier.png 5 1.0
+passage_etroit : dummy.png 6 0.0
