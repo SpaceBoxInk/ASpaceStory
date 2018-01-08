@@ -1,6 +1,10 @@
 # ASpaceStory
 The game
 
+## Compilation
+It uses c++17, so compile with g++ --std=c++1z or with clang5 with this same flag\
+It also depends on [Lua](http://www.lua.org/home.html), [sfml](https://www.sfml-dev.org/) and [wxWidget](http://wxwidgets.org/)
+
 ## Compilation libs
 you can use these commands :
 <pre>

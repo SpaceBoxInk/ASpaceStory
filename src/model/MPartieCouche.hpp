@@ -25,11 +25,7 @@ enum class MTypeCouche
   SIZE
 };
 
-constexpr char const* to_string(MTypeCouche coucheT)
-{
-  std::array<char const*, 4> names { "Sol", "Element", "Ciel", "SIZE" };
-  return names[(int)coucheT];
-}
+std::string to_string(MTypeCouche coucheT);
 
 
 class MPartieCouche
@@ -78,6 +74,8 @@ public:
   void declenchementDe(MEntite* entite);
 
   virtual void mine(MEntite* entite, int item, MCoordonnees minedCoords);
+
+  bool isNull() const;
 private:
 
 //=====================>Getters&Setters<======================

@@ -61,6 +61,11 @@ void MPartieCouche::mine(MEntite* entite, int item, MCoordonnees minedCoords)
   throw std::logic_error("Cannot call mine on couche isn't ELEMENT !");
 }
 
+bool MPartieCouche::isNull() const
+{
+  return id == 0;
+}
+
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
@@ -98,4 +103,10 @@ void MPartieCouche::setActionMining(
 void MPartieCouche::unSetActionMining()
 {
   throw std::logic_error("Cannot call unSetActionMining on couche isn't ELEMENT !");
+}
+
+std::string to_string(MTypeCouche coucheT)
+{
+  std::array<char const *, 4> names { "Sol", "Element", "Ciel", "SIZE" };
+  return names[(int)(coucheT)];
 }

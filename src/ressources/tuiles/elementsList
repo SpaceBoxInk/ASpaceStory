@@ -1,7 +1,7 @@
 # nom : fichierImage index(pour les .nbg) placeDispo(0-1) miningLevel
 rien : dummy.png 0 1.0 				-1
 arbre : arbre.png 1 0.0 			-1
-montagne : montagne.png 2 0.0 			-1
+montagne : montagne.png 2 0.0 		 -1
 coffre : coffre.png 3 0.0 			-1
 tombe : tombe.png 4 0.0 			-1
 piece_robot : piece_robot.png 5 0.0 		 0

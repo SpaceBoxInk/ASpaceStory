@@ -1,4 +1,5 @@
-function newItem(name, miningLevel)
+function newItem(name,description, texture, degat, protection, supprimable, miningLevel )
+cppNewItem(name,description,texture,degat,protection, supprimable, miningLevel)
   return {
    id = cppNewItem(name, miningLevel),
    

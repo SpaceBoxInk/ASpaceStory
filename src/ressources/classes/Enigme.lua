@@ -1,4 +1,5 @@
 function NewEnigme(nom,des,img,type,posDes,objectD,decouv,res)
+cppNewEnigme(nom, des,img)
 Enigme = {
 
 nom = nom,
@@ -13,10 +14,6 @@ resultat=res, -- resultat attendu de l'enigme
   
   setPosDes = function(x,y) 
     self.positionDescription = {x,y}
-  end,
-  
-  setCpp = function(self) 
-    cppNewEnigme(self.nom, self.description, self.image)
   end,
   
   whenInput = function(userInput) -- renvoie true si egnime reussie

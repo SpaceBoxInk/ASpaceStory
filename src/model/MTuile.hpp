@@ -10,13 +10,15 @@
 #pragma once
 
 #include "MAssException.hpp"
-#include <array>
-#include <string>
-
 #include "MCoordonnees.hpp"
 #include "MEntite.hpp"
 #include "MItem.hpp"
 #include "MPartieCouche.hpp"
+
+#include <array>
+#include <vector>
+
+class VInventaireInterface;
 
 class MEntite;
 
@@ -36,6 +38,7 @@ private:
    */
   std::array<MPartieCouche*, 3> couches;
   std::vector<MItem*> items;
+  VInventaireInterface* vItems;
   MCoordonnees position;
 
   MEntite* entite;
@@ -65,6 +68,7 @@ public:
   void interagirTuile(MEntite* entite);
   void mine(MEntite* entite, int item); // replace By item
   void addItem(MItem* item);
+  void addInventaire(MCoordonnees taille);
 private:
   float getPlaceDispoOn(MTypeCouche const& typeCouche) const;
 
@@ -79,8 +83,11 @@ public:
 
 
   MPartieCouche* getPartieCouche(MTypeCouche type);
+  bool hasPartieCouche(MTypeCouche type) const;
   MPartieCouche const* getPartieCouche(MTypeCouche type) const;
   void setPartieCouche(MPartieCouche const& couche);
+
+  VInventaireInterface* getInventaire();
 private:
 };
 //------------------------------------------------------------

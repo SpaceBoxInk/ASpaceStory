@@ -101,6 +101,9 @@ private:
   static int cppGiveNewItemToEntity(lua_State* l);
   static int cppPutNewItemOn(lua_State* l);
 
+  static int cppAddInventory(lua_State* l);
+  static int cppShowInventory(lua_State* l);
+
   static int cppAddActionUtilisation(lua_State* l);
 
   static int cppNewEnigme(lua_State* l);

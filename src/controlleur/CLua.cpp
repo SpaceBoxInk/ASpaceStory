@@ -10,15 +10,22 @@
  */
 
 #include "CLua.hpp"
-
-#include "../model/MAssException.hpp"
-#include "../model/MInventaire.hpp"
-#include "../model/MItem.hpp"
-#include "../model/MPartieCouche.hpp"
-#include "../model/MTerrain.hpp"
-#include "../model/MTuile.hpp"
 #include "CJeu.hpp"
 #include "CNiveau.hpp"
+#include "CPersonnage.hpp"
+
+#include "../model/MAssException.hpp"
+#include "../model/MCoordonnees.hpp"
+#include "../model/MInventaire.hpp"
+#include "../model/MItem.hpp"
+#include "../model/MParameters.hpp"
+#include "../model/MPartieCouche.hpp"
+#include "../model/MPersonnage.hpp"
+#include "../model/MTerrain.hpp"
+#include "../model/MTuile.hpp"
+#include "../vue/VInventaireInterface.hpp"
+
+#include <stdexcept>
 
 //------------------------------------------------------------
 //========================>static members<=========================
@@ -145,14 +152,20 @@ int CLua::loadfile(lua_State* l)
 int CLua::cppAddActionDeclenchement(lua_State* l)
 {
   testArgs(4);
-  MTypeCouche couche = (MTypeCouche)lua_tointeger(l, 3);
+  MTypeCouche typeCouche = (MTypeCouche)lua_tointeger(l, 3);
 
   if (lua_isfunction(l, -1))
   {
     // store function
     int curIndex = luaL_ref(l, LUA_REGISTRYINDEX);
 
-    getTuile(1)->getPartieCouche(couche)->setActionDeclenchement(
+    auto couche = getTuile(1)->getPartieCouche(typeCouche);
+    if (!couche)
+    {
+      throw MAssException("Couche " + to_string(typeCouche) + " inexistante");
+    }
+
+    couche->setActionDeclenchement(
         [curIndex, l](std::string entite)
         {
           // get function previously stored in special lua table registry
@@ -414,6 +427,10 @@ int CLua::cppNewItem(lua_State* l)
   return 1;
 }
 
+/**
+ * cppGiveNewItemToPerso()
+ * donne le nouvel item créé au personnage courant
+ */
 int CLua::cppGiveNewItemToPerso(lua_State* l)
 {
   testArgs(0);
@@ -422,6 +439,10 @@ int CLua::cppGiveNewItemToPerso(lua_State* l)
   return 0;
 }
 
+/**
+ * cppGiveNewItemToEntity(string nom)
+ * donne le nouvel item créé à l'entité de nom nom
+ */
 int CLua::cppGiveNewItemToEntity(lua_State* l)
 {
   testArgs(1);
@@ -432,13 +453,42 @@ int CLua::cppGiveNewItemToEntity(lua_State* l)
   return 0;
 }
 
+/**
+ * cppPutNewItemOn(int x, int y)
+ * met l'item nouvellement créé sur la tuile (x, y)
+ */
 int CLua::cppPutNewItemOn(lua_State* l)
 {
   testArgs(2);
-  int x = lua_tointeger(l, 1);
-  int y = lua_tointeger(l, 2);
-  cJeu->cNiveau.getTerrain()(x, y).addItem(getItem());
+  getTuile(1)->addItem(getItem());
   item = nullptr;
+  return 0;
+}
+
+/**
+ * addInventory(int x, int y, int tailleX, int tailleY)
+ * permet d'ajouter un inventaire VISIBLE à la tuile de coordonnées (x, y)
+ * de taille (tailleX, tailleY)
+ */
+int CLua::cppAddInventory(lua_State* l)
+{
+  testArgs(4);
+  int tailleX = lua_tointeger(l, 3);
+  int tailleY = lua_tointeger(l, 4);
+  getTuile(1)->addInventaire(MCoordonnees(tailleX, tailleY));
+
+  return 0;
+}
+
+/**
+ * cppShowInventory(int x, int y)
+ * show the inventory on coords (x, y)
+ */
+int CLua::cppShowInventory(lua_State* l)
+{
+  testArgs(2);
+  getTuile(1)->getInventaire()->show();
+
   return 0;
 }
 
@@ -489,7 +539,7 @@ int CLua::cppAddActionMining(lua_State* l)
         lua_pushinteger(l, xMined);
         lua_pushinteger(l, yMined);
         // call function defined by lua
-        lua_call(l, 2, 1);
+        lua_call(l, 4, 1);
         if (!lua_isnil(l, -1))
         {
           entite->addItemToInventaire(getItem());
@@ -560,6 +610,9 @@ void CLua::registerItemFunctions()
   lua_register(lua, "cppGiveNewItemToEntity", cppGiveNewItemToEntity);
   lua_register(lua, "cppPutNewItemOn", cppPutNewItemOn);
   lua_register(lua, "cppAddActionUtilisation", cppAddActionUtilisation);
+
+  lua_register(lua, "cppAddInventory", cppAddInventory);
+  lua_register(lua, "cppShowInventory", cppShowInventory);
 }
 
 void CLua::registerEnigmeFunctions()
@@ -577,10 +630,6 @@ void CLua::executeScript(std::string script)
       std::cerr << "\nError : " << lua_tostring(lua, -1) << '\n';
       throw MAssException("Erreur lors de l'execution du script lua");
     }
-  }
-  catch (MAssException& e)
-  {
-    throw;
   }
   catch (...)
   {
