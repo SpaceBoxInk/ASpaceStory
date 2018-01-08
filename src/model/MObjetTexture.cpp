@@ -19,7 +19,8 @@
 //=======================>Constructors<=======================
 //------------------------------------------------------------
 
-MObjetTexture::MObjetTexture(std::string texture)
+MObjetTexture::MObjetTexture(std::string texture) :
+    texture(texture)
 {
 }
 

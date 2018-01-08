@@ -46,6 +46,7 @@ public:
 
   //=====================>Getters&Setters<======================
   std::string getNom() const;
+  std::string getDescription() const;
   int getDegats() const;
   int getProtection() const;
   Id getId() const;
@@ -61,6 +62,11 @@ public:
 inline MTypeEquipement MItem::getType() const
 {
   return type;
+}
+
+inline std::string MItem::getDescription() const
+{
+  return description;
 }
 
 inline int MItem::getMiningLevel() const

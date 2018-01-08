@@ -53,7 +53,7 @@ public:
                                std::string description, std::string image,
                                int position = -1) = 0;
   virtual void delObjInv(unsigned long long id) = 0;
-  virtual void show(bool show) = 0;
+  virtual void show(bool show = true) = 0;
 private:
 
 //=====================>Getters&Setters<======================

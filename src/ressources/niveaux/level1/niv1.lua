@@ -11,6 +11,8 @@ cppSetTaille(0.9);
 cppSetPosition(5, 2);
 cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png");
 
+cppAddInventory(2, 1, 10, 10)
+
 cppNewEntity("test", cppGetResourcesPath() .. "sprites/texture3.png", 2, 1, 0.9)
 cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", 3, 2, 0.4)
 idIt = cppNewItem("jean", "leak skvsf",  cppGetResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
@@ -19,7 +21,7 @@ cppAddActionUtilisation(function(entite)
 	print("utilise jean")
 end)
 
-cppGiveNewItemToPerso()
+cppPutNewItemOn(2, 1)
 
 cppNewEnigme("nom", "desc", cppGetResourcesPath() .. "pictures/tombe.png")
 

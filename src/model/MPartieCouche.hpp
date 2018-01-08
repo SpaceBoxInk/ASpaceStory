@@ -78,6 +78,8 @@ public:
   void declenchementDe(MEntite* entite);
 
   virtual void mine(MEntite* entite, int item);
+
+  bool isNull() const;
 private:
 
 //=====================>Getters&Setters<======================

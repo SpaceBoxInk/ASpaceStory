@@ -61,6 +61,11 @@ void MPartieCouche::mine(MEntite* entite, int item)
   throw std::logic_error("Cannot call mine on couche isn't ELEMENT !");
 }
 
+bool MPartieCouche::isNull() const
+{
+  return id == 0;
+}
+
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
