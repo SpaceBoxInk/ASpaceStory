@@ -55,7 +55,7 @@ try
     setChanged();
     notifyObservers(MModelEvents::ENTITY_MOVED, *dynamic_cast<MEntite*>(this));
   }
-  return true;
+  return isReset();
 }
 catch (MAssException& e)
 {
@@ -64,7 +64,7 @@ catch (MAssException& e)
 
 bool MRobot::isReset()
 {
-  return getTuile()->getPosition() == posDepart->getPosition();
+  return getTuile()->getPosition() == posDepart->getPosition() && dirDepart == getDirection();
 }
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
