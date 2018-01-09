@@ -104,4 +104,3 @@ inline void CPersonnage::addPersonnage(std::string nom)
     it->second.addObserver(this);
   }
 }
-

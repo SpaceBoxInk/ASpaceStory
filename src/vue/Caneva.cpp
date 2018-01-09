@@ -43,7 +43,6 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
 
   Connect(this->GetId(), wxEVT_SIZE, wxSizeEventHandler(Canvas::onResize));
   Connect(this->GetId(), wxEVT_MOTION, wxMouseEventHandler(Canvas::onCursor));
-  this->Bind(wxEVT_RIGHT_DCLICK, &Canvas::onRight, this);
 }
 
 Canvas::~Canvas()
@@ -241,10 +240,6 @@ void Canvas::drawAll()
 
     this->display();
   }
-}
-
-void Canvas::onRight(wxMouseEvent& event)
-{
 }
 
 std::map<std::string, sf::Sprite>& Canvas::getSprites()

@@ -28,12 +28,9 @@
 #include "VEnigma.hpp"
 #include "VPlayerInventory.hpp"
 
-
-
-
 AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size,
                    int tailleTexture, MCoordonnees taille) :
-    wxFrame(NULL, wxNewId(), title, pos, size),
+    wxFrame(NULL, wxNewId(), title, pos, size, wxMAXIMIZE | wxDEFAULT_FRAME_STYLE),
 
     _canvas(
         new Canvas(
@@ -71,47 +68,38 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
   middleSizer->Add(new wxPanel(middlePanel, wxNewId(), wxPoint(-1, -1), wxSize(-1, -1)), 1,
                    wxEXPAND);
   middlePanel->SetSizer(middleSizer);
-  hbox->Add(_canvas, 10, wxEXPAND);
+  hbox->Add(_canvas, 15, wxEXPAND);
   hbox->Add(_panel2, 1, wxEXPAND);
-  cursorloc = new wxTextCtrl(
-      _panel2,
-      wxNewId(),
-      "",
-      wxPoint(-1, -1), wxSize(-1, -1),
+  cursorloc = new wxTextCtrl(_panel2, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, -1),
   wxTE_READONLY || wxTE_MULTILINE);
   dialogBox = new wxTextCtrl(dialogPanel, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, -1),
-                             wxTE_READONLY || wxTE_MULTILINE);
+  wxTE_READONLY || wxTE_MULTILINE);
   wxButton* okButton = new wxButton(dialogPanel, wxNewId(), "suivant");
-  hbox2->Add(cursorloc, 1,
-             wxEXPAND);
+  hbox2->Add(cursorloc, 2, wxEXPAND);
   hbox2->Add(middlePanel, 3, wxEXPAND);
+  hbox2->Add(dialog, 3, wxEXPAND);
+
   dialogue->Add(perso, 1, wxEXPAND);
   dialogue->Add(dialogPanel, 3, wxEXPAND);
   dialogPanel->SetSizer(dialogSizer);
   dialogSizer->Add(dialogBox, 3, wxEXPAND);
   dialogSizer->Add(okButton, 1, wxEXPAND);
   dialog->SetSizer(dialogue);
-  hbox2->Add(dialog, 3, wxEXPAND);
 //  hbox2->Add();
   _panel2->SetSizer(hbox2);
   this->SetSizer(hbox);
 //  Connect(this->GetId(), wxEVT_CHAR_HOOK, wxKeyEventHandler(AppFrame::onKey));
   this->Bind(wxEVT_CHAR_HOOK, &AppFrame::onKey, this);
   okButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AppFrame::onNext, this);
-  wxPoint coord = wxGetMousePosition();
 
-//  Connect(this->GetId(), wxEVT_MOTION, wxMouseEventHandler(AppFrame::onCursor));
-
-  std::string str;
-  str = "Coordonnees : "
-      + std::to_string(coord.x / MParameters::getNbTuileX() - MParameters::getNbTuileX() / 2)
-      + ", "
-      + std::to_string(coord.y / MParameters::getNbTuileY() - MParameters::getNbTuileY() / 2);
-
-  std::cout << str << '\n';
-
-  cursorloc->AppendText(str);
-//  cursorloc->AppendText("BONJOUR");
+  // bind for close the game :)
+  Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent)
+  {
+    // FIXME : change the exit with notifyObservers
+       setChanged();
+       notifyObservers(MUserEvents::EXIT);
+       exit(0);
+     });
 
   ////////////////////////////////////////////////////////////////////////////////
   // Probably due to some RTTI, IDE is getting confused by this dynamic call
@@ -187,7 +175,6 @@ void AppFrame::showEnigma(std::string title, std::string file, std::string textI
   VEnigma *custom = new VEnigma(title, file, textInside);
   custom->Show(true);
 }
-
 
 AppFrame::~AppFrame()
 {

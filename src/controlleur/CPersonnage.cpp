@@ -99,6 +99,11 @@ void CPersonnage::setEventMethods()
       {
         vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition());
       });
+
+  addAction(MUserEvents::EXIT, [this](Observed const&)
+  {
+    editor.saveProgram();
+  });
 }
 
 void CPersonnage::addRobot(std::string const & nom, std::string const & texture, MTuile* tuile,

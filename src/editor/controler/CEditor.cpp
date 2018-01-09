@@ -72,6 +72,11 @@ CEditor::~CEditor()
 {
 }
 
+void CEditor::saveProgram()
+{
+  save.save(ihmEditor->getEditContent());
+}
+
 void CEditor::addEvents()
 {
   // Action pour quand l'utilisateur clic sur une methode fournie
@@ -198,7 +203,7 @@ void CEditor::setProgramName(std::string programName, MRobot* robot)
 {
   luaInterpreter.setRobot(robot);
 
-  save.save(ihmEditor->getEditContent());
+  saveProgram();
 
   save.setFileName(programName);
 

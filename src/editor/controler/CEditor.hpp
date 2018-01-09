@@ -57,6 +57,8 @@ public:
   void setProgramName(std::string programName, MRobot* robot);
   void loadMethods(std::string method);
   void showEditor(bool show = true);
+
+  void saveProgram();
 private:
   void addEvents();
 

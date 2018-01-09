@@ -23,7 +23,7 @@
 //------------------------------------------------------------
 
 CJeu::CJeu() :
-    vuePrincipale(new AppFrame("A Space Story", wxPoint(0, 0), wxSize(1536, 1020), 32)),
+    vuePrincipale(new AppFrame("A Space Story", wxPoint(0, 0), wxSize(1536, 1000), 32)),
     cNiveau(vuePrincipale), cPersonnage(vuePrincipale, &cNiveau.getTerrain()), cLua(this)
 {
   cPersonnage.addPersonnage("name");

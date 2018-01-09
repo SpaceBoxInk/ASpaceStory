@@ -21,4 +21,5 @@ enum class MUserEvents
 {
   KEY_PRESSED,
   NEXT_DIALOG,
+  EXIT,
 };
