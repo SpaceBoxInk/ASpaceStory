@@ -24,7 +24,7 @@ cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png")
 
 -- enigme1 = NewEnigme("enigme1","description", cppGetResourcesPath() .. "pictures/tombe.png")
 
-cppNewEnigme("nom", "desc", cppGetResourcesPath() .. "pictures/tombe.png")
+cppNewEnigme("enigme1", "Contenu de l'enigme", cppGetResourcesPath() .. "pictures/tombe.png")
 
 --  Création des objets du niveau (positions, noms et tous les attributs)
 
@@ -47,9 +47,9 @@ end
 cppAddActionMining("piece_robot",getPiece) -- lorsque l'objet est ramassé(miné au niveau 0) la piece1 est mise dans l'inventaire du joueur par le C++
 -- création du coffre
 
-cppAddInventory(15, 7, 3, 3)
+cppAddInventory(15, 21, 3, 3)
 idIt = cppNewItem("epee", "test",  cppGetResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
-cppPutNewItemOn(15, 7)
+cppPutNewItemOn(15, 21)
 
 -- ca ca marche pas ^^
 --if nbPieceRobotGet == 3 then
@@ -71,7 +71,7 @@ actionOuvertureGrotte = function ()
     cppLoadCouche("../FichierCouche/level1.2.nvc", 1)
   end
 end
-cppAddActionDeclenchement(10, 9, 1, actionOuvertureGrotte)
+cppAddActionDeclenchement(16, 12, 1, actionOuvertureGrotte)
 
  
 -- getCoffre = function() -- on créée une fonction qui renvoie un coffre
@@ -90,9 +90,9 @@ cppAddActionDeclenchement(10, 9, 1, actionOuvertureGrotte)
   -- return getCouche(1,24,-10)
 -- end
 
---cppAddActionDeclenchement(1,24,10,function(entite)
- -- cppAfficherEnigme("nom")
---end)
+cppAddActionDeclenchement(54,25,0,function(entite)
+ cppAfficherEnigme("enigme1")
+end)
 
 -- entree_secrete = getCouche(1,-14,13)
 -- entree_secrete:setActionDeclenchement(10, 8, 0,actionOuvertureGrotte)
