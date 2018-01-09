@@ -582,6 +582,9 @@ int CLua::cppAfficherEnigme(lua_State* l)
   return 0;
 }
 
+/**
+ * cppParler(string entityName, string msg)
+ */
 int CLua::cppParler(lua_State* l)
 {
   testArgs(2);
