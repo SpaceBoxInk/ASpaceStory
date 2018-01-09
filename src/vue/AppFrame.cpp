@@ -29,6 +29,8 @@
 #include "VPlayerInventory.hpp"
 
 
+
+
 AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size,
                    int tailleTexture, MCoordonnees taille) :
     wxFrame(NULL, wxNewId(), title, pos, size),
@@ -51,7 +53,14 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
   wxBoxSizer* hbox = new wxBoxSizer(wxVERTICAL);
   wxBoxSizer* hbox2 = new wxBoxSizer(wxHORIZONTAL);
   wxPanel* middlePanel = new wxPanel(_panel2, wxNewId(), wxPoint(-1, -1));
+  wxPanel* dialog = new wxPanel(_panel2, wxNewId(), wxPoint(-1, -1));
   wxBoxSizer* middleSizer = new wxBoxSizer(wxVERTICAL);
+  wxBoxSizer* dialogue = new wxBoxSizer(wxHORIZONTAL);
+  perso = new wxImagePanelP(dialog, MParameters::getRootPath() + "/pictures/nothing.png",
+                            wxBITMAP_TYPE_PNG);
+  wxPanel* dialogPanel = new wxPanel(dialog, wxNewId(), wxPoint(-1, -1));
+  wxBoxSizer* dialogSizer = new wxBoxSizer(wxVERTICAL);
+
 //  VPlayerInventaireInterface* interF = new VPlayerInventory(taille);
 
   middleSizer->Add(new wxGauge(middlePanel, wxNewId(), 100, wxPoint(-1, -1), wxSize(-1, -1)),
@@ -61,7 +70,7 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
   middleSizer->Add(new wxPanel(middlePanel, wxNewId(), wxPoint(-1, -1), wxSize(-1, -1)), 1,
                    wxEXPAND);
   middlePanel->SetSizer(middleSizer);
-  hbox->Add(_canvas, 13, wxEXPAND);
+  hbox->Add(_canvas, 10, wxEXPAND);
   hbox->Add(_panel2, 1, wxEXPAND);
   cursorloc = new wxTextCtrl(
       _panel2,
@@ -69,17 +78,25 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
       "",
       wxPoint(-1, -1), wxSize(-1, -1),
   wxTE_READONLY || wxTE_MULTILINE);
+  dialogBox = new wxTextCtrl(dialogPanel, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, -1),
+                             wxTE_READONLY || wxTE_MULTILINE);
+  wxButton* okButton = new wxButton(dialogPanel, wxNewId(), "suivant");
   hbox2->Add(cursorloc, 1,
              wxEXPAND);
-  hbox2->Add(middlePanel, 2, wxEXPAND);
-  hbox2->Add(new wxButton(_panel2, wxID_ADD, wxT("Sert a rien"), wxPoint(-1, -1)), 1,
-             wxEXPAND);
+  hbox2->Add(middlePanel, 3, wxEXPAND);
+  dialogue->Add(perso, 1, wxEXPAND);
+  dialogue->Add(dialogPanel, 3, wxEXPAND);
+  dialogPanel->SetSizer(dialogSizer);
+  dialogSizer->Add(dialogBox, 3, wxEXPAND);
+  dialogSizer->Add(okButton, 1, wxEXPAND);
+  dialog->SetSizer(dialogue);
+  hbox2->Add(dialog, 3, wxEXPAND);
 //  hbox2->Add();
   _panel2->SetSizer(hbox2);
   this->SetSizer(hbox);
 //  Connect(this->GetId(), wxEVT_CHAR_HOOK, wxKeyEventHandler(AppFrame::onKey));
   this->Bind(wxEVT_CHAR_HOOK, &AppFrame::onKey, this);
-
+  okButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AppFrame::onNext, this);
   wxPoint coord = wxGetMousePosition();
 
 //  Connect(this->GetId(), wxEVT_MOTION, wxMouseEventHandler(AppFrame::onCursor));
@@ -176,9 +193,18 @@ AppFrame::~AppFrame()
 //  delete _canvas;
 //  delete _panel2;
 }
-void AppFrame::showDialog(std::string title, std::string file, std::string textInside)
+
+void AppFrame::onNext(wxCommandEvent& event)
 {
-  VEnigma *custom = new VEnigma(title, file, textInside);
-  custom->Show(true);
+  notifyObservers(MUserEvents::NEXT_DIALOG);
+}
+
+void AppFrame::parler(std::string entityName, std::string parole)
+{
+  perso->LoadImage(entityName);
+  perso->paintNow();
+  Refresh();
+  dialogBox->Clear();
+  dialogBox->AppendText(parole);
 }
 

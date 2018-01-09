@@ -65,15 +65,24 @@ void Canvas::onCursor(wxMouseEvent& event)
   coord.x -= 5;
   coord.y -= 30;
 
+#ifdef ASSDEBUG
   std::string str;
   double tailleTextX = (this->wxSfmlCanvas::getSize().x);
   double tailleTextY = (this->wxSfmlCanvas::getSize().y);
 //  / MParameters::getNbTuileY();
+  int coordX = (int)(coord.x / tailleTextX * MParameters::getNbTuileX());
+  int coordY = (int)floor(
+  (coord.y / tailleTextY * MParameters::getNbTuileY()));
+#else
+  std::string str;
+  double tailleTextX = (this->wxSfmlCanvas::getSize().x);
+  double tailleTextY = (this->wxSfmlCanvas::getSize().y);
+  //  / MParameters::getNbTuileY();
   int coordX = (int)(coord.x / tailleTextX * MParameters::getNbTuileX())
       - (MParameters::getNbTuileX() / 2);
   int coordY = (int)floor(
       (coord.y / tailleTextY * MParameters::getNbTuileY()) - MParameters::getNbTuileY() / 2);
-
+#endif
   str = "Coordonnees : "
       + std::to_string(coordX)
       + ", "
@@ -82,6 +91,7 @@ void Canvas::onCursor(wxMouseEvent& event)
   dynamic_cast<AppFrame*>(GetParent())->cursorloc->AppendText(str);
 //  dynamic_cast<AppFrame*>(GetParent())->cursorloc->AppendText(
 //      "Coord sourie:" + std::to_string(coord.x) + "," + std::to_string(coord.y));
+
 }
 
 void Canvas::onResize(wxSizeEvent& event)
@@ -235,9 +245,6 @@ void Canvas::drawAll()
 
 void Canvas::onRight(wxMouseEvent& event)
 {
-  dynamic_cast<AppFrame*>(GetParent())->showDialog("bonjour", "joseph-staline.png",
-                                                   "je t'envoie au goulag");
-
 }
 
 std::map<std::string, sf::Sprite>& Canvas::getSprites()

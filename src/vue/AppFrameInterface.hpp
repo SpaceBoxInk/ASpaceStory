@@ -41,7 +41,7 @@ public:
   virtual void addEntite(std::string entityName, std::string file) = 0;
   virtual void move(std::string entityName, MCoordonnees const& offset) = 0;
   virtual void setPositionOf(std::string entityName, MCoordonnees const& position) = 0;
-//  virtual void parler(std::string entityName, std::string parole) = 0;
+  virtual void parler(std::string entityName, std::string parole) = 0;
 //  virtual void penser(std::string entityName, std::string parole) = 0;
   /**
    * fait parler une entité et propose des réponses à l'utilisateur

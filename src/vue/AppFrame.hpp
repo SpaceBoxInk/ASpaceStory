@@ -7,6 +7,7 @@
 
 #pragma once
 #include "AppFrameInterface.hpp"
+#include "ImagePanelP.hpp"
 #include "Caneva.hpp"
 
 
@@ -37,16 +38,19 @@ private:
   void onKey(wxKeyEvent& event);
   void onCursor(wxMouseEvent& event);
   void onResize(wxSizeEvent& event);
+  void onNext(wxCommandEvent& event);
 public:
   void showEnigma(std::string title, std::string file, std::string textInside);
-  void showDialog(std::string title, std::string file, std::string textInside);
   wxPanel* getPanel();
+  void parler(std::string entityName, std::string parole);
 private:
   Canvas* _canvas;
   wxPanel* _panel2;
   MCoordonnees tailleInventory;
 public:
   wxTextCtrl* cursorloc;
+  wxTextCtrl* dialogBox;
+  wxImagePanelP* perso;
 };
 
 //inline wxPanel* AppFrame::getPanel()
