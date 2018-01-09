@@ -41,31 +41,20 @@ public:
   virtual void addEntite(std::string entityName, std::string file) = 0;
   virtual void move(std::string entityName, MCoordonnees const& offset) = 0;
   virtual void setPositionOf(std::string entityName, MCoordonnees const& position) = 0;
-//  virtual void parler(std::string entityName, std::string parole) = 0;
-//  virtual void penser(std::string entityName, std::string parole) = 0;
+//  virtual void parler(std::string entityTexture, std::string parole) = 0;
+//  virtual void penser(std::string entityTexture, std::string parole) = 0;
   /**
    * fait parler une entité et propose des réponses à l'utilisateur
    * @param parole ce que dis l'entité
    * @param choix variable, l'utilisateur peux choisir un des choix
    * @return le @param choix de l'utilisateur
    */
-//  virtual std::string discuter(std::string entityName, std::string parole, std::string choix...) =0;
+//  virtual std::string discuter(std::string entityTexture, std::string parole, std::string choix...) =0;
   /**
    *
    * @param entityName l'entité qu'il faut faire taire
    */
-//  virtual void arreterBulle(std::string entityName) = 0;
-
-  /**
-   * affiche une enigme avec une image et une description
-   * un bouton ok et indice(optionnel) est recommendé
-   *
-   * @param image chemin vers l'image
-   * @param description texte
-   */
-//  virtual void afficherEnigme(std::string image, std::string description, bool indice = false) = 0;
-//  virtual void afficherInventaire() = 0;
-//  virtual void afficherEditeur() = 0;
+//  virtual void arreterBulle(std::string entityTexture) = 0;
 private:
 
 //=====================>Getters&Setters<======================

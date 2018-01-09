@@ -111,6 +111,7 @@ private:
   static int cppNewEnigme(lua_State* l);
   static int cppAfficherEnigme(lua_State* l);
 
+  static int cppParler(lua_State* l);
 
 
 //==================Register functions========================

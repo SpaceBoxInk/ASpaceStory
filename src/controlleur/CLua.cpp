@@ -582,6 +582,16 @@ int CLua::cppAfficherEnigme(lua_State* l)
   return 0;
 }
 
+int CLua::cppParler(lua_State* l)
+{
+  testArgs(2);
+  std::string entiteName;
+  MEntite* entite = getEntite(entiteName, 1);
+  std::string msg = lua_tostring(l, 1);
+//  cJeu->vuePrincipale->parler(entite->getTexture(), msg);
+  return 0;
+}
+
 void CLua::registerBaseFunctions()
 {
   lua_register(lua, "cppSetScriptPath", cppSetScriptPath);
@@ -610,6 +620,8 @@ void CLua::registerEntiteFunctions()
   lua_register(lua, "cppSetTexture", cppSetTexture);
   lua_register(lua, "cppGetCurrentPerso", cppGetCurrentPerso);
   lua_register(lua, "cppAddActionDefense", cppAddActionDefense);
+
+  lua_register(lua, "cppParler", cppParler);
 }
 
 void CLua::registerItemFunctions()
