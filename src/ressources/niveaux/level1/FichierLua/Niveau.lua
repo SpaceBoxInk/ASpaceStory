@@ -13,7 +13,7 @@ print("Est ce que je peux bouger...")
 print("Il faut que j'essaye...")
 print("Avec " .. cppGetKeyFor("upKey") .. " je devrais pouvoir avancer")
 print("Et avec " .. cppGetKeyFor("downKey") .. " reculer")
-print("Et puis aller à gauche et droite avec " .. cppGetKeyFor("leftKey") .. " et " .. cppGetKeyFor("rightKey"))
+print("Et puis aller à gauche ou droite avec " .. cppGetKeyFor("leftKey") .. " ou " .. cppGetKeyFor("rightKey"))
 
 -- Création niveau 1
 --Initialisation de la position
@@ -73,7 +73,7 @@ actionOuvertureGrotte = function ()
 end
 cppAddActionDeclenchement(16, 12, 1, actionOuvertureGrotte)
 
- 
+
 -- getCoffre = function() -- on créée une fonction qui renvoie un coffre
  -- return Objet.getCouche(1,-15,-7)
 -- end
@@ -102,5 +102,3 @@ end)
 
 
 -- GESTION DES CONDITIONS DANS LE NIVEAU
-
-
