@@ -35,15 +35,18 @@ private:
   void onFocus(wxFocusEvent& event);
 
   void onKey(wxKeyEvent& event);
-
+  void onCursor(wxMouseEvent& event);
   void onResize(wxSizeEvent& event);
-
+public:
   void showEnigma(std::string title, std::string file, std::string textInside);
   void showDialog(std::string title, std::string file, std::string textInside);
   wxPanel* getPanel();
+private:
   Canvas* _canvas;
   wxPanel* _panel2;
   MCoordonnees tailleInventory;
+public:
+  wxTextCtrl* cursorloc;
 };
 
 //inline wxPanel* AppFrame::getPanel()

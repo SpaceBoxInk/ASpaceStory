@@ -7,7 +7,7 @@
 
 #include "AppFrame.hpp"
 
-#include <button.h>
+#include <wx/gtk/button.h>
 #include <wx/chartype.h>
 #include <wx/defs.h>
 #include <wx/event.h>
@@ -31,7 +31,7 @@
 
 AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & size,
                    int tailleTexture, MCoordonnees taille) :
-    wxFrame(NULL, wxID_ANY, title, pos, size),
+    wxFrame(NULL, wxNewId(), title, pos, size),
 
     _canvas(
         new Canvas(
@@ -61,11 +61,17 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
   middleSizer->Add(new wxPanel(middlePanel, wxNewId(), wxPoint(-1, -1), wxSize(-1, -1)), 1,
                    wxEXPAND);
   middlePanel->SetSizer(middleSizer);
-  hbox->Add(_canvas, 9, wxEXPAND);
+  hbox->Add(_canvas, 13, wxEXPAND);
   hbox->Add(_panel2, 1, wxEXPAND);
-  hbox2->Add(new wxButton(_panel2, wxID_ADD, wxT("Sert a rien"), wxPoint(-1, -1)), 1,
+  cursorloc = new wxTextCtrl(
+      _panel2,
+      wxNewId(),
+      "",
+      wxPoint(-1, -1), wxSize(-1, -1),
+  wxTE_READONLY || wxTE_MULTILINE);
+  hbox2->Add(cursorloc, 1,
              wxEXPAND);
-  hbox2->Add(middlePanel, 1, wxEXPAND);
+  hbox2->Add(middlePanel, 2, wxEXPAND);
   hbox2->Add(new wxButton(_panel2, wxID_ADD, wxT("Sert a rien"), wxPoint(-1, -1)), 1,
              wxEXPAND);
 //  hbox2->Add();
@@ -73,6 +79,21 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
   this->SetSizer(hbox);
 //  Connect(this->GetId(), wxEVT_CHAR_HOOK, wxKeyEventHandler(AppFrame::onKey));
   this->Bind(wxEVT_CHAR_HOOK, &AppFrame::onKey, this);
+
+  wxPoint coord = wxGetMousePosition();
+
+//  Connect(this->GetId(), wxEVT_MOTION, wxMouseEventHandler(AppFrame::onCursor));
+
+  std::string str;
+  str = "Coordonnees : "
+      + std::to_string(coord.x / MParameters::getNbTuileX() - MParameters::getNbTuileX() / 2)
+      + ", "
+      + std::to_string(coord.y / MParameters::getNbTuileY() - MParameters::getNbTuileY() / 2);
+
+  std::cout << str << '\n';
+
+  cursorloc->AppendText(str);
+//  cursorloc->AppendText("BONJOUR");
 
   ////////////////////////////////////////////////////////////////////////////////
   // Probably due to some RTTI, IDE is getting confused by this dynamic call
@@ -160,3 +181,4 @@ void AppFrame::showDialog(std::string title, std::string file, std::string textI
   VEnigma *custom = new VEnigma(title, file, textInside);
   custom->Show(true);
 }
+

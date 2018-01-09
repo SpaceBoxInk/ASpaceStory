@@ -57,6 +57,7 @@ private:
 
   void onResize(wxSizeEvent& event);
   void onRight(wxMouseEvent& event);
+  void onCursor(wxMouseEvent& event);
   //=====================>Getters&Setters<======================
 public:
 private:
