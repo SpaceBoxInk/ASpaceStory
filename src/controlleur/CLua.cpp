@@ -173,18 +173,17 @@ int CLua::cppAddActionDeclenchement(lua_State* l)
       throw MAssException("Couche " + to_string(typeCouche) + " inexistante");
     }
 
-    couche->setActionDeclenchement(
-        [curIndex, l](std::string entite)
+    couche->setActionDeclenchement([curIndex, l](std::string entite)
+    {
+      // get function previously stored in special lua table registry
+        lua_rawgeti(l, LUA_REGISTRYINDEX, curIndex);
+        if (lua_isfunction(l, -1))
         {
-          // get function previously stored in special lua table registry
-          lua_rawgeti(l, LUA_REGISTRYINDEX, curIndex);
-          if (lua_isfunction(l, -1))
-          {
-            push(entite.c_str());
-            // call function defined by lua
-            lua_call(l, 1, 0);
-          }
-        });
+          push(entite.c_str());
+          // call function defined by lua
+          lua_call(l, 1, 0);
+        }
+      });
 
   }
   return 0;
@@ -423,7 +422,7 @@ int CLua::cppNewItem(lua_State* l)
     equipement = (MTypeEquipement)lua_tointeger(l, 3);
     break;
   case 3:
-      // default min parameters
+    // default min parameters
     break;
   default:
     throw MExceptionLuaArguments("Nombre d'argument pour création d'item invalid ! ",
@@ -665,6 +664,21 @@ void CLua::executeScript(std::string script)
   }
 }
 
+void CLua::executeMain()
+try
+{
+  lua_getglobal(lua, "main");
+  lua_call(lua, 0, 0);
+}
+catch (...)
+{
+  lua_Debug ar;
+  lua_getstack(lua, 0, &ar);
+  lua_getinfo(lua, "nfSl", &ar);
+  std::cerr << "Error in " << ar.namewhat << " : " << ar.name << '\n';
+  throw;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //-/////////////////////////Lua/ASS function Helpers/////////////////////////-//
 ////////////////////////////////////////////////////////////////////////////////
@@ -772,8 +786,7 @@ void CLua::testArgs(int nbExpectedMin, int nbExpectedMax)
       lua_getinfo(lua, "nf", &ar);
       throw MExceptionLuaArguments(
           "Expect between " + std::to_string(nbExpectedMin) + " arguments and "
-              + std::to_string(nbExpectedMax) + " for "
-              + std::string(ar.name),
+              + std::to_string(nbExpectedMax) + " for " + std::string(ar.name),
           nb);
     }
   }
@@ -790,7 +803,6 @@ void CLua::testArgs(int nbExpectedMin)
   testArgs(nbExpectedMin, nbExpectedMin);
 }
 
-
 std::string CLua::getCurFunction()
 {
   lua_Debug ar;
@@ -798,6 +810,7 @@ std::string CLua::getCurFunction()
   lua_getinfo(lua, "nf", &ar);
   return ar.name;
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 
 //------------------------------------------------------------

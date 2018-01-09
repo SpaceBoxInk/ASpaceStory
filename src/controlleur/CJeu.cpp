@@ -11,8 +11,14 @@
 
 #include "CJeu.hpp"
 
-#include "../model/MCoordonnees.hpp"
+#include "../model/MAssException.hpp"
+#include "../model/MEvents.hpp"
 #include "../model/MPersonnage.hpp"
+#include "../model/MTuile.hpp"
+#include "../outils/ObserverPattern/Observer.hpp"
+#include "../vue/AppFrame.hpp"
+
+#include <iostream>
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -26,6 +32,7 @@ CJeu::CJeu() :
     vuePrincipale(new AppFrame("A Space Story", wxPoint(0, 0), wxSize(1536, 1020), 32)),
     cNiveau(vuePrincipale), cPersonnage(vuePrincipale, &cNiveau.getTerrain()), cLua(this)
 {
+
   cPersonnage.addPersonnage("joueur 1");
   cPersonnage.setPersonnage("joueur 1");
   try
@@ -37,12 +44,17 @@ CJeu::CJeu() :
     std::cout << e.what() << '\n';
     throw;
   }
+
   // TODO : to change (lua)
   vuePrincipale->addEntite(cPersonnage.getCurrentPerso()->getNom(),
                            cPersonnage.getCurrentPerso()->getTexture());
   vuePrincipale->setPositionOf(cPersonnage.getCurrentPerso()->getNom(),
                                cPersonnage.getCurrentPerso()->getTuile()->getPosition());
   dynamic_cast<AppFrame*>(vuePrincipale)->Show();
+
+  thread = std::async(std::launch::async, [this]
+  { cLua.executeMain();});
+
 }
 
 CJeu::~CJeu()
@@ -70,6 +82,7 @@ MPersonnage* CJeu::getPersonnage(std::string name)
 {
   return cPersonnage.getPersonnage(name);
 }
+
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------

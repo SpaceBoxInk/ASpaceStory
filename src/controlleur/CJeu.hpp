@@ -15,7 +15,8 @@
 #include "CNiveau.hpp"
 #include "CPersonnage.hpp"
 
-#include "../vue/AppFrame.hpp"
+#include <future>
+#include <string>
 
 /**
  * Controller for controllers
@@ -29,6 +30,8 @@ private:
   CNiveau cNiveau;
   CPersonnage cPersonnage;
   CLua cLua;
+
+  std::future<void> thread;
 //=======================>Constructors<=======================
 public:
   CJeu();
@@ -42,7 +45,6 @@ public:
   MEntite* getEntite(std::string name);
   MPersonnage* getPersonnage(std::string name);
 private:
-
 //=====================>Getters&Setters<======================
 public:
 

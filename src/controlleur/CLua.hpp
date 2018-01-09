@@ -71,6 +71,7 @@ private:
 //=========================>Methods<==========================
 public:
   void executeScript(std::string script);
+  void executeMain();
 
 private:
   static int cppLoadCouche(lua_State* l);
