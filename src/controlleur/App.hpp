@@ -11,6 +11,8 @@
  */
 struct App : public wxApp
 {
+  App();
+
   bool OnInit() override;
 };
 
