@@ -8,12 +8,23 @@ local Objet = require("Objet")
 cppLoadCouche("../FichierCouche/level1.1.nbg", 0)
 cppLoadCouche("../FichierCouche/level1.1.nvc", 1)
 
+local socket = require("socket")
+
+function sleep(sec)
+    socket.sleep(sec)
+end
+
 -- recupere la clé d'une action :
-print("Est ce que je peux bouger...")
-print("Il faut que j'essaye...")
-print("Avec " .. cppGetKeyFor("upKey") .. " je devrais pouvoir avancer")
-print("Et avec " .. cppGetKeyFor("downKey") .. " reculer")
-print("Et puis aller à gauche et droite avec " .. cppGetKeyFor("leftKey") .. " et " .. cppGetKeyFor("rightKey"))
+main = function()
+  sleep(0.5)
+  cppParler("Qu'est ce que je fais là... ?")
+  cppParler("Est ce que je peux bouger... ?")
+  cppParler("Il faut que j'essaye...")
+  cppParler("Avec " .. cppGetKeyFor("upKey") .. " je devrais pouvoir avancer")
+  cppParler("Et avec " .. cppGetKeyFor("downKey") .. " reculer")
+  cppParler("Et puis aller à gauche et droite avec " .. cppGetKeyFor("leftKey") .. " et " .. cppGetKeyFor("rightKey"))
+end
+
 
 -- Création niveau 1
 --Initialisation de la position
@@ -26,10 +37,6 @@ cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png")
 
 cppNewEnigme("enigme1", "Contenu de l'enigme", cppGetResourcesPath() .. "pictures/tombe.png")
 
---  Création des objets du niveau (positions, noms et tous les attributs)
-
--- /!\ Modifier comportements des entites
-
 local nbPieceRobotGet = 0
 
 getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie la piece robot
@@ -37,7 +44,7 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
 
   if nbPieceRobotGet == 3 then
     cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", x, y, 0.4)
-    -- dire("Oh il se met à bouger !")
+    cppParler("Oh il se met à bouger !")
     -- sendMessageToUser("Le robot semble content de vous rencontrer, mais il ne se souvient plus de son nom, comment s'appelle-il ?")
     -- sendMessageToUser("Vous possédez désormais utilser la tablette de Programmation, elle vous permettra de communiquer avec le robot comme bon vous semble ! (comme pour passer dans des passaes étroits par exemple...")
   end
@@ -51,28 +58,29 @@ cppAddInventory(15, 21, 3, 3)
 idIt = cppNewItem("epee", "test",  cppGetResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
 cppPutNewItemOn(15, 21)
 
--- ca ca marche pas ^^
---if nbPieceRobotGet == 3 then
---
---  actionOuvertureGrotte = function ()
---    -- charge le fond
---    cppLoadCouche("../FichierCouche/level1.2.nbg", 0)
---    cppLoadCouche("../FichierCouche/level1.2.nvc", 1)
---  end
---
---  cppAddActionDeclenchement(10, 9, 1, actionOuvertureGrotte)
---end
 
--- ce serait plus comme ca :P
 actionOuvertureGrotte = function ()
   if nbPieceRobotGet == 3 then
     -- charge le fond
+    cppParler("Quelle est donc cette sorcelerie !")
     cppLoadCouche("../FichierCouche/level1.2.nbg", 0)
     cppLoadCouche("../FichierCouche/level1.2.nvc", 1)
   end
 end
-cppAddActionDeclenchement(16, 12, 1, actionOuvertureGrotte)
 
+parlerCoffre = function ()
+  cppParler("On dirait bien que j'ai accompli tout ce que j'avais à faire ici...")
+end
+
+cppAddActionDeclenchement(16, 12, 1, actionOuvertureGrotte)
+cppAddActionDeclenchement(15, 21, 1, parlerCoffre)
+
+cppAddActionDeclenchement(54,25,0,function(entite)
+ cppAfficherEnigme("enigme1")
+ cppParler("Oh non une enigme !")
+ sleep(1)
+ cppParler("Elle n'a pas l'air évidente...")
+end)
  
 -- getCoffre = function() -- on créée une fonction qui renvoie un coffre
  -- return Objet.getCouche(1,-15,-7)
@@ -90,9 +98,7 @@ cppAddActionDeclenchement(16, 12, 1, actionOuvertureGrotte)
   -- return getCouche(1,24,-10)
 -- end
 
-cppAddActionDeclenchement(54,25,0,function(entite)
- cppAfficherEnigme("enigme1")
-end)
+
 
 -- entree_secrete = getCouche(1,-14,13)
 -- entree_secrete:setActionDeclenchement(10, 8, 0,actionOuvertureGrotte)
