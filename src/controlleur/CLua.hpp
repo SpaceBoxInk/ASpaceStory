@@ -73,40 +73,41 @@ public:
   void executeScript(std::string script);
 
 private:
-  static int loadCouche(lua_State* l);
-  static int setScriptPath(lua_State* l);
-  static int getScriptPath(lua_State* l);
-  static int getResourcesPath(lua_State* l);
+  static int cppLoadCouche(lua_State* l);
+  static int cppSetScriptPath(lua_State* l);
+  static int cppGetScriptPath(lua_State* l);
+  static int cppGetResourcesPath(lua_State* l);
   static int loadfile(lua_State* l);
 
-  static int addActionDeclenchement(lua_State* l);
-  static int addActionPassage(lua_State* l);
+  static int cppAddActionDeclenchement(lua_State* l);
+  static int cppAddActionPassage(lua_State* l);
 
-  static int addActionMining(lua_State* l);
+  static int cppAddActionMining(lua_State* l);
 
-  static int newEntity(lua_State* l);
-  static int addActionDefense(lua_State* l);
+  static int cppNewEntity(lua_State* l);
+  static int cppAddActionDefense(lua_State* l);
 
-  static MEntite* getEntite(std::string& entiteName, int nbArgsNoEntity);
-  static int setPosition(lua_State* l);
-  static int setTaille(lua_State* l);
-  static int setTexture(lua_State* l);
+  static int cppSetPosition(lua_State* l);
+  static int cppSetTaille(lua_State* l);
+  static int cppSetTexture(lua_State* l);
 
-  static int getCurrentPerso(lua_State* l);
+  static int cppGetCurrentPerso(lua_State* l);
 
-  static int newRobot(lua_State* l);
+  static int cppNewRobot(lua_State* l);
 
-  //==================Register functions========================
-  static int newItem(lua_State* l);
+  static int cppNewItem(lua_State* l);
 
-  static int giveNewItemToPerso(lua_State* l);
-  static int giveNewItemToEntity(lua_State* l);
-  static int putNewItemOn(lua_State* l);
+  static int cppGiveNewItemToPerso(lua_State* l);
+  static int cppGiveNewItemToEntity(lua_State* l);
+  static int cppPutNewItemOn(lua_State* l);
 
-  static int addActionUtilisation(lua_State* l);
+  static int cppAddInventory(lua_State* l);
+  static int cppShowInventory(lua_State* l);
 
-  static int newEnigme(lua_State* l);
-  static int afficherEnigme(lua_State* l);
+  static int cppAddActionUtilisation(lua_State* l);
+
+  static int cppNewEnigme(lua_State* l);
+  static int cppAfficherEnigme(lua_State* l);
 
 
 
@@ -119,6 +120,7 @@ private:
 //======================Lua/ASS function helper===================
   static MTuile* getTuile(int index);
   static MItem* getItem();
+  static MEntite* getEntite(std::string& entiteName, int nbArgsNoEntity);
 //======================Lua function helper===================
   static void push(lua_Number n);
   static void push(lua_Integer n);
@@ -206,3 +208,6 @@ T CLua::getTableData(lua_State* l, char const* key, int paramNb)
     return 0;
   }
 }
+/** @example niv1.lua
+ * an example to use lua function from CLua class
+ */

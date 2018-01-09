@@ -12,13 +12,12 @@
 #include "../model/MCoordonnees.hpp"
 #include "../model/MEvents.hpp"
 #include "../model/MParameters.hpp"
+#include "../model/MPartieCouche.hpp"
 #include "../model/MRobot.hpp"
 #include "../model/MTerrain.hpp"
 #include "../model/MTuile.hpp"
 #include "../outils/ObserverPattern/Observer.hpp"
 #include "../vue/AppFrameInterface.hpp"
-
-#include <utility>
 
 class MParameters;
 
@@ -50,7 +49,8 @@ void CPersonnage::setEventMethods()
 
   // action when keyboard input
   addAction<MUserEvents, char>(
-      MUserEvents::KEY_PRESSED, [this](char const& inputChar, Observed const&)
+      MUserEvents::KEY_PRESSED,
+      [this](char const& inputChar, Observed const&)
       {
         if (inputChar == '!')
         {
@@ -71,13 +71,21 @@ void CPersonnage::setEventMethods()
             currentPerso->interagirEntite(*terrain);
             break;
             case MActionsKey::MINE:
-            currentPerso->mine(*terrain);
+            currentPerso->mine(*terrain); // FIXME move in model (notify)*//
+
+            vuePrincipale->loadFileIntoGround(&terrain->getImagesList(MTypeCouche::ELEMENT)[0], MParameters::getTextureFor(MTypeCouche::ELEMENT),
+                MTypeCouche::ELEMENT, MParameters::getTailleTuile());
             break;
-            case MActionsKey::ATTACK:
             currentPerso->attaquer(*terrain);
             break;
             case MActionsKey::USE_MAIN_OBJECT:
             currentPerso->utiliserObjet();
+            break;
+            case MActionsKey::OPEN_EDITOR:
+            editor.showEditor();
+            break;
+            case MActionsKey::OPEN_INVENTORY:
+
             break;
             default:
             break;
@@ -102,7 +110,7 @@ void CPersonnage::addRobot(std::string const & nom, std::string const & texture,
     currentPerso->getRobot(nom).addObserver(this);
 
     currentPerso->getRobot(nom).setActionInteraction(
-        [&](MEntite const& entite)
+        [&, nom](MEntite const& entite)
         {
           editor.setProgramName(currentPerso->getNom() + "-" + nom + ".lua", &currentPerso->getRobot(nom));
           editor.showEditor();

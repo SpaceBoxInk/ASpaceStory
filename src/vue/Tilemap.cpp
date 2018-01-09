@@ -20,7 +20,7 @@ public:
 
     // on redimensionne le tableau de vertex pour qu'il puisse contenir tout le niveau
     m_vertices.setPrimitiveType(sf::Quads);
-    m_vertices.resize(width * height * 4);
+    m_vertices.resize(width * height * 4 + 8);
 
     // on remplit le tableau de vertex, avec un quad par tuile
     for (unsigned int i = 0; i < width; ++i)

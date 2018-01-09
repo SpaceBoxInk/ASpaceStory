@@ -131,7 +131,7 @@ void Editor::OnQuit(wxCommandEvent & WXUNUSED(event))
 {
   setChanged();
   notifyObservers(Event::SAVE_AND_CLOSE_EDITOR, getEditContent());
-  Close(true);
+  Show(false);
 }
 
 /**

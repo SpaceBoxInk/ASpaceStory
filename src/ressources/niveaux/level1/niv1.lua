@@ -1,42 +1,42 @@
 
 loadfile("testLoad.lua")();
 
-addActionMining("montagne", function(entite, item)
+cppAddActionMining("montagne", function(entite, item)
   print(entite.." mine montagne avec "..item)
-  local id = newItem("Montagne", "Ceci est gros", getResourcesPath() .. "pictures/epee_niv1.png")
+  local id = cppNewItem("Montagne", "Ceci est gros", cppGetResourcesPath() .. "pictures/epee_niv1.png")
   return id
 end)
 
-setTaille(0.9);
-setPosition(2, 2);
-setTexture(getResourcesPath() .. "sprites/perso_face_32.png");
+cppSetTaille(0.9);
+cppSetPosition(5, 2);
+cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png");
 
-newEntity("test", getResourcesPath() .. "sprites/texture3.png", 2, 1, 0.9)
-newRobot("robot1", getResourcesPath() .. "sprites/robot_face_32.png", 3, 2, 0.4)
-idIt = newItem("jean", "leak skvsf",  getResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
+cppAddInventory(2, 1, 10, 10)
 
-addActionUtilisation(function(entite)
+cppNewEntity("test", cppGetResourcesPath() .. "sprites/texture3.png", 2, 1, 0.9)
+cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", 3, 2, 0.4)
+idIt = cppNewItem("jean", "leak skvsf",  cppGetResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
+
+cppAddActionUtilisation(function(entite)
 	print("utilise jean")
 end)
 
-giveNewItemToPerso()
+cppPutNewItemOn(2, 1)
 
-newEnigme("nom", "desc", getResourcesPath() .. "pictures/tombe.png")
+cppNewEnigme("nom", "desc", cppGetResourcesPath() .. "pictures/tombe.png")
 
-afficherEnigme("nom")
 
-addActionDefense("test", function(entiteAtt, degat)
+cppAddActionDefense("test", function(entiteAtt, degat)
 	print("arg")
 end)
 
-addActionDeclenchement(10, 8, 0, function(entite)
-  loadCouche("level1.2.nbg", 0)
-  loadCouche("level1.2.nvc", 1)
+cppAddActionDeclenchement(10, 8, 0, function(entite)
+  cppLoadCouche("level1.2.nbg", 0)
+  cppLoadCouche("level1.2.nvc", 1)
 end);
 
-addActionPassage(1, 1, 0, function(entite)
-  loadCouche("level1.2.nbg", 0)
-  loadCouche("level1.2.nvc", 1)
+cppAddActionPassage(1, 1, 0, function(entite)
+  cppAfficherEnigme("nom")
 end);
 
 print("done")

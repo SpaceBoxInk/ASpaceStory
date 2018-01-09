@@ -25,7 +25,7 @@ public:
   void addObjInv(unsigned long long id, std::string name, std::string description,
                  std::string image, int position = -1) override;
   void delObjInv(unsigned long long id) override;
-  void show(bool show) override;
+  void show(bool show = true) override;
 private:
 
 //=========================>Methods<==========================

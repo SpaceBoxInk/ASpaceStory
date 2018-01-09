@@ -11,11 +11,12 @@
 #include "MPartieCoucheElement.hpp"
 #include "MTerrain.hpp"
 
-#include <unordered_map>
+#include "../vue/VInventory.hpp"
+
 #include <algorithm>
+#include <string>
 #include <unordered_map>
 #include <utility>
-#include <vector>
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -49,7 +50,10 @@ MTuile::~MTuile()
 {
   for (unsigned int i = 0; i < couches.size(); ++i)
   {
-    deletePartieCouche((MTypeCouche)i);
+    if (couches[i])
+    {
+      delete couches[i];
+    }
   }
 }
 
@@ -131,6 +135,39 @@ void MTuile::interagirTuile(MEntite* entite)
       getPartieCouche((MTypeCouche)i)->declenchementDe(entite);
     }
   }
+
+  // ouverture inventaire
+  if (vItems)
+  {
+    vItems->show();
+  }
+}
+
+void MTuile::addItem(MItem* item)
+{
+  this->items.push_back(item);
+  if (vItems)
+  {
+    vItems->addObjInv(item->getId(), item->getNom(), item->getDescription(),
+                      item->getTexture());
+  }
+}
+
+void MTuile::addInventaire(MCoordonnees taille)
+{
+  if (!vItems)
+  {
+    std::string name = "Objet ";
+    name += (
+        hasPartieCouche(MTypeCouche::ELEMENT) ?
+            "dans " + getPartieCouche(MTypeCouche::ELEMENT)->getName() :
+            "sur " + getPartieCouche(MTypeCouche::SOL)->getName());
+    vItems = new VInventory(name, taille);
+  }
+  else
+  {
+    throw MAssException("Already has an inventory on " + getPosition().str());
+  }
 }
 
 float MTuile::getPlaceDispoOn(MTypeCouche const & typeCouche) const
@@ -142,11 +179,6 @@ float MTuile::getPlaceDispoOn(MTypeCouche const & typeCouche) const
   return MPartieCouche::PLACE_MAX;
 }
 
-void MTuile::addItem(MItem* item)
-{
-  this->items.push_back(item);
-}
-
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================
 //------------------------------------------------------------
@@ -155,7 +187,15 @@ void MTuile::deletePartieCouche(MTypeCouche typeCouche)
   if (couches[(int)typeCouche])
   {
     auto vide = MTerrain::getTypeList(typeCouche)[0];
-    *couches[(int)typeCouche] = *vide;
+    if (typeCouche == MTypeCouche::ELEMENT)
+    {
+      *dynamic_cast<MPartieCoucheElement*>(couches[(int)typeCouche]) =
+          *dynamic_cast<MPartieCoucheElement*>(vide);
+    }
+    else
+    {
+      *couches[(int)typeCouche] = *vide;
+    }
   }
 }
 
@@ -172,6 +212,11 @@ void MTuile::mine(MEntite* entite, int item)
     elem->mine(entite, item);
     deletePartieCouche(MTypeCouche::ELEMENT);
   }
+}
+
+bool MTuile::hasPartieCouche(MTypeCouche type) const
+{
+  return getPartieCouche(type) && !getPartieCouche(type)->isNull();
 }
 
 /**
@@ -198,3 +243,7 @@ void MTuile::setPartieCouche(MPartieCouche const& couche)
   }
 }
 
+VInventaireInterface* MTuile::getInventaire()
+{
+  return vItems;
+}
