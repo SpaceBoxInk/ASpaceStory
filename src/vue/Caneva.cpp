@@ -13,9 +13,12 @@
 #include <iostream>
 #include <utility>
 #include "VInventory.hpp"
+#include <string.h>
 
+#include "../model/MParameters.hpp"
 #include "../model/MCoordonnees.hpp"
 #include "VEnigma.hpp"
+#include "AppFrame.hpp"
 
 Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, long style,
                int tailleTexture) :
@@ -39,7 +42,8 @@ Canvas::Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, l
 //  this->addEntite("24", "241890516020212.png");
 
   Connect(this->GetId(), wxEVT_SIZE, wxSizeEventHandler(Canvas::onResize));
-  Connect(this->GetId(), wxEVT_RIGHT_DCLICK, wxMouseEventHandler(Canvas::onRight));
+  Connect(this->GetId(), wxEVT_MOTION, wxMouseEventHandler(Canvas::onCursor));
+  this->Bind(wxEVT_RIGHT_DCLICK, &Canvas::onRight, this);
 }
 
 Canvas::~Canvas()
@@ -55,6 +59,41 @@ void Canvas::onUpdate()
   this->drawAll();
 }
 
+void Canvas::onCursor(wxMouseEvent& event)
+{
+  wxPoint coord = wxGetMousePosition();
+  coord.x -= 5;
+  coord.y -= 30;
+
+#ifdef ASSDEBUG
+  std::string str;
+  double tailleTextX = (this->wxSfmlCanvas::getSize().x);
+  double tailleTextY = (this->wxSfmlCanvas::getSize().y);
+//  / MParameters::getNbTuileY();
+  int coordX = (int)(coord.x / tailleTextX * MParameters::getNbTuileX());
+  int coordY = (int)floor(
+  (coord.y / tailleTextY * MParameters::getNbTuileY()));
+#else
+  std::string str;
+  double tailleTextX = (this->wxSfmlCanvas::getSize().x);
+  double tailleTextY = (this->wxSfmlCanvas::getSize().y);
+  //  / MParameters::getNbTuileY();
+  int coordX = (int)(coord.x / tailleTextX * MParameters::getNbTuileX())
+      - (MParameters::getNbTuileX() / 2);
+  int coordY = (int)floor(
+      (coord.y / tailleTextY * MParameters::getNbTuileY()) - MParameters::getNbTuileY() / 2);
+#endif
+  str = "Coordonnees : "
+      + std::to_string(coordX)
+      + ", "
+      + std::to_string(-coordY);
+  dynamic_cast<AppFrame*>(GetParent())->cursorloc->Clear();
+  dynamic_cast<AppFrame*>(GetParent())->cursorloc->AppendText(str);
+//  dynamic_cast<AppFrame*>(GetParent())->cursorloc->AppendText(
+//      "Coord sourie:" + std::to_string(coord.x) + "," + std::to_string(coord.y));
+
+}
+
 void Canvas::onResize(wxSizeEvent& event)
 {
 //  auto size = event.GetSize();
@@ -62,7 +101,7 @@ void Canvas::onResize(wxSizeEvent& event)
 //  auto newCanvasWidth = size.x - (2 * kCanvasMargin);
 //  auto newCanvasHeight = size.y - (2 * kCanvasMargin);
 //
-//  // Resize Canvas window
+//  // Resize Canvas windowCoordonnees : -12, 38
 //  this->setwxWindowSize( { newCanvasWidth, newCanvasHeight });
 //  this->setRenderWindowSize( { (unsigned int)newCanvasWidth, (unsigned int)newCanvasHeight });
 
@@ -206,7 +245,6 @@ void Canvas::drawAll()
 
 void Canvas::onRight(wxMouseEvent& event)
 {
-
 }
 
 std::map<std::string, sf::Sprite>& Canvas::getSprites()
