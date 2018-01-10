@@ -10,6 +10,8 @@
 #include "ImagePanelP.hpp"
 #include "Caneva.hpp"
 
+#include <mutex>
+
 
 /**
  * La racine de la vue (application)
@@ -36,13 +38,13 @@ private:
   void onFocus(wxFocusEvent& event);
 
   void onKey(wxKeyEvent& event);
-  void onCursor(wxMouseEvent& event);
   void onResize(wxSizeEvent& event);
   void onNext(wxCommandEvent& event);
 public:
   void showEnigma(std::string title, std::string file, std::string textInside);
   wxPanel* getPanel();
   void parler(std::string entityName, std::string parole);
+  void effacerParler();
 private:
   Canvas* _canvas;
   wxPanel* _panel2;
@@ -50,7 +52,9 @@ private:
 public:
   wxTextCtrl* cursorloc;
   wxTextCtrl* dialogBox;
-  wxImagePanelP* perso;
+  wxImagePanelP* persoDireImage;
+
+  std::mutex waitNextParler;
 };
 
 //inline wxPanel* AppFrame::getPanel()

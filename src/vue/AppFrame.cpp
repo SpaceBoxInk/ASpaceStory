@@ -42,7 +42,6 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
     _panel2(new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, -1))),
     tailleInventory(taille)
 {
-  _panel2 = new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, -1));
   this->SetMinSize(size);
 
 //  getCaneva()->Connect(getCaneva()->GetId(), wxEVT_SIZE,
@@ -51,13 +50,12 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
   wxBoxSizer* hbox = new wxBoxSizer(wxVERTICAL);
   wxBoxSizer* hbox2 = new wxBoxSizer(wxHORIZONTAL);
   wxPanel* middlePanel = new wxPanel(_panel2, wxNewId(), wxPoint(-1, -1));
-  wxPanel* dialog = new wxPanel(_panel2, wxNewId(), wxPoint(-1, -1));
+  wxPanel* dialogPanel = new wxPanel(_panel2, wxNewId(), wxPoint(-1, -1));
   wxBoxSizer* middleSizer = new wxBoxSizer(wxVERTICAL);
-  wxBoxSizer* dialogue = new wxBoxSizer(wxHORIZONTAL);
-  perso = new wxImagePanelP(dialog, MParameters::getRootPath() + "/pictures/nothing.png",
+  wxBoxSizer* dialogueSizer = new wxBoxSizer(wxHORIZONTAL);
+  persoDireImage = new wxImagePanelP(dialogPanel, MParameters::getRootPath() + "/pictures/nothing.png",
                             wxBITMAP_TYPE_PNG);
-  wxPanel* dialogPanel = new wxPanel(dialog, wxNewId(), wxPoint(-1, -1));
-  wxBoxSizer* dialogSizer = new wxBoxSizer(wxVERTICAL);
+  wxBoxSizer* direZoneSizer = new wxBoxSizer(wxVERTICAL);
 
 //  VPlayerInventaireInterface* interF = new VPlayerInventory(taille);
 
@@ -71,21 +69,22 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
   hbox->Add(_canvas, 15, wxEXPAND);
   hbox->Add(_panel2, 1, wxEXPAND);
   cursorloc = new wxTextCtrl(_panel2, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, -1),
-  wxTE_READONLY || wxTE_MULTILINE);
+  wxTE_READONLY | wxTE_CENTER);
   dialogBox = new wxTextCtrl(dialogPanel, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, -1),
-  wxTE_READONLY || wxTE_MULTILINE);
-  wxButton* okButton = new wxButton(dialogPanel, wxNewId(), "suivant");
-  hbox2->Add(cursorloc, 2, wxEXPAND);
-  hbox2->Add(middlePanel, 3, wxEXPAND);
-  hbox2->Add(dialog, 3, wxEXPAND);
+  wxTE_READONLY | wxTE_MULTILINE);
+  waitNextParler.lock();
 
-  dialogue->Add(perso, 1, wxEXPAND);
-  dialogue->Add(dialogPanel, 3, wxEXPAND);
-  dialogPanel->SetSizer(dialogSizer);
-  dialogSizer->Add(dialogBox, 3, wxEXPAND);
-  dialogSizer->Add(okButton, 1, wxEXPAND);
-  dialog->SetSizer(dialogue);
-//  hbox2->Add();
+  wxButton* okButton = new wxButton(dialogPanel, wxNewId(), "Suivant >");
+  hbox2->Add(cursorloc, 2, wxEXPAND);
+  hbox2->Add(middlePanel, 4, wxEXPAND);
+  hbox2->Add(dialogPanel, 3, wxEXPAND);
+
+  dialogueSizer->Add(persoDireImage, 1, wxEXPAND);
+  dialogueSizer->Add(direZoneSizer, 5, wxEXPAND);
+  direZoneSizer->Add(dialogBox, 22, wxEXPAND);
+  direZoneSizer->Add(okButton, 11, wxEXPAND);
+  dialogPanel->SetSizer(dialogueSizer);
+
   _panel2->SetSizer(hbox2);
   this->SetSizer(hbox);
 //  Connect(this->GetId(), wxEVT_CHAR_HOOK, wxKeyEventHandler(AppFrame::onKey));
@@ -100,6 +99,7 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
        notifyObservers(MUserEvents::EXIT);
        exit(0);
      });
+
 
   ////////////////////////////////////////////////////////////////////////////////
   // Probably due to some RTTI, IDE is getting confused by this dynamic call
@@ -184,15 +184,21 @@ AppFrame::~AppFrame()
 
 void AppFrame::onNext(wxCommandEvent& event)
 {
-  notifyObservers(MUserEvents::NEXT_DIALOG);
+  waitNextParler.unlock();
+//  notifyObservers(MUserEvents::NEXT_DIALOG);
 }
 
 void AppFrame::parler(std::string entityName, std::string parole)
 {
-  perso->LoadImage(entityName);
-  perso->paintNow();
+  waitNextParler.lock();
+  persoDireImage->LoadImage(entityName);
+  persoDireImage->paintNow();
   Refresh();
   dialogBox->Clear();
   dialogBox->AppendText(parole);
 }
 
+void AppFrame::effacerParler()
+{
+  parler(MParameters::getRootPath() + "/pictures/nothing.png", "");
+}
