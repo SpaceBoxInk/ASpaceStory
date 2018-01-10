@@ -81,7 +81,7 @@ cppAddActionDeclenchement(54,25,0,function(entite)
  sleep(1)
  cppParler("Elle n'a pas l'air évidente...")
 end)
- 
+
 -- getCoffre = function() -- on créée une fonction qui renvoie un coffre
  -- return Objet.getCouche(1,-15,-7)
 -- end
@@ -108,5 +108,3 @@ end)
 
 
 -- GESTION DES CONDITIONS DANS LE NIVEAU
-
-
