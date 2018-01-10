@@ -100,7 +100,8 @@ void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
       }
       else
       {
-        getTypeList(type).insert( { ID, new MPartieCouche(ID, type, name, imgFile, placeDispo) });
+        getTypeList(type).insert(
+            { ID, new MPartieCouche(ID, type, name, imgFile, placeDispo) });
       }
     }
   }
@@ -116,9 +117,9 @@ MPartieCouche& MTerrain::getElement(std::string element)
   auto elemMap = getTypeList(MTypeCouche::ELEMENT);
   return *std::find_if(elemMap.begin(), elemMap.end(),
                        [element](std::pair<uint8_t, MPartieCouche*> pair)
-  {
-    return pair.second->getName() == element;
-  })->second;
+                       {
+                         return pair.second->getName() == element;
+                       })->second;
 }
 
 std::unordered_map<uint8_t, MPartieCouche*>& MTerrain::getTypeList(
@@ -154,7 +155,7 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
     {
       for (unsigned int i = 0; i < nbElem; ++i)
       {
-        fichierCouche >> ID;
+        ID = fichierCouche.get();
         if (ID == 0 && type != MTypeCouche::SOL)
         {
           // le rien
@@ -203,8 +204,7 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
       throw MExceptionFile(
           fichier,
           "Le fichier n'est pas du bon format\nil faut " + std::to_string(nbElemRequis)
-              + " tuiles(octets)" "\nVous fournissez "
-              + std::to_string(nbElem)
+              + " tuiles(octets)" "\nVous fournissez " + std::to_string(nbElem)
               + " tuiles(octets)");
     }
   }
