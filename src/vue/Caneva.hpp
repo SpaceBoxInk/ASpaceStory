@@ -52,9 +52,9 @@ public:
   void addEntite(std::string name, std::string file);
   void move(std::string entityName, MCoordonnees const& offset);
   void setPositionOf(std::string entityName, MCoordonnees const& position);
+  void SetSize(int width, int height);
 
 private:
-
   void onResize(wxSizeEvent& event);
   void onCursor(wxMouseEvent& event);
   //=====================>Getters&Setters<======================

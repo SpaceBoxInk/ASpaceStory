@@ -14,6 +14,7 @@
 #include <wx/gdicmn.h>
 #include <wx/generic/panelg.h>
 #include <wx/sizer.h>
+#include <wx/gbsizer.h>
 #include <wx/string.h>
 #include <wx/utils.h>
 #include <iostream>
@@ -39,11 +40,11 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
             wxPoint(-1, -1),
             wxSize(MParameters::getNbTuileX() * tailleTexture,
                    MParameters::getNbTuileY() * tailleTexture))),
-    _panel2(new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, -1))),
+    _panel2(new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, 100))),
     tailleInventory(taille)
 {
   this->SetMinSize(size);
-
+  _canvas->SetMaxSize(wxSize(-1, wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) * 0.7));
 //  getCaneva()->Connect(getCaneva()->GetId(), wxEVT_SIZE,
 //                       wxSizeEventHandler(Canvas::onResize),
 //                       getCaneva());
@@ -68,11 +69,12 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
 //                   wxEXPAND);
 
   middlePanel->SetSizer(middleSizer);
-  hbox->Add(_canvas, 10, wxEXPAND);
-  hbox->Add(_panel2, 2, wxEXPAND);
+  hbox->Add(_canvas, 1, wxEXPAND);
+  hbox->Add(_panel2, 0, wxEXPAND);
+
   cursorloc = new wxTextCtrl(_panel2, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, -1),
   wxTE_READONLY | wxTE_CENTER);
-  dialogBox = new wxTextCtrl(dialogPanel, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, -1),
+  dialogBox = new wxTextCtrl(dialogPanel, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, 50),
   wxTE_READONLY | wxTE_MULTILINE);
 
   wxButton* okButton = new wxButton(dialogPanel, wxNewId(), "Suivant >");
@@ -82,8 +84,8 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
 
   dialogueSizer->Add(persoDireImage, 1, wxEXPAND);
   dialogueSizer->Add(direZoneSizer, 5, wxEXPAND);
-  direZoneSizer->Add(dialogBox, 15, wxEXPAND);
-  direZoneSizer->Add(okButton, 12, wxEXPAND);
+  direZoneSizer->Add(dialogBox, 2, wxEXPAND);
+  direZoneSizer->Add(okButton, 1, wxEXPAND);
   dialogPanel->SetSizer(dialogueSizer);
 
   _panel2->SetSizer(hbox2);

@@ -10,7 +10,7 @@
 wxSfmlCanvas::wxSfmlCanvas(wxWindow *parent, wxWindowID windowId,
     wxPoint const &position , wxSize const &size ,
                            long style) :
-    wxControl(parent, windowId, position, size, style)
+    wxPanel(parent, windowId, position, size, style)
 {
   createRenderWindow();
 }

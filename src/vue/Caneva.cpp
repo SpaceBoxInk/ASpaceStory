@@ -71,7 +71,7 @@ void Canvas::onCursor(wxMouseEvent& event)
 //  / MParameters::getNbTuileY();
   int coordX = (int)(coord.x / tailleTextX * MParameters::getNbTuileX());
   int coordY = (int)floor(
-  (coord.y / tailleTextY * MParameters::getNbTuileY()));
+      (coord.y / tailleTextY * MParameters::getNbTuileY()));
 #else
   std::string str;
   double tailleTextX = (this->wxSfmlCanvas::getSize().x);
@@ -82,10 +82,7 @@ void Canvas::onCursor(wxMouseEvent& event)
   int coordY = (int)floor(
       (coord.y / tailleTextY * MParameters::getNbTuileY()) - MParameters::getNbTuileY() / 2);
 #endif
-  str = "Coordonnees : "
-      + std::to_string(coordX)
-      + ", "
-      + std::to_string(-coordY);
+  str = "Coordonnees : " + std::to_string(coordX) + ", " + std::to_string(-coordY);
   dynamic_cast<AppFrame*>(GetParent())->cursorloc->Clear();
   dynamic_cast<AppFrame*>(GetParent())->cursorloc->AppendText(str);
 //  dynamic_cast<AppFrame*>(GetParent())->cursorloc->AppendText(
@@ -108,11 +105,13 @@ void Canvas::onResize(wxSizeEvent& event)
   sf::Vector2u si(GetSize().x, GetSize().y);
   sf::RenderWindow::setSize(si);
   drawAll();
+  Refresh();
 }
 void Canvas::loadFileIntoGround(int const* idList, std::string texture, int level,
                                 int tailleTexture)
 {
   //TODO : c'est un tableau
+
   if (level == 0)
     ground.load(texture, sf::Vector2u(tailleTexture, tailleTexture), idList, x / tailleTexture,
                 y / tailleTexture);
@@ -203,7 +202,6 @@ catch (std::out_of_range e)
   std::cout << entityName << " pas trouvé" << std::endl;
 }
 
-
 void Canvas::setTailleTexture(int taille)
 {
   this->tailleTexture = taille;
@@ -212,6 +210,14 @@ void Canvas::setTailleTexture(int taille)
 int Canvas::getTailleTexture()
 {
   return this->tailleTexture;
+}
+
+void Canvas::SetSize(int width, int height)
+{
+  wxPanel::SetSize(width, height);
+  sf::Vector2u si(GetSize().x, GetSize().y);
+  sf::RenderWindow::setSize(si);
+  drawAll();
 }
 
 void Canvas::setTexture(std::string const& file)
@@ -239,6 +245,7 @@ void Canvas::drawAll()
     }
 
     this->display();
+
   }
 }
 
