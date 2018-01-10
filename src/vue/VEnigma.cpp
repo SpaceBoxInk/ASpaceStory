@@ -27,7 +27,11 @@ VEnigma::VEnigma(wxString const & title, wxString file, std::string texte) :
   hbox->Add(text, 1, wxEXPAND);
   hbox->Add(new wxButton(this, wxID_EXIT, wxT("Ok"), wxPoint(-1, -1)), 1, wxEXPAND);
 
-  Connect(wxID_EXIT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VEnigma::OnQuit));
+  Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent)
+  {
+    Show(false);
+  });
+  Connect(wxID_EXIT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(VEnigma::onQuit));
 
   this->SetSizer(hbox);
 }
@@ -38,7 +42,7 @@ VEnigma::~VEnigma()
   delete picture;
 }
 
-void VEnigma::OnQuit(wxCommandEvent&)
+void VEnigma::onQuit(wxCommandEvent&)
 {
   Show(false);
 }

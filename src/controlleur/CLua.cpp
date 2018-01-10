@@ -23,6 +23,7 @@
 #include "../model/MPersonnage.hpp"
 #include "../model/MTerrain.hpp"
 #include "../model/MTuile.hpp"
+#include "../vue/AppFrameInterface.hpp"
 #include "../vue/VInventaireInterface.hpp"
 
 #include <stdexcept>
@@ -76,14 +77,7 @@ int CLua::cppLoadCouche(lua_State* l)
   MTypeCouche couche = (MTypeCouche)lua_tointeger(l, 2);
 
   coucheFile = cJeu->cNiveau.getScriptFolder() + coucheFile;
-  try
-  {
-    cJeu->cNiveau.getTerrain().loadCouche(coucheFile, couche);
-  }
-  catch (MAssException& e)
-  {
-    std::cerr << e.what();
-  }
+  cJeu->cNiveau.getTerrain().loadCouche(coucheFile, couche);
   return 0;
 }
 
@@ -586,11 +580,11 @@ int CLua::cppAfficherEnigme(lua_State* l)
  */
 int CLua::cppParler(lua_State* l)
 {
-  testArgs(2);
+  testArgs(1, 2);
   std::string entiteName;
   MEntite* entite = getEntite(entiteName, 1);
-  std::string msg = lua_tostring(l, 1);
-//  cJeu->vuePrincipale->parler(entite->getTexture(), msg);
+  std::string msg = lua_tostring(l, getTop());
+  cJeu->vuePrincipale->parler(entite->getTexture(), msg);
   return 0;
 }
 

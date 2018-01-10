@@ -26,7 +26,7 @@ private:
 //=========================>Methods<==========================
 public:
   void onFocus(wxFocusEvent& event);
-  void OnQuit(wxCommandEvent & WXUNUSED(event));
+  void onQuit(wxCommandEvent & WXUNUSED(event));
 private:
 
 //=====================>Getters&Setters<======================

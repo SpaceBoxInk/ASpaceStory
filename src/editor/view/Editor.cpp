@@ -24,7 +24,8 @@ using namespace AssEditor;
  * @param title
  */
 Editor::Editor(wxString const & title) :
-    wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(830, 600), wxSTAY_ON_TOP)
+    wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(830, 600),
+            wxSTAY_ON_TOP | wxDEFAULT_FRAME_STYLE)
 {
   this->SetMinSize(wxSize(500, 300)); //la taille minimum
 
@@ -66,6 +67,13 @@ Editor::Editor(wxString const & title) :
   Connect(wxID_EXIT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Editor::OnQuit));
   Connect(wxID_CANCEL, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Editor::OnAbort));
   Connect(wxID_ADD, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Editor::OnAdd));
+
+  Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent)
+  {
+    setChanged();
+    notifyObservers(Event::SAVE_AND_CLOSE_EDITOR, getEditContent());
+    Show(false);
+  });
 
   //la zone du bas
   hbox2->Add(m_res, 3, wxEXPAND);

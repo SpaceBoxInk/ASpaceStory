@@ -15,11 +15,13 @@
 
 #include <fstream>
 #include <iostream>
+#include <experimental/filesystem>
 #include <iterator>
 #include <stdexcept>
 #include <unordered_map>
 #include <utility>
 
+namespace fs = std::experimental::filesystem;
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
@@ -142,19 +144,17 @@ std::unordered_map<uint8_t, MPartieCouche*>& MTerrain::getTypeList(
 void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
 {
   std::ifstream fichierCouche(fichier, std::ios::binary);
+
   if (fichierCouche)
   {
     uint32_t nbElemRequis = (unsigned int)(taille.getX() * taille.getY());
+    uint32_t nbElem = fs::file_size(fichier);
     uint8_t ID;
-    std::vector<uint8_t> vecteurControle;
-    vecteurControle.insert(vecteurControle.begin(),
-                           std::istream_iterator<uint8_t>(fichierCouche),
-                           std::istream_iterator<uint8_t>());
-    if (vecteurControle.size() == nbElemRequis)
+    if (nbElem == nbElemRequis)
     {
-      for (unsigned int i = 0; i < vecteurControle.size(); ++i)
+      for (unsigned int i = 0; i < nbElem; ++i)
       {
-        ID = vecteurControle[i];
+        fichierCouche >> ID;
         if (ID == 0 && type != MTypeCouche::SOL)
         {
           // le rien
@@ -166,39 +166,45 @@ void MTerrain::loadCouche(std::string const & fichier, MTypeCouche const & type)
           throw MExceptionArgumentsInvalides(
               std::string("Id 0 not expected for couche SOL in offset ") + std::to_string(i));
         }
-        MPartieCouche const& couche = *getTypeList(type).at(ID);
-        // si on veut mettre une couche à une tuile pas existante
-        // il faut aussi que le type soit le sol, on commence par le sol !
-        if (tuiles.size() <= i && type == MTypeCouche::SOL)
+        try
         {
-          // SEE : push_back may be replaced by something related to the position "i"
-// <<<<<<< feature/linkIHM-Model
-//           tuiles.push_back(
-//               new MTuile(toCoords(i), couche.getId(), couche.getName(), couche.getFichierImg(),
-//                          couche.getPlaceDispo()));
-//         }
-//         else if (tuiles.size() > i)
-//         {
-//           tuiles[i]->setPartieCouche(couche.getId(), couche.getType(), couche.getName(),
-//                                      couche.getFichierImg(), couche.getPlaceDispo());
-// =======
-          tuiles.push_back(new MTuile(toCoords(i), couche));
+          MPartieCouche const& couche = *getTypeList(type).at(ID);
+          // si on veut mettre une couche à une tuile pas existante
+          // il faut aussi que le type soit le sol, on commence par le sol !
+          if (tuiles.size() <= i && type == MTypeCouche::SOL)
+          {
+            tuiles.push_back(new MTuile(toCoords(i), couche));
+          }
+          else if (tuiles.size() > i)
+          {
+            tuiles[i]->setPartieCouche(couche);
+          }
+          else
+          {
+            fichierCouche.close();
+            throw MExceptionInvalidTypeCouche(MTypeCouche::SOL, type);
+          }
+
         }
-        else if (tuiles.size() > i)
+        catch (std::exception& e)
         {
-          tuiles[i]->setPartieCouche(couche);
-        }
-        else
-        {
-          throw MExceptionInvalidTypeCouche(MTypeCouche::SOL, type);
+          fichierCouche.close();
+          throw MExceptionArgumentsInvalides(
+              "couche n°" + std::to_string((int)ID) + " n'existe pas dans la liste "
+                  + to_string(type) + "\nVoici le nombre d'id : "
+                  + std::to_string(getTypeList(type).size() - 1));
         }
       }
+      fichierCouche.close();
     }
     else
     {
+      fichierCouche.close();
       throw MExceptionFile(
           fichier,
           "Le fichier n'est pas du bon format\nil faut " + std::to_string(nbElemRequis)
+              + " tuiles(octets)" "\nVous fournissez "
+              + std::to_string(nbElem)
               + " tuiles(octets)");
     }
   }

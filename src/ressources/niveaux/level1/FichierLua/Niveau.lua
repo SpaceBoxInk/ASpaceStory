@@ -11,7 +11,7 @@ cppLoadCouche("../FichierCouche/level1.1.nvc", 1)
 local socket = require("socket")
 
 function sleep(sec)
-    socket.sleep(sec)
+  socket.sleep(sec)
 end
 
 -- recupere la clé d'une action :
@@ -76,10 +76,10 @@ cppAddActionDeclenchement(16, 12, 1, actionOuvertureGrotte)
 cppAddActionDeclenchement(15, 21, 1, parlerCoffre)
 
 cppAddActionDeclenchement(54,25,0,function(entite)
- cppAfficherEnigme("enigme1")
- cppParler("Oh non une enigme !")
- sleep(1)
- cppParler("Elle n'a pas l'air évidente...")
+  cppAfficherEnigme("enigme1")
+  cppParler("Oh non une enigme !")
+  sleep(1)
+  cppParler("Elle n'a pas l'air évidente...")
 end)
 
 -- getCoffre = function() -- on créée une fonction qui renvoie un coffre
