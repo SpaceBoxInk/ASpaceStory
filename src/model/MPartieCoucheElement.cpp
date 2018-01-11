@@ -28,6 +28,19 @@ MPartieCoucheElement::MPartieCoucheElement(Id ID, MTypeCouche type, std::string 
 {
 }
 
+MPartieCoucheElement::MPartieCoucheElement(MPartieCoucheElement const & other) :
+    MPartieCouche(other), miningLevel(other.miningLevel), actionMining(other.actionMining)
+{
+}
+
+MPartieCoucheElement& MPartieCoucheElement::operator =(MPartieCoucheElement const & other)
+{
+  MPartieCouche::operator =(other);
+  miningLevel = other.miningLevel;
+  actionMining = other.actionMining;
+  return *this;
+}
+
 MPartieCoucheElement::~MPartieCoucheElement()
 {
 }
@@ -39,7 +52,8 @@ void MPartieCoucheElement::mine(MEntite* entite, int item, MCoordonnees minedCoo
 {
   if (*actionMining)
   {
-    (*actionMining)(entite, item, minedCoords.getX(), minedCoords.getY());
+    threadMining = std::async(std::launch::async, *actionMining, entite, item,
+                              minedCoords.getX(), minedCoords.getY());
   }
 }
 

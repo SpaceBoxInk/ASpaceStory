@@ -30,6 +30,7 @@ private:
   int degats;
   int protection;
   bool supprimable;
+  // FIXME add thread
   std::function<void(std::string entite)> actionUtilisation;
   int miningLevel;
 

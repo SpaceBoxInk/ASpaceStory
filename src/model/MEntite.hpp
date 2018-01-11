@@ -20,7 +20,10 @@
 #include "../outils/ObserverPattern/Observed.hpp"
 
 #include <functional>
+#include <future>
 #include <string>
+
+class MItem;
 
 class MTerrain;
 class MTuile;
@@ -47,7 +50,9 @@ private:
   MInventaire inventaire;
 
   std::function<void(std::string entite, int degat)> actionDefense;
+  std::future<void> threadDefense;
   std::function<void(MEntite const& entite)> actionInteraction;
+  std::future<void> threadInteraction;
 //=======================>Constructors<=======================
 public:
   MEntite(std::string const& nom, std::string const& texture, MTuile* tuile = nullptr,
@@ -114,7 +119,7 @@ inline void MEntite::setActionDefense(std::function<void(std::string, int)> acti
 }
 
 inline void MEntite::setActionInteraction(
-    std::function<void(MEntite const & entite)> actionInteraction)
+    std::function<void(MEntite const& entite)> actionInteraction)
 {
   this->actionInteraction = actionInteraction;
 }

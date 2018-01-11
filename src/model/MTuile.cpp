@@ -128,6 +128,12 @@ bool MTuile::deplacerEntiteVers(MTuile& tuileDst)
  */
 void MTuile::interagirTuile(MEntite* entite)
 {
+  // ouverture inventaire
+  if (vItems)
+  {
+    vItems->show();
+  }
+
   for (int i = 0; i < (int)MTypeCouche::SIZE; ++i)
   {
     if (getPartieCouche((MTypeCouche)i))
@@ -136,11 +142,6 @@ void MTuile::interagirTuile(MEntite* entite)
     }
   }
 
-  // ouverture inventaire
-  if (vItems)
-  {
-    vItems->show();
-  }
 }
 
 void MTuile::addItem(MItem* item)

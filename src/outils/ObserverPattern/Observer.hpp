@@ -74,7 +74,8 @@ public:
    * @note do not call this method, it's called automatically by #Observed
    */
   template<class EventName, class Content>
-  void doEventActions(EventName eventName, Content content, Observed const& observed) const;
+  void doEventActions(EventName eventName, Content const& content,
+                      Observed const& observed) const;
 
   /**
    * @brief method called by the #Observed when an event is send

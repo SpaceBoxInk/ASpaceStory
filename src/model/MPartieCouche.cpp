@@ -12,6 +12,7 @@
 
 #include <iostream>
 
+
 //------------------------------------------------------------
 //========================>Constants<=========================
 //------------------------------------------------------------
@@ -25,6 +26,25 @@ MPartieCouche::MPartieCouche(int id, MTypeCouche type, std::string name,
                              float placeDispo) :
     id(id), type(type), name(name), fichierImg(fichierImg), placeDispo(placeDispo)
 {
+}
+
+MPartieCouche::MPartieCouche(MPartieCouche const &other):
+    id(other.id), type(other.type), name(other.name), fichierImg(other.fichierImg),
+    placeDispo(other.placeDispo), actionPassage(other.actionPassage),
+    actionDeclenchement(other.actionDeclenchement)
+{
+}
+
+MPartieCouche& MPartieCouche::operator =(MPartieCouche const & other)
+{
+  id = other.id;
+  type = other.type;
+  name = other.name;
+  fichierImg = other.fichierImg;
+  placeDispo = other.placeDispo;
+  actionPassage = other.actionPassage;
+  actionDeclenchement = other.actionDeclenchement;
+  return *this;
 }
 
 MPartieCouche::~MPartieCouche()
@@ -44,7 +64,7 @@ void MPartieCouche::passageDe(MEntite* entite)
 {
   if (actionPassage)
   {
-    actionPassage(entite->getNom());
+    threadPassage = std::async(std::launch::async, actionPassage, entite->getNom());
   }
 }
 
@@ -52,7 +72,8 @@ void MPartieCouche::declenchementDe(MEntite* entite)
 {
   if (actionDeclenchement)
   {
-    actionDeclenchement(entite->getNom());
+    threadDeclenchement = std::async(std::launch::async, actionDeclenchement,
+                                     entite->getNom());
   }
 }
 
