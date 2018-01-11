@@ -41,7 +41,8 @@ CJeu::CJeu() :
   vuePrincipale->addEntite(cPersonnage.getCurrentPerso()->getNom(),
                            cPersonnage.getCurrentPerso()->getTexture());
   vuePrincipale->setPositionOf(cPersonnage.getCurrentPerso()->getNom(),
-                               cPersonnage.getCurrentPerso()->getTuile()->getPosition());
+                               cPersonnage.getCurrentPerso()->getTuile()->getPosition(),
+                               cPersonnage.getCurrentPerso()->getDirection());
   dynamic_cast<AppFrame*>(vuePrincipale)->Show();
 }
 

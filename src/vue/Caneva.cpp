@@ -180,10 +180,17 @@ void Canvas::addEntite(std::string name, std::string file)
   }
 }
 
-void Canvas::move(std::string entityName, MCoordonnees const& offset)
+void Canvas::move(std::string entityName, MCoordonnees const& offset, Mouvement direction)
 try
 {
+  int textMoove = (int)direction;
   sf::Sprite& sp = getSprites().at(entityName);
+//  wxPoint topLeft = wxPoint((textMoove - 1) * getTailleTexture(), 0);
+//  wxPoint BottomRight = wxPoint((textMoove) * getTailleTexture(), getTailleTexture());
+//  wxRect rect = wxRect(topLeft, BottomRight);
+  sf::Rect<int> rect = sf::Rect<int>((textMoove - 1) * getTailleTexture(), 0,
+                                     getTailleTexture(), getTailleTexture());
+  sp.setTextureRect(rect);
   sp.move(offset.getX() * getTailleTexture(), offset.getY() * getTailleTexture());
   drawAll();
 }
@@ -192,10 +199,15 @@ catch (std::out_of_range e)
   std::cout << entityName << " pas trouvé" << std::endl;
 }
 
-void Canvas::setPositionOf(std::string entityName, MCoordonnees const& position)
+void Canvas::setPositionOf(std::string entityName, MCoordonnees const& position,
+                           Mouvement direction)
 try
 {
+  int textMoove = (int)direction;
   sf::Sprite& sp = getSprites().at(entityName);
+  sf::Rect<int> rect = sf::Rect<int>((textMoove - 1) * getTailleTexture(), 0,
+                                     getTailleTexture(), getTailleTexture());
+  sp.setTextureRect(rect);
   sp.setPosition(position.getX() * getTailleTexture(), position.getY() * getTailleTexture());
   drawAll();
 }

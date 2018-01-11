@@ -29,8 +29,9 @@ public:
 
   void addEntite(std::string name, std::string file) override;
 
-  void move(std::string entityName, MCoordonnees const& offset) override;
-  void setPositionOf(std::string entityName, MCoordonnees const& offset) override;
+  void move(std::string entityName, MCoordonnees const& offset, Mouvement direction) override;
+  void setPositionOf(std::string entityName, MCoordonnees const& offset, Mouvement direction)
+      override;
 private:
   Canvas* getCaneva();
   void onFocus(wxFocusEvent& event);

@@ -89,7 +89,7 @@ void CPersonnage::setEventMethods()
   addAction<MModelEvents, MEntite>(
       MModelEvents::ENTITY_MOVED, [this](MEntite const& entity, Observed const&)
       {
-        vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition());
+        vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition(), entity.getDirection());
       });
 }
 
@@ -109,7 +109,8 @@ void CPersonnage::addRobot(std::string const & nom, std::string const & texture,
         });
 
     vuePrincipale->addEntite(nom, texture);
-    vuePrincipale->setPositionOf(nom, tuile->getPosition());
+    vuePrincipale->setPositionOf(nom, tuile->getPosition(),
+                                 currentPerso->getRobot(nom).getDirection());
 
   }
 }
