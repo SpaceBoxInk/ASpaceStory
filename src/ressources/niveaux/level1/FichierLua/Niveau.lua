@@ -25,7 +25,7 @@ main = function()
   cppParler("Et avec " .. cppGetKeyFor("downKey") .. " reculer")
   cppParler("Et puis aller à gauche et droite avec " .. cppGetKeyFor("leftKey") .. " et " .. cppGetKeyFor("rightKey"))
   sleep(1)
-  cppParler("Oh il y a quelque chose à là-bas, on dirait des... des... morceaux de quelque chose ! Il faudrait que je pense à appuyer sur la touche " .. cppGetKeyFor("mineKey") .. " pour le ramasser")
+  cppParler("Oh il y a quelque chose à là-bas, on dirait des... des... morceaux de quelque chose ! Il faudrait que je pense à appuyer sur la touche " .. cppGetKeyFor("mineKey") .. " pour les ramasser")
 end
 
 indice1 = function ()
@@ -44,8 +44,6 @@ cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png")
 
 cppNewEnigme("enigme1", "Soit le point T(a,b) position de la tombe, le tunel se trouve au point M(x,y). Déterminez x et y pour trouver mon trésor... ", cppGetResourcesPath() .. "pictures/tombe2.png")
 
-
-
 getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie la piece robot
   nbPieceRobotGet = nbPieceRobotGet + 1
 
@@ -53,13 +51,13 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
     cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", x, y, 0.4)
     cppAddActionPassage(16,11,0, indice1)
     cppParler("Oh le robot se met à bouger !")
-    -- cppParler("Il est magnifique...")
-    --cppParler("Je crois que pour l'utiliser il faudrait que j'apprenne à le comprendre son langage...")
-    --cppParler("Pour demander au robot d'avancer : utiliser avancer() ")
-    --cppParler("Pour demander au robot d'activer quelque chose: écrivez avancer() ") 
-    --cppParler("Pour demander au robot de tourner : écrivez tournerDe(angle) ")    
-    --cppParler("L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180 ")  
-    --cppParler("Pour les boucles, amusez vous à les comprendre ;) !")
+    cppParler("Il est magnifique...")
+    cppParler("Je crois que pour l'utiliser il faudrait que j'apprenne à le comprendre son langage...")
+    cppParler("Pour demander au robot d'avancer : utiliser avancer() ")
+    cppParler("Pour demander au robot d'activer quelque chose: écrivez activer() ") 
+    cppParler("Pour demander au robot de tourner : écrivez tournerDe(angle) ")    
+    cppParler("L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180 ")  
+    cppParler("Pour les boucles, amusez vous à les comprendre ;) !")
   else if nbPieceRobotGet == 2 then 
     cppParler("Ces pieces ressemblent à une sorte de... robot ? Peut être que je devrais ramasser la troisième... ?")
   end
@@ -106,7 +104,7 @@ cppAddActionDeclenchement(54,25,0,function(entite)
   cppAfficherEnigme("enigme1")
   cppParler("Oh non une enigme !")
   sleep(1)
-  -- cppParler("Elle n'a pas l'air évidente...")
+  cppParler("Elle n'a pas l'air évidente...")
 end)
 
 -- getCoffre = function() -- on créée une fonction qui renvoie un coffre
