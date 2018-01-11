@@ -103,7 +103,10 @@ void VInventory::delObjInv(unsigned long long id)
 
 void VInventory::show(bool show)
 {
-  this->Show(show);
+  this->CallAfter([this, show]
+  {
+    Show(show);
+  });
 }
 
 //------------------------------------------------------------

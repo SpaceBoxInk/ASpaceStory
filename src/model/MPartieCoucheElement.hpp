@@ -28,12 +28,14 @@ private:
    * THIS POINTER is copied !! it's to share the action between all same couche
    */
   std::shared_ptr<std::function<void(MEntite* entite, int item, int xMined, int yMined)>> actionMining; // replace by item
+  std::future<void> threadMining;
 
 //=======================>Constructors<=======================
 public:
   MPartieCoucheElement(Id ID, MTypeCouche type, std::string name, std::string fichierImg,
                        float placeDispo, int miningLevel = -1);
-  MPartieCoucheElement(MPartieCoucheElement const&) = default;
+  MPartieCoucheElement(MPartieCoucheElement const&);
+  MPartieCoucheElement& operator=(MPartieCoucheElement const&);
   // TODO: rule of five ? copyandswap
   virtual ~MPartieCoucheElement();
 
