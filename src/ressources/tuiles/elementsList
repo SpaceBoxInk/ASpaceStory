@@ -17,7 +17,7 @@ montagne_angle_ext_1 :       montagne_angle_ext_1.png       14                  
 montagne_angle_ext_2 :       montagne_angle_ext_2.png	     15                   0.0               -1
 montagne_angle_ext_3 :	      montagne_angle_ext_3.png	     16                   0.0               -1
 montagne_angle_ext_4 :	      montagne_angle_ext_4.png	     17                   0.0               -1
-montagne_angle_int_1 :	      montagne_angle_int_1.png	     18			              0.0		            -1
-montagne_angle_int_2 :	      montagne_angle_int_2.png	     19			              0.0		            -1
-montagne_angle_int_3 :	      montagne_angle_int_3.png	     20			              0.0		            -1
-montagne_angle_int_4 :	      montagne_angle_int_4.png	     21			              0.0		            -1
+#montagne_angle_int_1 :	      montagne_angle_int_1.png	     18			              0.0		            -1
+#montagne_angle_int_2 :	      montagne_angle_int_2.png	     19			              0.0		            -1
+#montagne_angle_int_3 :	      montagne_angle_int_3.png	     20			              0.0		            -1
+#montagne_angle_int_4 :	      montagne_angle_int_4.png	     21			              0.0		            -1
