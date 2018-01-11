@@ -9,6 +9,7 @@ cppLoadCouche("../FichierCouche/level1.1.nbg", 0)
 cppLoadCouche("../FichierCouche/level1.1.nvc", 1)
 
 local socket = require("socket")
+local nbPieceRobotGet = 0
 
 function sleep(sec)
   socket.sleep(sec)
@@ -23,6 +24,14 @@ main = function()
   cppParler("Avec " .. cppGetKeyFor("upKey") .. " je devrais pouvoir avancer")
   cppParler("Et avec " .. cppGetKeyFor("downKey") .. " reculer")
   cppParler("Et puis aller à gauche et droite avec " .. cppGetKeyFor("leftKey") .. " et " .. cppGetKeyFor("rightKey"))
+  sleep(2)
+  cppParler("Oh il y a quelque chose à là-bas, il faudrait que je pense à appuyer sur la touche " .. cppGetKeyFor("interactEntityKey") .. " pour le ramasser")
+end
+
+indice1 = function ()
+  if nbPieceRobotGet == 3 then
+    cppParler("Oh il y a un levier, peut-être que je devrais appuyer sur la touche " .. cppGetKeyFor("interactEnvKey") .." pour l'actionner")
+  end
 end
 
 
@@ -37,27 +46,44 @@ cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png")
 
 cppNewEnigme("enigme1", "Contenu de l'enigme", cppGetResourcesPath() .. "pictures/tombe.png")
 
-local nbPieceRobotGet = 0
+
 
 getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie la piece robot
   nbPieceRobotGet = nbPieceRobotGet + 1
 
   if nbPieceRobotGet == 3 then
     cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", x, y, 0.4)
+    cppAddActionPassage(16,11,0, indice1)
     cppParler("Oh il se met à bouger !")
-    -- sendMessageToUser("Le robot semble content de vous rencontrer, mais il ne se souvient plus de son nom, comment s'appelle-il ?")
-    -- sendMessageToUser("Vous possédez désormais utilser la tablette de Programmation, elle vous permettra de communiquer avec le robot comme bon vous semble ! (comme pour passer dans des passaes étroits par exemple...")
+    -- cppParler("Il est magnifique...")
+    --cppParler("Je crois que pour l'utiliser il faudrait que j'apprenne à le comprendre son langage...")
+    --cppParler("Pour demander au robot d'avancer : utiliser avancer() ")
+    --cppParler("Pour demander au robot d'activer quelque chose: écrivez avancer() ") 
+    --cppParler("Pour demander au robot de tourner : écrivez tournerDe(angle) ")    
+    --cppParler("L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180 ")  
+    --cppParler("Pour les boucles, amusez vous à les comprendre ;) !")
   end
   return cppNewItem("pieceRobot","leak skvsf",  cppGetResourcesPath() .. "pictures/epee_niv1.png")
 end
 
 cppAddActionMining("piece_robot",getPiece) -- lorsque l'objet est ramassé(miné au niveau 0) la piece1 est mise dans l'inventaire du joueur par le C++
--- création du coffre
+-- création du coffreutiliser
 
-cppAddInventory(15, 21, 3, 3)
-idIt = cppNewItem("epee", "test",  cppGetResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
-cppPutNewItemOn(15, 21)
-
+nouvellesCouches = function()
+    cppAddInventory(15, 22, 3, 3)
+    idIt = cppNewItem("epee", "test",  cppGetResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
+    cppPutNewItemOn(15, 22)
+    parlerCoffre = function ()
+      cppParler("On dirait bien que j'ai accompli tout ce que j'avais à faire ici...")
+    end
+    cppAddActionDeclenchement(15, 22, 0, parlerCoffre)
+    nouveauNiveau = function ()
+      cppLoadCouche("",0)
+      cppLoadCouche("",1)
+    end
+    cppAddActionPassage(51,0,0,)
+    cppAddActionPassage(52,0,0,)
+end
 
 actionOuvertureGrotte = function ()
   if nbPieceRobotGet == 3 then
@@ -65,21 +91,17 @@ actionOuvertureGrotte = function ()
     cppParler("Quelle est donc cette sorcelerie !")
     cppLoadCouche("../FichierCouche/level1.2.nbg", 0)
     cppLoadCouche("../FichierCouche/level1.2.nvc", 1)
+    nouvellesCouches()
   end
 end
 
-parlerCoffre = function ()
-  cppParler("On dirait bien que j'ai accompli tout ce que j'avais à faire ici...")
-end
-
 cppAddActionDeclenchement(16, 12, 1, actionOuvertureGrotte)
-cppAddActionDeclenchement(15, 21, 1, parlerCoffre)
 
 cppAddActionDeclenchement(54,25,0,function(entite)
   cppAfficherEnigme("enigme1")
   cppParler("Oh non une enigme !")
   sleep(1)
-  cppParler("Elle n'a pas l'air évidente...")
+  -- cppParler("Elle n'a pas l'air évidente...")
 end)
 
 -- getCoffre = function() -- on créée une fonction qui renvoie un coffre
