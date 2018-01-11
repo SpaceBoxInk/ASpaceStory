@@ -76,7 +76,7 @@ protected:
    * @param content the content of the event
    */
   template<class EventName, class Content>
-  void notifyObservers(EventName eventName, Content content);
+  void notifyObservers(EventName eventName, Content const& content);
 
   /**
    *
@@ -114,7 +114,7 @@ private:
 };
 
 template<class EventName, class Content>
-void Observed::notifyObservers(EventName eventName, Content content)
+void Observed::notifyObservers(EventName eventName, Content const& content)
 {
   if (hasChanged())
   {

@@ -50,17 +50,20 @@ private:
    * @see CLua#addActionPassage
    */
   std::function<void(std::string entite)> actionPassage;
+  std::future<void> threadPassage;
   /**
    * action set by lua
    * @see CLua#addActionDeclenchement
    */
   std::function<void(std::string entite)> actionDeclenchement;
+  std::future<void> threadDeclenchement;
 
 //=======================>Constructors<=======================
 public:
   MPartieCouche(int id, MTypeCouche type, std::string name, std::string fichierImg,
                 float placeDispo);
-  MPartieCouche(MPartieCouche const&) = default;
+  MPartieCouche(MPartieCouche const& other);
+  MPartieCouche& operator=(MPartieCouche const& other);
   // TODO: rule of five ? copyandswap
   virtual ~MPartieCouche();
 

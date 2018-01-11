@@ -86,7 +86,7 @@ void MEntite::seDefendre(MEntite& attaquant, int degats)
   this->competences.enleveVie(degats - defenseTotale());
   if (actionDefense)
   {
-    actionDefense(attaquant.getNom(), degats);
+    threadDefense = std::async(std::launch::async, actionDefense, attaquant.getNom(), degats);
   }
 }
 
@@ -113,7 +113,10 @@ try
   MEntite* entite = terrain(getTuile()->getPosition() + *direction).getEntite();
   if (entite && entite->actionInteraction)
   {
-    entite->actionInteraction(*this);
+    entite->threadInteraction = std::async(std::launch::async, [this, entite]
+    {
+      entite->actionInteraction(*this);
+    });
   }
 }
 catch (MExceptionOutOfTerrain& e)

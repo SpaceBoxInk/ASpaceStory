@@ -39,6 +39,12 @@ VInventory::VInventory(wxString const & title,
 //            wxEXPAND);
   hbox->Add(grid, 1, wxEXPAND);
   this->SetSizer(hbox);
+
+  Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent)
+  {
+    Show(false);
+  });
+
 }
 
 VInventory::~VInventory()

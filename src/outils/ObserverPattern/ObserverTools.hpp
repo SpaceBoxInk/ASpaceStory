@@ -33,7 +33,7 @@ class Observed;
  * @endcode
  */
 template<class Content>
-using EventAction = std::function<void(Content, Observed const&)>;
+using EventAction = std::function<void(Content const&, Observed const&)>;
 
 /**
  * @brief alias for event without content function signature <br>

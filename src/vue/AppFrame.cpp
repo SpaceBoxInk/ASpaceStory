@@ -141,8 +141,9 @@ void AppFrame::onResize(wxSizeEvent& event)
 void AppFrame::onKey(wxKeyEvent& event)
 {
   wxChar uc = event.GetUnicodeKey();
-  if (uc != WXK_NONE)
+  if (uc != WXK_NONE && waitNextParler.try_lock())
   {
+    waitNextParler.unlock();
     setChanged();
     std::stringstream str;
     std::wstring ws;
@@ -194,7 +195,7 @@ void AppFrame::onNext(wxCommandEvent& event)
 
 void AppFrame::parler(std::string entityTexture, std::string parole)
 {
-  waitNextParler.lock();
+  waitNextParler.try_lock();
   persoDireImage->LoadImage(entityTexture);
   persoDireImage->paintNow();
   Refresh();
@@ -203,6 +204,8 @@ void AppFrame::parler(std::string entityTexture, std::string parole)
   {
     dialogBox->AppendText(wxString(parole.c_str(), wxConvUTF8));
   });
+  waitNextParler.lock();
+  waitNextParler.unlock();
 }
 
 void AppFrame::effacerParler()
