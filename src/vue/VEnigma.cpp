@@ -16,7 +16,7 @@
 //------------------------------------------------------------
 
 VEnigma::VEnigma(wxString const & title, wxString file, std::string texte) :
-    wxFrame(NULL, wxID_ANY, title, wxPoint(-1, -1), wxSize(340, 340),
+    wxFrame(NULL, wxID_ANY, title, wxPoint(-1, -1), wxSize(420, 500),
             wxSTAY_ON_TOP | wxDEFAULT_FRAME_STYLE)
 {
   picture = new wxImagePanel(this, file, wxBITMAP_TYPE_PNG);

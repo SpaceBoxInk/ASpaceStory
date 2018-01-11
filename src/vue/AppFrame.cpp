@@ -44,8 +44,6 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
     _panel2(new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, -1))),
     tailleInventory(taille)
 {
-  this->SetMinSize(size);
-  _canvas->SetMaxSize(wxSize(-1, wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) * 0.7));
 //  getCaneva()->Connect(getCaneva()->GetId(), wxEVT_SIZE,
 //                       wxSizeEventHandler(Canvas::onResize),
 //                       getCaneva());
