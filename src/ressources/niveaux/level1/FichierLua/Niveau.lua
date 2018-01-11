@@ -54,6 +54,7 @@ guidageEnigme = function()
 end
 
 cppAddActionPassage(53,25,0, guidageEnigme)
+cppAddActionPassage(42,-24,0, guidageRobot)
 
 getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie la piece robot
   nbPieceRobotGet = nbPieceRobotGet + 1
@@ -67,7 +68,7 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
     cppParler("Je crois que pour l'utiliser il faudrait que j'apprenne à comprendre son langage...")
     cppParler("Pour lui parler appuyez sur " .. cppGetKeyFor("interactEntityKey") .. " !")
     cppParler("Pour demander au robot d'avancer : utilisez avancer() ")
-    cppParler("Pour demander au robot d'intéragir avec un objet: écrivez activer() ") 
+    cppParler("Pour demander au robot d'intéragir avec un objet(comme une tombe): écrivez activer() ") 
     cppParler("Pour demander au robot de tourner : écrivez tournerDe(angle) ")    
     cppParler("L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180 ")  
     cppParler("Pour les boucles, amusez vous à les comprendre ;) ! Pensez à utiliser les raccourcis présents dans le menu à gauche de l'éditeur. Ils vous seront très utiles ! ")
