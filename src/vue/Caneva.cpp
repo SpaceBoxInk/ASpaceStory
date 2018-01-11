@@ -205,7 +205,7 @@ try
 {
   int textMoove = (int)direction;
   sf::Sprite& sp = getSprites().at(entityName);
-  sf::Rect<int> rect = sf::Rect<int>((textMoove - 1) * getTailleTexture(), 0,
+  sf::Rect<int> rect = sf::Rect<int>((textMoove) * getTailleTexture(), 0,
                                      getTailleTexture(), getTailleTexture());
   sp.setTextureRect(rect);
   sp.setPosition(position.getX() * getTailleTexture(), position.getY() * getTailleTexture());
