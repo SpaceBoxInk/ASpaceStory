@@ -24,8 +24,8 @@ main = function()
   cppParler("Avec " .. cppGetKeyFor("upKey") .. " je devrais pouvoir avancer")
   cppParler("Et avec " .. cppGetKeyFor("downKey") .. " reculer")
   cppParler("Et puis aller à gauche et droite avec " .. cppGetKeyFor("leftKey") .. " et " .. cppGetKeyFor("rightKey"))
-  sleep(2)
-  cppParler("Oh il y a quelque chose à là-bas, il faudrait que je pense à appuyer sur la touche " .. cppGetKeyFor("interactEntityKey") .. " pour le ramasser")
+  sleep(1)
+  cppParler("Oh il y a quelque chose à là-bas, on dirait des... des... morceaux de quelque chose ! Il faudrait que je pense à appuyer sur la touche " .. cppGetKeyFor("mineKey") .. " pour le ramasser")
 end
 
 indice1 = function ()
@@ -33,8 +33,6 @@ indice1 = function ()
     cppParler("Oh il y a un levier, peut-être que je devrais appuyer sur la touche " .. cppGetKeyFor("interactEnvKey") .." pour l'actionner")
   end
 end
-
-
 -- Création niveau 1
 --Initialisation de la position
 cppSetPosition(2, 2)
@@ -54,7 +52,7 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
   if nbPieceRobotGet == 3 then
     cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", x, y, 0.4)
     cppAddActionPassage(16,11,0, indice1)
-    cppParler("Oh il se met à bouger !")
+    cppParler("Oh le robot se met à bouger !")
     -- cppParler("Il est magnifique...")
     --cppParler("Je crois que pour l'utiliser il faudrait que j'apprenne à le comprendre son langage...")
     --cppParler("Pour demander au robot d'avancer : utiliser avancer() ")
@@ -62,6 +60,10 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
     --cppParler("Pour demander au robot de tourner : écrivez tournerDe(angle) ")    
     --cppParler("L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180 ")  
     --cppParler("Pour les boucles, amusez vous à les comprendre ;) !")
+  else if nbPieceRobotGet == 2 then 
+    cppParler("Ces pieces ressemblent à une sorte de... robot ? Peut être que je devrais ramasser la troisième... ?")
+  end
+  
   end
   return cppNewItem("pieceRobot","leak skvsf",  cppGetResourcesPath() .. "pictures/epee_niv1.png")
 end
@@ -76,13 +78,16 @@ nouvellesCouches = function()
     parlerCoffre = function ()
       cppParler("On dirait bien que j'ai accompli tout ce que j'avais à faire ici...")
     end
+    
     cppAddActionDeclenchement(15, 22, 0, parlerCoffre)
     niveauSuivant = function ()
       cppLoadCouche("../../level2/level2_data/level2-FIN.nbg",0)
-      cppLoadCouche("./../level2/level2_data/level2-FIN.nvc",1)
+      cppLoadCouche("../../level2/level2_data/level2-FIN.nvc",1)
     end
+    
     cppAddActionPassage(51,0,0,niveauSuivant)
     cppAddActionPassage(52,0,0,niveauSuivant)
+    
 end
 
 actionOuvertureGrotte = function ()
