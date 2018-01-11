@@ -77,12 +77,12 @@ nouvellesCouches = function()
       cppParler("On dirait bien que j'ai accompli tout ce que j'avais à faire ici...")
     end
     cppAddActionDeclenchement(15, 22, 0, parlerCoffre)
-    nouveauNiveau = function ()
-      cppLoadCouche("",0)
-      cppLoadCouche("",1)
+    niveauSuivant = function ()
+      cppLoadCouche("../../level2/level2_data/level2-FIN.nbg",0)
+      cppLoadCouche("./../level2/level2_data/level2-FIN.nvc",1)
     end
-    cppAddActionPassage(51,0,0,)
-    cppAddActionPassage(52,0,0,)
+    cppAddActionPassage(51,0,0,niveauSuivant)
+    cppAddActionPassage(52,0,0,niveauSuivant)
 end
 
 actionOuvertureGrotte = function ()
