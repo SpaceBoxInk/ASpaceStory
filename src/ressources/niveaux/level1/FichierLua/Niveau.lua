@@ -24,8 +24,9 @@ main = function()
   cppParler("Avec " .. cppGetKeyFor("upKey") .. " je devrais pouvoir avancer")
   cppParler("Et avec " .. cppGetKeyFor("downKey") .. " reculer")
   cppParler("Et puis aller à gauche et droite avec " .. cppGetKeyFor("leftKey") .. " et " .. cppGetKeyFor("rightKey"))
-  sleep(1)
-  cppParler("Oh il y a quelque chose à là-bas, on dirait des... des... morceaux de quelque chose ! Il faudrait que je pense à appuyer sur la touche " .. cppGetKeyFor("mineKey") .. " pour les ramasser")
+  sleep(3)
+  cppParler("Oh il y a quelque chose là-bas !\n" ..
+    "Je pourrais sans doute utiliser la touche " .. cppGetKeyFor("mineKey") .. " pour les ramasser")
 end
 
 indice1 = function ()
@@ -45,16 +46,16 @@ cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png")
 cppNewEnigme("enigme1", "", cppGetResourcesPath() .. "pictures/tombe2.png")
 
 guidageRobot = function()
-  cppParler("Si vous voulez accéder au robot à distance utilisez votre tablette de programmation en appuyant sur la touche " .. cppGetKeyFor("openEditorKey"))
+  cppParler("Je peux accéder au robot à distance avec ma tablette de programmation en appuyant sur la touche " .. cppGetKeyFor("openEditorKey"))
 end
 
 guidageEnigme = function()
   sleep(3)
-  cppParler("Pour vous aider à localiser l'enigme référez vous à la petit fenêtre en bas à gauche où il est écrit coordonnées, en cliquant sur une case du niveau vous pourrez connaitre sa position (x et y)")
+  cppParler("Pour localiser l'enigme mon gps en bas à gauche me permettra de connaitre la position(x et y) d'une case en la survolant avec la souris")
 end
 
 cppAddActionPassage(53,25,0, guidageEnigme)
-cppAddActionPassage(42,-24,0, guidageRobot)
+cppAddActionPassage(42,24,0, guidageRobot)
 
 getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie la piece robot
   nbPieceRobotGet = nbPieceRobotGet + 1
@@ -64,20 +65,18 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
     cppAddActionPassage(16,11,0, indice1)
     cppParler("Oh le robot se met à bouger !")
     cppParler("Il est magnifique...")
-    cppParler("Peut-être que je devrais essayer de jeter un coup d'oeil à cette tombe là-bas vu que je ne pouvais pas passer avant, le robot le fera sûrement !")
+    cppParler("Peut-être que je devrais essayer de jeter un coup d'oeil à cette tombe grâce à mon nouveau robot, le passage semble vraiment étroit !")
     cppParler("Je crois que pour l'utiliser il faudrait que j'apprenne à comprendre son langage...")
-    cppParler("Pour lui parler appuyez sur " .. cppGetKeyFor("interactEntityKey") .. " !")
-    cppParler("Pour demander au robot d'avancer : utilisez avancer() ")
-    cppParler("Pour demander au robot d'intéragir avec un objet(comme une tombe): écrivez activer() ") 
-    cppParler("Pour demander au robot de tourner : écrivez tournerDe(angle) ")    
-    cppParler("L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180 ")  
-    cppParler("Pour les boucles, amusez vous à les comprendre ;) ! Pensez à utiliser les raccourcis présents dans le menu à gauche de l'éditeur. Ils vous seront très utiles ! ")
-    guidageRobot()
-  else if nbPieceRobotGet == 2 then 
-    cppParler("Ces pieces ressemblent à une sorte de... robot ? Peut être que je devrais ramasser la troisième... ?")
+    cppParler("Pour le programmager je peux utiliser " .. cppGetKeyFor("interactEntityKey") .. " !")
+    cppParler("Pour demander au robot d'avancer j'écris avancer() ")
+    cppParler("Pour demander au robot d'intéragir avec un objet(comme une tombe) j'écris activer() ")
+    cppParler("Pour demander au robot de tourner j'écris tournerDe(angle) ")
+    cppParler("L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180")
+    cppParler("Je peux utiliser les raccourcis présents dans le menu à gauche de ma tablette de programmation. Ils me seront très utiles ! ")
+  elseif nbPieceRobotGet == 2 then
+    cppParler("Avec une pièce de plus je devrais pouvoir construire un robot !")
   end
-  
-  end
+ 
   return cppNewItem("pieceRobot","leak skvsf",  cppGetResourcesPath() .. "pictures/epee_niv1.png")
 end
 
@@ -85,22 +84,22 @@ cppAddActionMining("piece_robot",getPiece) -- lorsque l'objet est ramassé(miné
 -- création du coffreutiliser
 
 nouvellesCouches = function()
-    cppAddInventory(15, 22, 3, 3)
-    idIt = cppNewItem("epee", "test",  cppGetResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
-    cppPutNewItemOn(15, 22)
-    parlerCoffre = function ()
-      cppParler("On dirait bien que j'ai accompli tout ce que j'avais à faire ici...")
-    end
-    
-    cppAddActionDeclenchement(15, 22, 0, parlerCoffre)
-    niveauSuivant = function ()
-      cppLoadCouche("../../level2/level2_data/level2-FIN.nbg",0)
-      cppLoadCouche("../../level2/level2_data/level2-FIN.nvc",1)
-    end
-    
-    cppAddActionPassage(51,0,0,niveauSuivant)
-    cppAddActionPassage(52,0,0,niveauSuivant)
-    
+  cppAddInventory(15, 22, 3, 3)
+  idIt = cppNewItem("epee", "test",  cppGetResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
+  cppPutNewItemOn(15, 22)
+  parlerCoffre = function ()
+    cppParler("On dirait bien que j'ai accompli tout ce que j'avais à faire ici, je pourrais continuer d'explorer d'autres horizons...")
+  end
+
+  cppAddActionDeclenchement(15, 22, 0, parlerCoffre)
+  niveauSuivant = function ()
+    cppLoadCouche("../../level2/level2_data/level2-FIN.nbg",0)
+    cppLoadCouche("../../level2/level2_data/level2-FIN.nvc",1)
+  end
+
+  cppAddActionPassage(51,0,0,niveauSuivant)
+  cppAddActionPassage(52,0,0,niveauSuivant)
+
 end
 
 actionOuvertureGrotte = function ()
