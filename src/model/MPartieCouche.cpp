@@ -9,8 +9,10 @@
  */
 
 #include "MPartieCouche.hpp"
+#include "MCoordonnees.hpp"
+#include "MThreads.hpp"
 
-#include <iostream>
+#include <stdexcept>
 
 
 //------------------------------------------------------------
@@ -64,7 +66,7 @@ void MPartieCouche::passageDe(MEntite* entite)
 {
   if (actionPassage)
   {
-    threadPassage = std::async(std::launch::async, actionPassage, entite->getNom());
+    MThreads::parallelize(actionPassage, entite->getNom());
   }
 }
 
@@ -72,8 +74,7 @@ void MPartieCouche::declenchementDe(MEntite* entite)
 {
   if (actionDeclenchement)
   {
-    threadDeclenchement = std::async(std::launch::async, actionDeclenchement,
-                                     entite->getNom());
+    MThreads::parallelize(actionDeclenchement, entite->getNom());
   }
 }
 

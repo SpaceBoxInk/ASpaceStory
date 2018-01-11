@@ -28,7 +28,7 @@ using namespace std::chrono_literals;
 
 MRobot::MRobot(MPersonnage* proprietaire, std::string const& nom, std::string const& texture,
                MTuile* tuile, float taille) :
-    MEntite(nom, texture, tuile, taille), proprietaire(*proprietaire), speed(1s),
+    MEntite(nom, texture, tuile, taille), proprietaire(*proprietaire), speed(500ms),
     posDepart(tuile), dirDepart(getDirection())
 {
 }

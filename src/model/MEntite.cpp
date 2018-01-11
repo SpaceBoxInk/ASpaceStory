@@ -10,11 +10,12 @@
  */
 
 #include "MEntite.hpp"
-#include "MAssException.hpp"
 #include "MEvents.hpp"
 #include "MItem.hpp"
+#include "MThreads.hpp"
 #include "MTerrain.hpp"
 #include "MTuile.hpp"
+
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -92,7 +93,7 @@ void MEntite::seDefendre(MEntite& attaquant, int degats)
   this->competences.enleveVie(degats - defenseTotale());
   if (actionDefense)
   {
-    threadDefense = std::async(std::launch::async, actionDefense, attaquant.getNom(), degats);
+    MThreads::parallelize(actionDefense, attaquant.getNom(), degats);
   }
 }
 
@@ -119,7 +120,7 @@ try
   MEntite* entite = terrain(getTuile()->getPosition() + *direction).getEntite();
   if (entite && entite->actionInteraction)
   {
-    entite->threadInteraction = std::async(std::launch::async, [this, entite]
+    MThreads::parallelize([this, entite]
     {
       entite->actionInteraction(*this);
     });

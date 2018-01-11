@@ -42,6 +42,7 @@ private:
   MCoordonnees position;
 
   MEntite* entite;
+
 //=======================>Constructors<=======================
 public:
   MTuile(MCoordonnees const& position, MPartieCouche const& couche);

@@ -234,18 +234,28 @@ bool MTuile::hasPartieCouche(MTypeCouche type) const
  */
 void MTuile::setPartieCouche(MPartieCouche const& couche)
 {
-  if (couches.at((int)couche.getType()))
+  if (!couches.at((int)couche.getType()))
   {
-    delete couches.at((int)couche.getType());
-  }
-  if (couche.isTypeOf(MTypeCouche::ELEMENT))
-  {
-    couches[(int)couche.getType()] = new MPartieCoucheElement(
-        dynamic_cast<MPartieCoucheElement const&>(couche));
+    if (couche.isTypeOf(MTypeCouche::ELEMENT))
+    {
+      couches[(int)couche.getType()] = new MPartieCoucheElement(
+          dynamic_cast<MPartieCoucheElement const&>(couche));
+    }
+    else
+    {
+      couches[(int)couche.getType()] = new MPartieCouche(couche);
+    }
   }
   else
   {
-    couches[(int)couche.getType()] = new MPartieCouche(couche);
+    if (couche.isTypeOf(MTypeCouche::ELEMENT))
+    {
+      *couches[(int)couche.getType()] = (dynamic_cast<MPartieCoucheElement const&>(couche));
+    }
+    else
+    {
+      *couches[(int)couche.getType()] = couche;
+    }
   }
 }
 

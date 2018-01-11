@@ -28,7 +28,6 @@ private:
    * THIS POINTER is copied !! it's to share the action between all same couche
    */
   std::shared_ptr<std::function<void(MEntite* entite, int item, int xMined, int yMined)>> actionMining; // replace by item
-  std::future<void> threadMining;
 
 //=======================>Constructors<=======================
 public:

@@ -10,6 +10,9 @@
  */
 
 #include "MPartieCoucheElement.hpp"
+#include "MCoordonnees.hpp"
+#include "MInventaire.hpp"
+#include "MThreads.hpp"
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -22,7 +25,8 @@
 MPartieCoucheElement::MPartieCoucheElement(Id ID, MTypeCouche type, std::string name,
                                            std::string fichierImg, float placeDispo,
                                            int miningLevel) :
-    MPartieCouche(ID, type, name, fichierImg, placeDispo), miningLevel(miningLevel),
+    MPartieCouche(ID, type, name, fichierImg, placeDispo),
+    miningLevel(miningLevel),
     actionMining(
         new std::function<void(MEntite* entite, int item, int xMined, int yMined)>(nullptr))
 {
@@ -52,8 +56,7 @@ void MPartieCoucheElement::mine(MEntite* entite, int item, MCoordonnees minedCoo
 {
   if (*actionMining)
   {
-    threadMining = std::async(std::launch::async, *actionMining, entite, item,
-                              minedCoords.getX(), minedCoords.getY());
+    MThreads::parallelize(*actionMining, entite, item, minedCoords.getX(), minedCoords.getY());
   }
 }
 

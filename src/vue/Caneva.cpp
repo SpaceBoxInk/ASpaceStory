@@ -257,7 +257,6 @@ void Canvas::drawAll()
     }
 
     this->display();
-
   }
 }
 
