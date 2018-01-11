@@ -42,7 +42,7 @@ cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png")
 
 -- enigme1 = NewEnigme("enigme1","description", cppGetResourcesPath() .. "pictures/tombe.png")
 
-cppNewEnigme("enigme1", "Contenu de l'enigme", cppGetResourcesPath() .. "pictures/tombe.png")
+cppNewEnigme("enigme1", "Soit le point T(a,b) position de la tombe, le tunel se trouve au point M(x,y). Déterminez x et y pour trouver mon trésor... ", cppGetResourcesPath() .. "pictures/tombe2.png")
 
 
 
@@ -93,9 +93,9 @@ end
 actionOuvertureGrotte = function ()
   if nbPieceRobotGet == 3 then
     -- charge le fond
-    cppParler("Quelle est donc cette sorcelerie !")
     cppLoadCouche("../FichierCouche/level1.2.nbg", 0)
     cppLoadCouche("../FichierCouche/level1.2.nvc", 1)
+    cppParler("Quelle est donc cette sorcelerie !")
     nouvellesCouches()
   end
 end
