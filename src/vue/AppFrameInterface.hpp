@@ -39,8 +39,10 @@ public:
 //  virtual void setVie(int vie, int vieMax) = 0;
 
   virtual void addEntite(std::string entityName, std::string file) = 0;
-  virtual void move(std::string entityName, MCoordonnees const& offset) = 0;
-  virtual void setPositionOf(std::string entityName, MCoordonnees const& position) = 0;
+  virtual void move(std::string entityName, MCoordonnees const& offset,
+                    Mouvement direction) = 0;
+  virtual void setPositionOf(std::string entityName, MCoordonnees const& position,
+                             Mouvement direction) = 0;
   virtual void parler(std::string entityTexture, std::string parole) = 0;
 //  virtual void penser(std::string entityTexture, std::string parole) = 0;
   /**
