@@ -119,11 +119,6 @@ inline void MEntite::setActionInteraction(
   this->actionInteraction = actionInteraction;
 }
 
-inline void MEntite::setDirection(Mouvement direction)
-{
-  this->direction = direction;
-}
-
 inline std::string const & MEntite::getNom() const
 {
   return nom;

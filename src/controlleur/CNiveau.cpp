@@ -59,7 +59,7 @@ void CNiveau::setEventMethods()
   addAction<MModelEvents, MEntite>(
       MModelEvents::ENTITY_MOVED, [this](MEntite const& entity, Observed const&)
       {
-        vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition());
+        vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition(), entity.getDirection());
       });
 }
 
@@ -105,7 +105,7 @@ void CNiveau::addEntite(std::string name, std::string texture, MTuile* tuile, fl
   {
     it->second.addObserver(this);
     vuePrincipale->addEntite(name, texture);
-    vuePrincipale->setPositionOf(name, tuile->getPosition());
+    vuePrincipale->setPositionOf(name, tuile->getPosition(), entites.at(name).getDirection());
   }
 }
 

@@ -26,10 +26,8 @@
 
 MEntite::MEntite(std::string const& nom, std::string const& texture, MTuile* tuile,
                  float taille) :
-    MObjetTexture(texture), nom(nom), tuile(nullptr), direction(Mouvement::DROITE),
-    taille(0),
-    inventaire(70),
-    actionDefense(nullptr), actionInteraction(nullptr)
+    MObjetTexture(texture), nom(nom), tuile(nullptr), direction(Mouvement::DROITE), taille(0),
+    inventaire(70), actionDefense(nullptr), actionInteraction(nullptr)
 {
   setTaille(taille);
   setTuile(tuile);
@@ -57,7 +55,9 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
   using MouvementT::operator *;
 
   // on set la direction peut importe si on peut aller sur la case
+  auto depOld = getDirection();
   setDirection(deplacement);
+
   try
   {
     // on prend la position de la tuile, puis on ajoute le deplacement
@@ -71,10 +71,16 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
       if (tuile->deplacerEntiteVers(tuileDst))
       {
         tuile = &terrain(tuile->getPosition() + *deplacement);
-        setChanged();
-        notifyObservers(MModelEvents::ENTITY_MOVED, *this);
       }
+      setChanged();
     }
+    else if (depOld != deplacement)
+    {
+      setChanged();
+    }
+
+    notifyObservers(MModelEvents::ENTITY_MOVED, *this);
+
   }
   catch (MExceptionOutOfTerrain& e)
   {
@@ -188,6 +194,16 @@ void MEntite::utiliserObjet()
 MCompetence const& MEntite::getCompetences() const
 {
   return this->competences;
+}
+
+void MEntite::setDirection(Mouvement direction)
+{
+  if (this->direction != direction)
+  {
+    setChanged();
+  }
+  this->direction = direction;
+  notifyObservers(MModelEvents::ENTITY_MOVED, *this);
 }
 
 void MEntite::setTuile(MTuile* tuile)

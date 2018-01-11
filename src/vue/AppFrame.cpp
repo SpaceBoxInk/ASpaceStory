@@ -39,8 +39,9 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
             wxNewId(),
             wxPoint(-1, -1),
             wxSize(MParameters::getNbTuileX() * tailleTexture,
-                   MParameters::getNbTuileY() * tailleTexture))),
-    _panel2(new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, 100))),
+                   MParameters::getNbTuileY() * tailleTexture),
+            tailleTexture)),
+    _panel2(new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, -1))),
     tailleInventory(taille)
 {
   this->SetMinSize(size);
@@ -162,14 +163,15 @@ wxPanel* AppFrame::getPanel()
   return this->_panel2;
 }
 
-void AppFrame::move(std::string entityName, MCoordonnees const& offset)
+void AppFrame::move(std::string entityName, MCoordonnees const& offset, Mouvement direction)
 {
-  _canvas->move(entityName, offset);
+  _canvas->move(entityName, offset, direction);
 }
 
-void AppFrame::setPositionOf(std::string entityName, MCoordonnees const& position)
+void AppFrame::setPositionOf(std::string entityName, MCoordonnees const& position,
+                             Mouvement direction)
 {
-  _canvas->setPositionOf(entityName, position);
+  _canvas->setPositionOf(entityName, position, direction);
 }
 
 void AppFrame::showEnigma(std::string title, std::string file, std::string textInside)
