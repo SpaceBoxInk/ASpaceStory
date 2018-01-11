@@ -42,7 +42,18 @@ cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png")
 
 -- enigme1 = NewEnigme("enigme1","description", cppGetResourcesPath() .. "pictures/tombe.png")
 
-cppNewEnigme("enigme1", "Soit le point T(a,b) position de la tombe, le tunel se trouve au point M(x,y). Déterminez x et y pour trouver mon trésor... ", cppGetResourcesPath() .. "pictures/tombe2.png")
+cppNewEnigme("enigme1", "", cppGetResourcesPath() .. "pictures/tombe2.png")
+
+guidageRobot = function()
+  cppParler("Si vous voulez accéder au robot à distance utilisez votre tablette de programmation en appuyant sur la touche " .. cppGetKeyFor("openEditorKey"))
+end
+
+guidageEnigme = function()
+  sleep(3)
+  cppParler("Pour vous aider à localiser l'enigme référez vous à la petit fenêtre en bas à gauche où il est écrit coordonnées, en cliquant sur une case du niveau vous pourrez connaitre sa position (x et y)")
+end
+
+cppAddActionPassage(53,25,0, guidageEnigme)
 
 getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie la piece robot
   nbPieceRobotGet = nbPieceRobotGet + 1
@@ -52,12 +63,15 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
     cppAddActionPassage(16,11,0, indice1)
     cppParler("Oh le robot se met à bouger !")
     cppParler("Il est magnifique...")
-    cppParler("Je crois que pour l'utiliser il faudrait que j'apprenne à le comprendre son langage...")
-    cppParler("Pour demander au robot d'avancer : utiliser avancer() ")
-    cppParler("Pour demander au robot d'activer quelque chose: écrivez activer() ") 
+    cppParler("Peut-être que je devrais essayer de jeter un coup d'oeil à cette tombe là-bas vu que je ne pouvais pas passer avant, le robot le fera sûrement !")
+    cppParler("Je crois que pour l'utiliser il faudrait que j'apprenne à comprendre son langage...")
+    cppParler("Pour lui parler appuyez sur " .. cppGetKeyFor("interactEntityKey") .. " !")
+    cppParler("Pour demander au robot d'avancer : utilisez avancer() ")
+    cppParler("Pour demander au robot d'intéragir avec un objet: écrivez activer() ") 
     cppParler("Pour demander au robot de tourner : écrivez tournerDe(angle) ")    
     cppParler("L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180 ")  
-    cppParler("Pour les boucles, amusez vous à les comprendre ;) !")
+    cppParler("Pour les boucles, amusez vous à les comprendre ;) ! Pensez à utiliser les raccourcis présents dans le menu à gauche de l'éditeur. Ils vous seront très utiles ! ")
+    guidageRobot()
   else if nbPieceRobotGet == 2 then 
     cppParler("Ces pieces ressemblent à une sorte de... robot ? Peut être que je devrais ramasser la troisième... ?")
   end
