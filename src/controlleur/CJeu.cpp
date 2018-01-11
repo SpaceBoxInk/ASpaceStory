@@ -29,7 +29,11 @@
 //------------------------------------------------------------
 
 CJeu::CJeu() :
-    vuePrincipale(new AppFrame("A Space Story", wxPoint(0, 0), wxSize(136, 100), 32)),
+    vuePrincipale(
+        new AppFrame("A Space Story", wxPoint(0, 0),
+            wxSize(wxSystemSettings::GetMetric(wxSYS_SCREEN_X) - 10,
+                   wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) - 50),
+            32)),
     cNiveau(vuePrincipale), cPersonnage(vuePrincipale, &cNiveau.getTerrain()), cLua(this)
 {
 
