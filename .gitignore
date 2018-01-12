@@ -43,10 +43,11 @@
 *.app
 /Debug/
 /Tests/
-/Debug Gcov/
+Debug Gcov/
+ASpaceStory
 /ASpaceStory.xml
 /Win/
-/IHM/
+*.o
 /src/ressources/programs/*
 !/src/ressources/programs/defaultProgram.lua
 /IHMDoxy/

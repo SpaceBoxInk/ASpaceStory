@@ -2,16 +2,19 @@
 The game
 
 ## Compilation
-It uses c++17, so compile with g++ --std=c++1z or with clang5 with this same flag\
+It uses c++17, so compile with g++ --std=c++1z or with clang5 with this same flag and -lstdc++fs for the filesystem c++ library<br>
 It also depends on [Lua](http://www.lua.org/home.html), [sfml](https://www.sfml-dev.org/) and [wxWidget](http://wxwidgets.org/)
 
+a make file is available in IHM folder for linux
+
 ## Compilation libs
-you can use these commands :
+you can use these commands :<br>
 <pre>
-\`wx-config --libs\` \`pkg-config X11 --libs\` \`pkg-config X11 --libs\` \`pkg-config sfml-all --libs\`
+\`wx-config --libs\` \`pkg-config x11 --libs\` \`pkg-config sfml-all --libs\`
 
 and for gtk :
 \`pkg-config gtk+-3.0 --libs\`
+
 
 under Linux it may be :
 
@@ -45,7 +48,14 @@ lua
 </pre>
 
 ## Compilation flags
-use the same commands with --cflags :
+use the same commands with --cflags :<br>
+<pre>
+\`wx-config --cflags\` \`pkg-config x11 --cflags\` \`pkg-config sfml-all --cflags\`
+
+and for gtk :
+\`pkg-config gtk+-3.0 --cflags\`
+</pre>
+
 <pre>
 -I :
 /usr/include/wx-3.0
