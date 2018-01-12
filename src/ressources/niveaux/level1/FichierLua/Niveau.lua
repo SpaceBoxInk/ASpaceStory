@@ -120,7 +120,7 @@ cppAddActionDeclenchement(54,25,0,function(entite)
   cppAfficherEnigme("enigme1")
   cppParler(pngPersoParl, "Oh non une enigme !")
   sleep(1)
-  cppParler("Elle n'a pas l'air évidente...")
+  cppParler(pngPersoParl, "Elle n'a pas l'air évidente...")
 end)
 
 -- getCoffre = function() -- on créée une fonction qui renvoie un coffre
