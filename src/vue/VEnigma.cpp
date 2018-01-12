@@ -23,6 +23,8 @@ VEnigma::VEnigma(wxString const & title, wxString file, std::string texte) :
   text = new wxTextCtrl(this, wxID_ANY, texte, wxPoint(-1, -1), wxSize(30, 50), wxTE_READONLY);
   wxBoxSizer* hbox = new wxBoxSizer(wxVERTICAL);
 
+  SetSize(picture->getPictureSize().x, picture->getPictureSize().y + 100);
+
   hbox->Add(picture, 9, wxEXPAND);
   hbox->Add(text, 1, wxEXPAND);
   hbox->Add(new wxButton(this, wxID_EXIT, wxT("Ok"), wxPoint(-1, -1)), 1, wxEXPAND);

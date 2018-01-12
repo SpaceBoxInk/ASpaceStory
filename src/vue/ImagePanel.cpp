@@ -81,6 +81,11 @@ void wxImagePanel::OnSize(wxSizeEvent& event)
   event.Skip();
 }
 
+wxSize wxImagePanel::getPictureSize()
+{
+  return image.GetSize();
+}
+
 void wxImagePanel::LoadImage(std::string file)
 {
   this->image.LoadFile(file, wxBITMAP_TYPE_PNG);

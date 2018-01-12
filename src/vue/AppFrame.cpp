@@ -134,7 +134,6 @@ Canvas* AppFrame::getCaneva()
 
 void AppFrame::onResize(wxSizeEvent& event)
 {
-  std::cout << "resize" << std::endl;
 }
 
 void AppFrame::onKey(wxKeyEvent& event)

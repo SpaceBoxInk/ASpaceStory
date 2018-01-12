@@ -15,23 +15,25 @@ function sleep(sec)
   socket.sleep(sec)
 end
 
+pngPersoParl = cppGetResourcesPath() .. "sprites/persoParle.png"
+
 -- recupere la clé d'une action :
 main = function()
   sleep(0.5)
-  cppParler("Qu'est ce que je fais là... ?")
-  cppParler("Est ce que je peux bouger... ?")
-  cppParler("Il faut que j'essaye...")
-  cppParler("Avec " .. cppGetKeyFor("upKey") .. " je devrais pouvoir avancer")
-  cppParler("Et avec " .. cppGetKeyFor("downKey") .. " reculer")
-  cppParler("Et puis aller à gauche et droite avec " .. cppGetKeyFor("leftKey") .. " et " .. cppGetKeyFor("rightKey"))
+  cppParler(pngPersoParl, "Qu'est ce que je fais là... ?")
+  cppParler(pngPersoParl, "Est ce que je peux bouger... ?")
+  cppParler(pngPersoParl, "Il faut que j'essaye...")
+  cppParler(pngPersoParl, "Avec " .. cppGetKeyFor("upKey") .. " je devrais pouvoir avancer")
+  cppParler(pngPersoParl, "Et avec " .. cppGetKeyFor("downKey") .. " reculer")
+  cppParler(pngPersoParl, "Et puis aller à gauche et droite avec " .. cppGetKeyFor("leftKey") .. " et " .. cppGetKeyFor("rightKey"))
   sleep(3)
-  cppParler("Oh il y a quelque chose là-bas !\n" ..
+  cppParler(pngPersoParl, "Oh il y a quelque chose là-bas !\n" ..
     "Je pourrais sans doute utiliser la touche " .. cppGetKeyFor("mineKey") .. " pour les ramasser")
 end
 
 indice1 = function ()
   if nbPieceRobotGet == 3 then
-    cppParler("Oh il y a un levier, peut-être que je devrais appuyer sur la touche " .. cppGetKeyFor("interactEnvKey") .." pour l'actionner")
+    cppParler(pngPersoParl, "Oh il y a un levier, peut-être que je devrais appuyer sur la touche " .. cppGetKeyFor("interactEnvKey") .." pour l'actionner")
   end
 end
 -- Création niveau 1
@@ -46,12 +48,12 @@ cppSetTexture(cppGetResourcesPath() .. "sprites/perso_face_32.png")
 cppNewEnigme("enigme1", "", cppGetResourcesPath() .. "pictures/tombe2.png")
 
 guidageRobot = function()
-  cppParler("Je peux accéder au robot à distance avec ma tablette de programmation en appuyant sur la touche " .. cppGetKeyFor("openEditorKey"))
+  cppParler(pngPersoParl, "Je peux accéder au robot à distance avec ma tablette de programmation en appuyant sur la touche " .. cppGetKeyFor("openEditorKey"))
 end
 
 guidageEnigme = function()
   sleep(3)
-  cppParler("Pour localiser l'enigme mon gps en bas à gauche me permettra de connaitre la position(x et y) d'une case en la survolant avec la souris")
+  cppParler(pngPersoParl, "Pour localiser l'enigme mon gps en bas à gauche me permettra de connaitre la position(x et y) d'une case en la survolant avec la souris")
 end
 
 cppAddActionPassage(53,25,0, guidageEnigme)
@@ -63,18 +65,18 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
   if nbPieceRobotGet == 3 then
     cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", x, y, 0.4)
     cppAddActionPassage(16,11,0, indice1)
-    cppParler("Oh le robot se met à bouger !")
-    cppParler("Il est magnifique...")
-    cppParler("Peut-être que je devrais essayer de jeter un coup d'oeil à cette tombe grâce à mon nouveau robot, le passage semble vraiment étroit !")
-    cppParler("Je crois que pour l'utiliser il faudrait que j'apprenne à comprendre son langage...")
-    cppParler("Pour le programmager je peux utiliser " .. cppGetKeyFor("interactEntityKey") .. " !")
-    cppParler("Pour demander au robot d'avancer j'écris avancer() ")
-    cppParler("Pour demander au robot d'intéragir avec un objet(comme une tombe) j'écris activer() ")
-    cppParler("Pour demander au robot de tourner j'écris tournerDe(angle) ")
-    cppParler("L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180")
-    cppParler("Je peux utiliser les raccourcis présents dans le menu à gauche de ma tablette de programmation. Ils me seront très utiles ! ")
+    cppParler(pngPersoParl, "Oh le robot se met à bouger !")
+    cppParler(pngPersoParl, "Il est magnifique...")
+    cppParler(pngPersoParl, "Peut-être que je devrais essayer de jeter un coup d'oeil à cette tombe grâce à mon nouveau robot, le passage semble vraiment étroit !")
+    cppParler(pngPersoParl, "Je crois que pour l'utiliser il faudrait que j'apprenne à comprendre son langage...")
+    cppParler(pngPersoParl, "Pour le programmager je peux utiliser " .. cppGetKeyFor("interactEntityKey") .. " !")
+    cppParler(pngPersoParl, "Pour demander au robot d'avancer j'écris avancer() ")
+    cppParler(pngPersoParl, "Pour demander au robot d'intéragir avec un objet(comme une tombe) j'écris activer() ")
+    cppParler(pngPersoParl, "Pour demander au robot de tourner j'écris tournerDe(angle) ")
+    cppParler(pngPersoParl, "L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180")
+    cppParler(pngPersoParl, "Je peux utiliser les raccourcis présents dans le menu à gauche de ma tablette de programmation. Ils me seront très utiles ! ")
   elseif nbPieceRobotGet == 2 then
-    cppParler("Avec une pièce de plus je devrais pouvoir construire un robot !")
+    cppParler(pngPersoParl, "Avec une pièce de plus je devrais pouvoir construire un robot !")
   end
  
   return cppNewItem("pieceRobot","leak skvsf",  cppGetResourcesPath() .. "pictures/epee_niv1.png")
@@ -88,7 +90,7 @@ nouvellesCouches = function()
   idIt = cppNewItem("epee", "test",  cppGetResourcesPath() .. "pictures/epee_niv1.png", 2, 3, 3, false, 1)
   cppPutNewItemOn(15, 22)
   parlerCoffre = function ()
-    cppParler("On dirait bien que j'ai accompli tout ce que j'avais à faire ici, je pourrais continuer d'explorer d'autres horizons...")
+    cppParler(pngPersoParl, "On dirait bien que j'ai accompli tout ce que j'avais à faire ici, je pourrais continuer d'explorer d'autres horizons...")
   end
 
   cppAddActionDeclenchement(15, 22, 0, parlerCoffre)
@@ -107,7 +109,7 @@ actionOuvertureGrotte = function ()
     -- charge le fond
     cppLoadCouche("../FichierCouche/level1.2.nbg", 0)
     cppLoadCouche("../FichierCouche/level1.2.nvc", 1)
-    cppParler("Quelle est donc cette sorcelerie !")
+    cppParler(pngPersoParl, "Quelle est donc cette sorcelerie !")
     nouvellesCouches()
   end
 end
@@ -116,7 +118,7 @@ cppAddActionDeclenchement(16, 12, 1, actionOuvertureGrotte)
 
 cppAddActionDeclenchement(54,25,0,function(entite)
   cppAfficherEnigme("enigme1")
-  cppParler("Oh non une enigme !")
+  cppParler(pngPersoParl, "Oh non une enigme !")
   sleep(1)
   cppParler("Elle n'a pas l'air évidente...")
 end)
