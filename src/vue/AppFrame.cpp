@@ -83,8 +83,8 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
 
   dialogueSizer->Add(persoDireImage, 1, wxEXPAND);
   dialogueSizer->Add(direZoneSizer, 5, wxEXPAND);
-  direZoneSizer->Add(dialogBox, 2, wxEXPAND);
-  direZoneSizer->Add(okButton, 1, wxEXPAND);
+  direZoneSizer->Add(dialogBox, 5, wxEXPAND);
+  direZoneSizer->Add(okButton, 4, wxEXPAND);
   dialogPanel->SetSizer(dialogueSizer);
 
   _panel2->SetSizer(hbox2);
