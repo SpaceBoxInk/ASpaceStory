@@ -14,6 +14,7 @@
 #include <wx/gdicmn.h>
 #include <wx/generic/panelg.h>
 #include <wx/sizer.h>
+#include <wx/gbsizer.h>
 #include <wx/string.h>
 #include <wx/utils.h>
 #include <iostream>
@@ -38,12 +39,11 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
             wxNewId(),
             wxPoint(-1, -1),
             wxSize(MParameters::getNbTuileX() * tailleTexture,
-                   MParameters::getNbTuileY() * tailleTexture))),
+                   MParameters::getNbTuileY() * tailleTexture),
+            tailleTexture)),
     _panel2(new wxPanel(this, wxID_ANY, wxPoint(-1, -1), wxSize(-1, -1))),
     tailleInventory(taille)
 {
-  this->SetMinSize(size);
-
 //  getCaneva()->Connect(getCaneva()->GetId(), wxEVT_SIZE,
 //                       wxSizeEventHandler(Canvas::onResize),
 //                       getCaneva());
@@ -53,26 +53,28 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
   wxPanel* dialogPanel = new wxPanel(_panel2, wxNewId(), wxPoint(-1, -1));
   wxBoxSizer* middleSizer = new wxBoxSizer(wxVERTICAL);
   wxBoxSizer* dialogueSizer = new wxBoxSizer(wxHORIZONTAL);
-  persoDireImage = new wxImagePanelP(dialogPanel, MParameters::getRootPath() + "/pictures/nothing.png",
-                            wxBITMAP_TYPE_PNG);
+  persoDireImage = new wxImagePanelP(dialogPanel,
+                                     MParameters::getRootPath() + "/pictures/nothing.png",
+                                     wxBITMAP_TYPE_PNG);
   wxBoxSizer* direZoneSizer = new wxBoxSizer(wxVERTICAL);
 
 //  VPlayerInventaireInterface* interF = new VPlayerInventory(taille);
 
-  middleSizer->Add(new wxGauge(middlePanel, wxNewId(), 100, wxPoint(-1, -1), wxSize(-1, -1)),
-                   1, wxEXPAND);
-  middleSizer->Add(new wxGauge(middlePanel, wxNewId(), 100, wxPoint(-1, -1), wxSize(-1, -1)),
-                   1, wxEXPAND);
-  middleSizer->Add(new wxPanel(middlePanel, wxNewId(), wxPoint(-1, -1), wxSize(-1, -1)), 1,
-                   wxEXPAND);
+//  middleSizer->Add(new wxGauge(middlePanel, wxNewId(), 100, wxPoint(-1, -1), wxSize(-1, -1)),
+//                   3, wxEXPAND);
+//  middleSizer->Add(new wxGauge(middlePanel, wxNewId(), 100, wxPoint(-1, -1), wxSize(-1, -1)),
+//                   3, wxEXPAND);
+//  middleSizer->Add(new wxPanel(middlePanel, wxNewId(), wxPoint(-1, -1), wxSize(-1, -1)), 1,
+//                   wxEXPAND);
+
   middlePanel->SetSizer(middleSizer);
-  hbox->Add(_canvas, 15, wxEXPAND);
-  hbox->Add(_panel2, 1, wxEXPAND);
+  hbox->Add(_canvas, 1, wxEXPAND);
+  hbox->Add(_panel2, 0, wxEXPAND);
+
   cursorloc = new wxTextCtrl(_panel2, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, -1),
   wxTE_READONLY | wxTE_CENTER);
-  dialogBox = new wxTextCtrl(dialogPanel, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, -1),
+  dialogBox = new wxTextCtrl(dialogPanel, wxNewId(), "", wxPoint(-1, -1), wxSize(-1, 50),
   wxTE_READONLY | wxTE_MULTILINE);
-  waitNextParler.lock();
 
   wxButton* okButton = new wxButton(dialogPanel, wxNewId(), "Suivant >");
   hbox2->Add(cursorloc, 2, wxEXPAND);
@@ -81,12 +83,13 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
 
   dialogueSizer->Add(persoDireImage, 1, wxEXPAND);
   dialogueSizer->Add(direZoneSizer, 5, wxEXPAND);
-  direZoneSizer->Add(dialogBox, 22, wxEXPAND);
-  direZoneSizer->Add(okButton, 11, wxEXPAND);
+  direZoneSizer->Add(dialogBox, 5, wxEXPAND);
+  direZoneSizer->Add(okButton, 4, wxEXPAND);
   dialogPanel->SetSizer(dialogueSizer);
 
   _panel2->SetSizer(hbox2);
   this->SetSizer(hbox);
+
 //  Connect(this->GetId(), wxEVT_CHAR_HOOK, wxKeyEventHandler(AppFrame::onKey));
   this->Bind(wxEVT_CHAR_HOOK, &AppFrame::onKey, this);
   okButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AppFrame::onNext, this);
@@ -99,7 +102,6 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
        notifyObservers(MUserEvents::EXIT);
        exit(0);
      });
-
 
   ////////////////////////////////////////////////////////////////////////////////
   // Probably due to some RTTI, IDE is getting confused by this dynamic call
@@ -133,14 +135,14 @@ Canvas* AppFrame::getCaneva()
 
 void AppFrame::onResize(wxSizeEvent& event)
 {
-  std::cout << "resize" << std::endl;
 }
 
 void AppFrame::onKey(wxKeyEvent& event)
 {
   wxChar uc = event.GetUnicodeKey();
-  if (uc != WXK_NONE)
+  if (uc != WXK_NONE && waitNextParler.try_lock())
   {
+    waitNextParler.unlock();
     setChanged();
     std::stringstream str;
     std::wstring ws;
@@ -160,14 +162,15 @@ wxPanel* AppFrame::getPanel()
   return this->_panel2;
 }
 
-void AppFrame::move(std::string entityName, MCoordonnees const& offset)
+void AppFrame::move(std::string entityName, MCoordonnees const& offset, Mouvement direction)
 {
-  _canvas->move(entityName, offset);
+  _canvas->move(entityName, offset, direction);
 }
 
-void AppFrame::setPositionOf(std::string entityName, MCoordonnees const& position)
+void AppFrame::setPositionOf(std::string entityName, MCoordonnees const& position,
+                             Mouvement direction)
 {
-  _canvas->setPositionOf(entityName, position);
+  _canvas->setPositionOf(entityName, position, direction);
 }
 
 void AppFrame::showEnigma(std::string title, std::string file, std::string textInside)
@@ -184,21 +187,32 @@ AppFrame::~AppFrame()
 
 void AppFrame::onNext(wxCommandEvent& event)
 {
+  effacerParler();
+  waitNextParler.try_lock();
   waitNextParler.unlock();
 //  notifyObservers(MUserEvents::NEXT_DIALOG);
 }
 
-void AppFrame::parler(std::string entityName, std::string parole)
+void AppFrame::parler(std::string entityTexture, std::string parole)
 {
-  waitNextParler.lock();
-  persoDireImage->LoadImage(entityName);
+  waitNextParler.try_lock();
+  persoDireImage->LoadImage(entityTexture);
   persoDireImage->paintNow();
   Refresh();
   dialogBox->Clear();
-  dialogBox->AppendText(parole);
+  dialogBox->CallAfter([this, parole]
+  {
+    dialogBox->AppendText(wxString(parole.c_str(), wxConvUTF8));
+  });
+  waitNextParler.lock();
+  waitNextParler.unlock();
 }
 
 void AppFrame::effacerParler()
 {
-  parler(MParameters::getRootPath() + "/pictures/nothing.png", "");
+  persoDireImage->LoadImage(MParameters::getRootPath() + "/pictures/nothing.png");
+  persoDireImage->paintNow();
+  Refresh();
+  dialogBox->Clear();
+  dialogBox->AppendText("");
 }

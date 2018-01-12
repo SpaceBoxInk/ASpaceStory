@@ -14,7 +14,7 @@ static int const kDefaultWindowWidth = 1280;
 static int const kDefaultWindowHeight = 720;
 static int const kCanvasMargin = 50;
 
-class wxSfmlCanvas : public wxControl, public sf::RenderWindow
+class wxSfmlCanvas : public wxPanel, public sf::RenderWindow
 {
 public:
   wxSfmlCanvas(wxWindow *parent = nullptr, wxWindowID windowId = -1, wxPoint const &position =

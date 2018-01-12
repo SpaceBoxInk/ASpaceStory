@@ -97,7 +97,7 @@ void CPersonnage::setEventMethods()
   addAction<MModelEvents, MEntite>(
       MModelEvents::ENTITY_MOVED, [this](MEntite const& entity, Observed const&)
       {
-        vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition());
+        vuePrincipale->setPositionOf(entity.getNom(), entity.getTuile()->getPosition(), entity.getDirection());
       });
 
   addAction(MUserEvents::EXIT, [this](Observed const&)
@@ -115,14 +115,15 @@ void CPersonnage::addRobot(std::string const & nom, std::string const & texture,
     currentPerso->getRobot(nom).addObserver(this);
 
     currentPerso->getRobot(nom).setActionInteraction(
-        [&, nom](MEntite const& entite)
+        [this, nom](MEntite const& entite)
         {
           editor.setProgramName(currentPerso->getNom() + "-" + nom + ".lua", &currentPerso->getRobot(nom));
           editor.showEditor();
         });
 
     vuePrincipale->addEntite(nom, texture);
-    vuePrincipale->setPositionOf(nom, tuile->getPosition());
+    vuePrincipale->setPositionOf(nom, tuile->getPosition(),
+                                 currentPerso->getRobot(nom).getDirection());
 
   }
 }

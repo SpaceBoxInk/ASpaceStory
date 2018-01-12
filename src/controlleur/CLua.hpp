@@ -71,6 +71,7 @@ private:
 //=========================>Methods<==========================
 public:
   void executeScript(std::string script);
+  void executeMain();
 
 private:
   static int cppLoadCouche(lua_State* l);
@@ -78,6 +79,8 @@ private:
   static int cppGetScriptPath(lua_State* l);
   static int cppGetResourcesPath(lua_State* l);
   static int loadfile(lua_State* l);
+
+  static int cppGetKeyFor(lua_State* l);
 
   static int cppAddActionDeclenchement(lua_State* l);
   static int cppAddActionPassage(lua_State* l);
@@ -109,6 +112,7 @@ private:
   static int cppNewEnigme(lua_State* l);
   static int cppAfficherEnigme(lua_State* l);
 
+  static int cppParler(lua_State* l);
 
 
 //==================Register functions========================

@@ -29,7 +29,7 @@ class MRobot : public MEntite
 //========================>Attributes<========================
 private:
   MPersonnage& proprietaire;
-  std::chrono::seconds speed;
+  std::chrono::milliseconds speed;
   MTuile* posDepart;
   Mouvement dirDepart;
 //=======================>Constructors<=======================
@@ -50,22 +50,27 @@ private:
 
 //=====================>Getters&Setters<======================
 public:
-  std::chrono::seconds const & getSpeed() const;
-
+  std::chrono::milliseconds const & getSpeed() const;
+  MTuile const* getBeginPos() const;
 private:
-  void setSpeed(std::chrono::seconds const & speed);
+  void setSpeed(std::chrono::milliseconds const & speed);
 
 };
 //------------------------------------------------------------
 //=====================>Implementations<======================
 //------------------------------------------------------------
 
-inline std::chrono::seconds const & MRobot::getSpeed() const
+inline std::chrono::milliseconds const & MRobot::getSpeed() const
 {
   return speed;
 }
 
-inline void MRobot::setSpeed(std::chrono::seconds const & speed)
+inline MTuile const * MRobot::getBeginPos() const
+{
+  return posDepart;
+}
+
+inline void MRobot::setSpeed(std::chrono::milliseconds const & speed)
 {
   this->speed = speed;
 }

@@ -28,7 +28,7 @@ using namespace std::chrono_literals;
 
 MRobot::MRobot(MPersonnage* proprietaire, std::string const& nom, std::string const& texture,
                MTuile* tuile, float taille) :
-    MEntite(nom, texture, tuile, taille), proprietaire(*proprietaire), speed(1s),
+    MEntite(nom, texture, tuile, taille), proprietaire(*proprietaire), speed(500ms),
     posDepart(tuile), dirDepart(getDirection())
 {
 }
@@ -55,7 +55,7 @@ try
     setChanged();
     notifyObservers(MModelEvents::ENTITY_MOVED, *dynamic_cast<MEntite*>(this));
   }
-  return true;
+  return isReset();
 }
 catch (MAssException& e)
 {
@@ -64,7 +64,7 @@ catch (MAssException& e)
 
 bool MRobot::isReset()
 {
-  return getTuile()->getPosition() == posDepart->getPosition();
+  return getTuile()->getPosition() == posDepart->getPosition() && dirDepart == getDirection();
 }
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================

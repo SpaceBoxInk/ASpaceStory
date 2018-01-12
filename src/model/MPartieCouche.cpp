@@ -9,8 +9,11 @@
  */
 
 #include "MPartieCouche.hpp"
+#include "MCoordonnees.hpp"
+#include "MThreads.hpp"
 
-#include <iostream>
+#include <stdexcept>
+
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -25,6 +28,25 @@ MPartieCouche::MPartieCouche(int id, MTypeCouche type, std::string name,
                              float placeDispo) :
     id(id), type(type), name(name), fichierImg(fichierImg), placeDispo(placeDispo)
 {
+}
+
+MPartieCouche::MPartieCouche(MPartieCouche const &other):
+    id(other.id), type(other.type), name(other.name), fichierImg(other.fichierImg),
+    placeDispo(other.placeDispo), actionPassage(other.actionPassage),
+    actionDeclenchement(other.actionDeclenchement)
+{
+}
+
+MPartieCouche& MPartieCouche::operator =(MPartieCouche const & other)
+{
+  id = other.id;
+  type = other.type;
+  name = other.name;
+  fichierImg = other.fichierImg;
+  placeDispo = other.placeDispo;
+  actionPassage = other.actionPassage;
+  actionDeclenchement = other.actionDeclenchement;
+  return *this;
 }
 
 MPartieCouche::~MPartieCouche()
@@ -44,7 +66,7 @@ void MPartieCouche::passageDe(MEntite* entite)
 {
   if (actionPassage)
   {
-    actionPassage(entite->getNom());
+    MThreads::parallelize(actionPassage, entite->getNom());
   }
 }
 
@@ -52,11 +74,11 @@ void MPartieCouche::declenchementDe(MEntite* entite)
 {
   if (actionDeclenchement)
   {
-    actionDeclenchement(entite->getNom());
+    MThreads::parallelize(actionDeclenchement, entite->getNom());
   }
 }
 
-void MPartieCouche::mine(MEntite* entite, int item)
+void MPartieCouche::mine(MEntite* entite, int item, MCoordonnees minedCoords)
 {
   throw std::logic_error("Cannot call mine on couche isn't ELEMENT !");
 }
@@ -95,7 +117,7 @@ int MPartieCouche::getMiningLevel() const
 }
 
 void MPartieCouche::setActionMining(
-    std::function<void(MEntite* entite, int item)> actionMining)
+    std::function<void(MEntite* entite, int item, int xMined, int yMined)> actionMining)
 {
   throw std::logic_error("Cannot call setActionMining on couche isn't ELEMENT !");
 }
@@ -103,4 +125,10 @@ void MPartieCouche::setActionMining(
 void MPartieCouche::unSetActionMining()
 {
   throw std::logic_error("Cannot call unSetActionMining on couche isn't ELEMENT !");
+}
+
+std::string to_string(MTypeCouche coucheT)
+{
+  std::array<char const *, 4> names { "Sol", "Element", "Ciel", "SIZE" };
+  return names[(int)(coucheT)];
 }

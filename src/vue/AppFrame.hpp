@@ -31,8 +31,9 @@ public:
 
   void addEntite(std::string name, std::string file) override;
 
-  void move(std::string entityName, MCoordonnees const& offset) override;
-  void setPositionOf(std::string entityName, MCoordonnees const& offset) override;
+  void move(std::string entityName, MCoordonnees const& offset, Mouvement direction) override;
+  void setPositionOf(std::string entityName, MCoordonnees const& offset, Mouvement direction)
+      override;
 private:
   Canvas* getCaneva();
   void onFocus(wxFocusEvent& event);
@@ -43,7 +44,7 @@ private:
 public:
   void showEnigma(std::string title, std::string file, std::string textInside);
   wxPanel* getPanel();
-  void parler(std::string entityName, std::string parole);
+  void parler(std::string entityTexture, std::string parole);
   void effacerParler();
 private:
   Canvas* _canvas;

@@ -16,12 +16,14 @@
 //------------------------------------------------------------
 
 VEnigma::VEnigma(wxString const & title, wxString file, std::string texte) :
-    wxFrame(NULL, wxID_ANY, title, wxPoint(-1, -1), wxSize(340, 340),
+    wxFrame(NULL, wxID_ANY, title, wxPoint(-1, -1), wxSize(420, 500),
             wxSTAY_ON_TOP | wxDEFAULT_FRAME_STYLE)
 {
   picture = new wxImagePanel(this, file, wxBITMAP_TYPE_PNG);
-  text = new wxTextCtrl(this, wxID_ANY, texte, wxPoint(-1, -1), wxSize(20, 20), wxTE_READONLY);
+  text = new wxTextCtrl(this, wxID_ANY, texte, wxPoint(-1, -1), wxSize(30, 50), wxTE_READONLY);
   wxBoxSizer* hbox = new wxBoxSizer(wxVERTICAL);
+
+  SetSize(picture->getPictureSize().x, picture->getPictureSize().y + 100);
 
   hbox->Add(picture, 9, wxEXPAND);
   hbox->Add(text, 1, wxEXPAND);

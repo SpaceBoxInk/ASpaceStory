@@ -25,11 +25,7 @@ enum class MTypeCouche
   SIZE
 };
 
-constexpr char const* to_string(MTypeCouche coucheT)
-{
-  std::array<char const*, 4> names { "Sol", "Element", "Ciel", "SIZE" };
-  return names[(int)coucheT];
-}
+std::string to_string(MTypeCouche coucheT);
 
 
 class MPartieCouche
@@ -64,7 +60,8 @@ private:
 public:
   MPartieCouche(int id, MTypeCouche type, std::string name, std::string fichierImg,
                 float placeDispo);
-  MPartieCouche(MPartieCouche const&) = default;
+  MPartieCouche(MPartieCouche const& other);
+  virtual MPartieCouche& operator=(MPartieCouche const& other);
   // TODO: rule of five ? copyandswap
   virtual ~MPartieCouche();
 
@@ -77,7 +74,7 @@ public:
   void passageDe(MEntite* entite);
   void declenchementDe(MEntite* entite);
 
-  virtual void mine(MEntite* entite, int item);
+  virtual void mine(MEntite* entite, int item, MCoordonnees minedCoords);
 
   bool isNull() const;
 private:
@@ -85,6 +82,7 @@ private:
 //=====================>Getters&Setters<======================
 public:
   int getId() const;
+  void setId(int id);
 
   MTypeCouche const& getType() const;
   std::string const& getName() const;
@@ -97,7 +95,7 @@ public:
   void setActionDeclenchement(std::function<void(std::string entite)> actionDeclenchement);
   void setActionPassage(std::function<void(std::string entite)> actionPassage);
   virtual void setActionMining(
-      std::function<void(MEntite* entite, int item)> actionMining);
+      std::function<void(MEntite* entite, int item, int xMined, int yMined)> actionMining);
   void unSetActionDeclenchement();
   void unSetActionPassage();
   virtual void unSetActionMining();
@@ -133,6 +131,11 @@ inline void MPartieCouche::setActionPassage(
 inline void MPartieCouche::unSetActionDeclenchement()
 {
   actionDeclenchement = nullptr;
+}
+
+inline void MPartieCouche::setId(int id)
+{
+  this->id = id;
 }
 
 inline void MPartieCouche::unSetActionPassage()

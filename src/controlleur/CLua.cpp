@@ -23,6 +23,7 @@
 #include "../model/MPersonnage.hpp"
 #include "../model/MTerrain.hpp"
 #include "../model/MTuile.hpp"
+#include "../vue/AppFrameInterface.hpp"
 #include "../vue/VInventaireInterface.hpp"
 
 #include <stdexcept>
@@ -51,6 +52,7 @@ CLua::CLua(CJeu* cJeu)
   registerEntiteFunctions();
   registerItemFunctions();
   registerEnigmeFunctions();
+
 }
 
 CLua::~CLua()
@@ -75,14 +77,7 @@ int CLua::cppLoadCouche(lua_State* l)
   MTypeCouche couche = (MTypeCouche)lua_tointeger(l, 2);
 
   coucheFile = cJeu->cNiveau.getScriptFolder() + coucheFile;
-  try
-  {
-    cJeu->cNiveau.getTerrain().loadCouche(coucheFile, couche);
-  }
-  catch (MAssException& e)
-  {
-    std::cerr << e.what();
-  }
+  cJeu->cNiveau.getTerrain().loadCouche(coucheFile, couche);
   return 0;
 }
 
@@ -144,6 +139,13 @@ int CLua::loadfile(lua_State* l)
   return 1;
 }
 
+int CLua::cppGetKeyFor(lua_State* l)
+{
+  testArgs(1);
+  push(MParameters::getKey(lua_tostring(l, 1)).c_str());
+  return 1;
+}
+
 /**
  * addActionDeclenchement(int x, int y, int couche, fonction actionDeclenchement(entite))\n
  * ajoute l'action actionDeclenchement à la couche n°couche en (x,y)
@@ -152,25 +154,30 @@ int CLua::loadfile(lua_State* l)
 int CLua::cppAddActionDeclenchement(lua_State* l)
 {
   testArgs(4);
-  MTypeCouche couche = (MTypeCouche)lua_tointeger(l, 3);
+  MTypeCouche typeCouche = (MTypeCouche)lua_tointeger(l, 3);
 
   if (lua_isfunction(l, -1))
   {
     // store function
     int curIndex = luaL_ref(l, LUA_REGISTRYINDEX);
 
-    getTuile(1)->getPartieCouche(couche)->setActionDeclenchement(
-        [curIndex, l](std::string entite)
+    auto couche = getTuile(1)->getPartieCouche(typeCouche);
+    if (!couche)
+    {
+      throw MAssException("Couche " + to_string(typeCouche) + " inexistante");
+    }
+
+    couche->setActionDeclenchement([curIndex, l](std::string entite)
+    {
+      // get function previously stored in special lua table registry
+        lua_rawgeti(l, LUA_REGISTRYINDEX, curIndex);
+        if (lua_isfunction(l, -1))
         {
-          // get function previously stored in special lua table registry
-          lua_rawgeti(l, LUA_REGISTRYINDEX, curIndex);
-          if (lua_isfunction(l, -1))
-          {
-            push(entite.c_str());
-            // call function defined by lua
-            lua_call(l, 1, 0);
-          }
-        });
+          push(entite.c_str());
+          // call function defined by lua
+          lua_call(l, 1, 0);
+        }
+      });
 
   }
   return 0;
@@ -409,7 +416,7 @@ int CLua::cppNewItem(lua_State* l)
     equipement = (MTypeEquipement)lua_tointeger(l, 3);
     break;
   case 3:
-      // default min parameters
+    // default min parameters
     break;
   default:
     throw MExceptionLuaArguments("Nombre d'argument pour création d'item invalid ! ",
@@ -512,8 +519,11 @@ int CLua::cppAddActionUtilisation(lua_State* l)
 }
 
 /**
- * addActionMining(string element, function(string entite, int itemId))
+ * addActionMining(string element, function(string entite, int itemId, int xMined, int yMined))
  * element est le nom d'un element définie dans elementList
+ *
+ * la fonction passée en paramètre peut retourner l'id du dernier item créé (dans cette fonction par exemple)
+ * pour mettre cet item dans l'inventaire de l'entité mineuse
  */
 int CLua::cppAddActionMining(lua_State* l)
 {
@@ -521,14 +531,16 @@ int CLua::cppAddActionMining(lua_State* l)
   std::string element = lua_tostring(l, 1);
   int curIndex = storeFunction();
   cJeu->cNiveau.getTerrain().getElement(element).setActionMining(
-      [curIndex, l](MEntite* entite, int item)
+      [curIndex, l](MEntite* entite, int item, int xMined, int yMined)
       {
         pushFunctionFrom(curIndex);
         // pass entity name on 1st parameter
         push(entite->getNom().c_str());
         lua_pushinteger(l, item);
+        lua_pushinteger(l, xMined);
+        lua_pushinteger(l, yMined);
         // call function defined by lua
-        lua_call(l, 2, 1);
+        lua_call(l, 4, 1);
         if (!lua_isnil(l, -1))
         {
           entite->addItemToInventaire(getItem());
@@ -563,11 +575,24 @@ int CLua::cppAfficherEnigme(lua_State* l)
   return 0;
 }
 
+/**
+ * cppParler(string texture, string msg)
+ */
+int CLua::cppParler(lua_State* l)
+{
+  testArgs(2);
+  std::string texture = lua_tostring(l, 1);
+  std::string msg = lua_tostring(l, getTop());
+  cJeu->vuePrincipale->parler(texture, msg);
+  return 0;
+}
+
 void CLua::registerBaseFunctions()
 {
   lua_register(lua, "cppSetScriptPath", cppSetScriptPath);
   lua_register(lua, "cppGetScriptPath", cppGetScriptPath);
   lua_register(lua, "cppGetResourcesPath", cppGetResourcesPath);
+  lua_register(lua, "cppGetKeyFor", cppGetKeyFor);
   lua_register(lua, "loadfile", loadfile);
 }
 
@@ -590,6 +615,8 @@ void CLua::registerEntiteFunctions()
   lua_register(lua, "cppSetTexture", cppSetTexture);
   lua_register(lua, "cppGetCurrentPerso", cppGetCurrentPerso);
   lua_register(lua, "cppAddActionDefense", cppAddActionDefense);
+
+  lua_register(lua, "cppParler", cppParler);
 }
 
 void CLua::registerItemFunctions()
@@ -614,20 +641,35 @@ void CLua::executeScript(std::string script)
 {
   try
   {
-    luaL_dofile(lua, script.c_str());
-  }
-  catch (MAssException& e)
-  {
-    throw;
+    if (luaL_dofile(lua, script.c_str()))
+    {
+      std::cerr << "\nError : " << lua_tostring(lua, -1) << '\n';
+      throw MAssException("Erreur lors de l'execution du script lua");
+    }
   }
   catch (...)
   {
     lua_Debug ar;
     lua_getstack(lua, 0, &ar);
     lua_getinfo(lua, "nfSl", &ar);
-    std::cout << "Error in " << ar.namewhat << " : " << ar.name << '\n';
+    std::cerr << "Error in " << ar.namewhat << " : " << ar.name << '\n';
     throw;
   }
+}
+
+void CLua::executeMain()
+try
+{
+  lua_getglobal(lua, "main");
+  lua_call(lua, 0, 0);
+}
+catch (...)
+{
+  lua_Debug ar;
+  lua_getstack(lua, 0, &ar);
+  lua_getinfo(lua, "nfSl", &ar);
+  std::cerr << "Error in " << ar.namewhat << " : " << ar.name << '\n';
+  throw;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -737,8 +779,7 @@ void CLua::testArgs(int nbExpectedMin, int nbExpectedMax)
       lua_getinfo(lua, "nf", &ar);
       throw MExceptionLuaArguments(
           "Expect between " + std::to_string(nbExpectedMin) + " arguments and "
-              + std::to_string(nbExpectedMax) + " for "
-              + std::string(ar.name),
+              + std::to_string(nbExpectedMax) + " for " + std::string(ar.name),
           nb);
     }
   }
@@ -754,7 +795,6 @@ void CLua::testArgs(int nbExpectedMin)
 {
   testArgs(nbExpectedMin, nbExpectedMin);
 }
-
 
 std::string CLua::getCurFunction()
 {

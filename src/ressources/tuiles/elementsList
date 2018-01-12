@@ -1,4 +1,23 @@
-# nom : fichierImage index(pour les .nbg) placeDispo(0-1) 
-rien : dummy.png 0 1.0 -1
-montagne : montagne.png 1 0.0 0
-buisson : buisson.png 2 0.0 -1
+# nom :                     fichierImage                   index(pour les .nvc) placeDispo(0-1) miningLevel
+rien :                      dummy.png                      0                    1.0 	            -1
+arbre :                     arbre.png                      1                    0.0 		          -1
+montagne_pleine :           montagne_pleine.png            2                    0.0 		          -1
+coffre :                    coffre.png                     3                    0.0 	 	          -1
+tombe :                     tombe.png                      4                    0.0 		          -1
+piece_robot :               piece_robot.png                5                    0.0 		           0
+passage_etroit_horizontal : passage_etroit_horizontal.png  6                    0.5 		          -1
+passage_etroit_angle_1 :    passage_etroit_angle_1.png     7                    0.5 		          -1
+passage_etroit_angle_2 :    passage_etroit_angle_2.png     8                    0.5 		          -1
+passage_etroit_vertical :   passage_etroit_vertical.png    9                    0.5 		          -1
+montagne_vertical_1 :	      montagne_vertical_1.png	       10                   0.0               -1
+montagne_vertical_2 :       montagne_vertical_2.png        11                   0.0               -1
+montagne_vertical_3 :       montagne_vertical_3.png        12                   0.0               -1
+montagne_vertical_4 :       montagne_vertical_4.png        13                   0.0               -1
+montagne_angle_ext_1 :       montagne_angle_ext_1.png       14                   0.0               -1
+montagne_angle_ext_2 :       montagne_angle_ext_2.png	     15                   0.0               -1
+montagne_angle_ext_3 :	      montagne_angle_ext_3.png	     16                   0.0               -1
+montagne_angle_ext_4 :	      montagne_angle_ext_4.png	     17                   0.0               -1
+#montagne_angle_int_1 :	      montagne_angle_int_1.png	     18			              0.0		            -1
+#montagne_angle_int_2 :	      montagne_angle_int_2.png	     19			              0.0		            -1
+#montagne_angle_int_3 :	      montagne_angle_int_3.png	     20			              0.0		            -1
+#montagne_angle_int_4 :	      montagne_angle_int_4.png	     21			              0.0		            -1

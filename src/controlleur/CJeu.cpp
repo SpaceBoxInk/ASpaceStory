@@ -11,8 +11,14 @@
 
 #include "CJeu.hpp"
 
-#include "../model/MCoordonnees.hpp"
+#include "../model/MAssException.hpp"
+#include "../model/MEvents.hpp"
 #include "../model/MPersonnage.hpp"
+#include "../model/MTuile.hpp"
+#include "../outils/ObserverPattern/Observer.hpp"
+#include "../vue/AppFrame.hpp"
+
+#include <iostream>
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -23,26 +29,29 @@
 //------------------------------------------------------------
 
 CJeu::CJeu() :
-    vuePrincipale(new AppFrame("A Space Story", wxPoint(0, 0), wxSize(1536, 1000), 32)),
+    vuePrincipale(
+        new AppFrame("A Space Story", wxPoint(0, 0),
+            wxSize(wxSystemSettings::GetMetric(wxSYS_SCREEN_X) - 10,
+                   wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) - 80),
+            32)),
     cNiveau(vuePrincipale), cPersonnage(vuePrincipale, &cNiveau.getTerrain()), cLua(this)
 {
-  cPersonnage.addPersonnage("name");
-  cPersonnage.setPersonnage("name");
-  try
-  {
-    cLua.executeScript(cNiveau.getScript());
-  }
-  catch (MAssException& e)
-  {
-    std::cout << e.what() << '\n';
-    throw;
-  }
+
+  cPersonnage.addPersonnage("joueur 1");
+  cPersonnage.setPersonnage("joueur 1");
+  cLua.executeScript(cNiveau.getScript());
+
   // TODO : to change (lua)
   vuePrincipale->addEntite(cPersonnage.getCurrentPerso()->getNom(),
                            cPersonnage.getCurrentPerso()->getTexture());
   vuePrincipale->setPositionOf(cPersonnage.getCurrentPerso()->getNom(),
-                               cPersonnage.getCurrentPerso()->getTuile()->getPosition());
+                               cPersonnage.getCurrentPerso()->getTuile()->getPosition(),
+                               cPersonnage.getCurrentPerso()->getDirection());
   dynamic_cast<AppFrame*>(vuePrincipale)->Show();
+
+  thread = std::async(std::launch::async, [this]
+  { cLua.executeMain();});
+
 }
 
 CJeu::~CJeu()
@@ -70,6 +79,7 @@ MPersonnage* CJeu::getPersonnage(std::string name)
 {
   return cPersonnage.getPersonnage(name);
 }
+
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------

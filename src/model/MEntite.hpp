@@ -22,6 +22,8 @@
 #include <functional>
 #include <string>
 
+class MItem;
+
 class MTerrain;
 class MTuile;
 
@@ -114,14 +116,9 @@ inline void MEntite::setActionDefense(std::function<void(std::string, int)> acti
 }
 
 inline void MEntite::setActionInteraction(
-    std::function<void(MEntite const & entite)> actionInteraction)
+    std::function<void(MEntite const& entite)> actionInteraction)
 {
   this->actionInteraction = actionInteraction;
-}
-
-inline void MEntite::setDirection(Mouvement direction)
-{
-  this->direction = direction;
 }
 
 inline std::string const & MEntite::getNom() const

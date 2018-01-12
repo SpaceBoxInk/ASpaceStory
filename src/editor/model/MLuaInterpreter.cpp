@@ -15,10 +15,10 @@
 #include "../../model/MCoordonnees.hpp"
 #include "../../model/MRobot.hpp"
 #include "../../model/MTerrain.hpp"
+#include "../../model/MTuile.hpp"
 #include "../view/Editor.hpp"
 
 #include <thread>
-#include <typeinfo>
 
 extern "C"
 {
@@ -146,12 +146,19 @@ MLuaInterpreter::~MLuaInterpreter()
 //------------------------------------------------------------
 void MLuaInterpreter::execute(std::string const& exePath)
 {
-  robot->launch();
-  abort = false;
-  running.lock();
-  luaL_dofile(lua, exePath.c_str());
-  running.unlock();
-  abort = false;
+  if (robot->launch())
+  {
+    abort = false;
+    running.lock();
+    luaL_dofile(lua, exePath.c_str());
+    running.unlock();
+    abort = false;
+  }
+  else
+  {
+    output << "Je ne peux pas demarrer car " << robot->getBeginPos()->getEntite()->getNom()
+        << " bloque le passage...";
+  }
 }
 
 void MLuaInterpreter::interrupt()

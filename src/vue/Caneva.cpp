@@ -71,7 +71,7 @@ void Canvas::onCursor(wxMouseEvent& event)
 //  / MParameters::getNbTuileY();
   int coordX = (int)(coord.x / tailleTextX * MParameters::getNbTuileX());
   int coordY = (int)floor(
-  (coord.y / tailleTextY * MParameters::getNbTuileY()));
+      (coord.y / tailleTextY * MParameters::getNbTuileY()));
 #else
   std::string str;
   double tailleTextX = (this->wxSfmlCanvas::getSize().x);
@@ -82,10 +82,7 @@ void Canvas::onCursor(wxMouseEvent& event)
   int coordY = (int)floor(
       (coord.y / tailleTextY * MParameters::getNbTuileY()) - MParameters::getNbTuileY() / 2);
 #endif
-  str = "Coordonnees : "
-      + std::to_string(coordX)
-      + ", "
-      + std::to_string(-coordY);
+  str = "Coordonnees : " + std::to_string(coordX) + ", " + std::to_string(-coordY);
   dynamic_cast<AppFrame*>(GetParent())->cursorloc->Clear();
   dynamic_cast<AppFrame*>(GetParent())->cursorloc->AppendText(str);
 //  dynamic_cast<AppFrame*>(GetParent())->cursorloc->AppendText(
@@ -108,11 +105,13 @@ void Canvas::onResize(wxSizeEvent& event)
   sf::Vector2u si(GetSize().x, GetSize().y);
   sf::RenderWindow::setSize(si);
   drawAll();
+  Refresh();
 }
 void Canvas::loadFileIntoGround(int const* idList, std::string texture, int level,
                                 int tailleTexture)
 {
   //TODO : c'est un tableau
+
   if (level == 0)
     ground.load(texture, sf::Vector2u(tailleTexture, tailleTexture), idList, x / tailleTexture,
                 y / tailleTexture);
@@ -179,10 +178,17 @@ void Canvas::addEntite(std::string name, std::string file)
   }
 }
 
-void Canvas::move(std::string entityName, MCoordonnees const& offset)
+void Canvas::move(std::string entityName, MCoordonnees const& offset, Mouvement direction)
 try
 {
+  int textMoove = (int)direction;
   sf::Sprite& sp = getSprites().at(entityName);
+//  wxPoint topLeft = wxPoint((textMoove - 1) * getTailleTexture(), 0);
+//  wxPoint BottomRight = wxPoint((textMoove) * getTailleTexture(), getTailleTexture());
+//  wxRect rect = wxRect(topLeft, BottomRight);
+  sf::Rect<int> rect = sf::Rect<int>((textMoove - 1) * getTailleTexture(), 0,
+                                     getTailleTexture(), getTailleTexture());
+  sp.setTextureRect(rect);
   sp.move(offset.getX() * getTailleTexture(), offset.getY() * getTailleTexture());
   drawAll();
 }
@@ -191,10 +197,15 @@ catch (std::out_of_range e)
   std::cout << entityName << " pas trouvé" << std::endl;
 }
 
-void Canvas::setPositionOf(std::string entityName, MCoordonnees const& position)
+void Canvas::setPositionOf(std::string entityName, MCoordonnees const& position,
+                           Mouvement direction)
 try
 {
+  int textMoove = (int)direction;
   sf::Sprite& sp = getSprites().at(entityName);
+  sf::Rect<int> rect = sf::Rect<int>((textMoove) * getTailleTexture(), 0,
+                                     getTailleTexture(), getTailleTexture());
+  sp.setTextureRect(rect);
   sp.setPosition(position.getX() * getTailleTexture(), position.getY() * getTailleTexture());
   drawAll();
 }
@@ -202,7 +213,6 @@ catch (std::out_of_range e)
 {
   std::cout << entityName << " pas trouvé" << std::endl;
 }
-
 
 void Canvas::setTailleTexture(int taille)
 {
@@ -212,6 +222,14 @@ void Canvas::setTailleTexture(int taille)
 int Canvas::getTailleTexture()
 {
   return this->tailleTexture;
+}
+
+void Canvas::SetSize(int width, int height)
+{
+  wxPanel::SetSize(width, height);
+  sf::Vector2u si(GetSize().x, GetSize().y);
+  sf::RenderWindow::setSize(si);
+  drawAll();
 }
 
 void Canvas::setTexture(std::string const& file)

@@ -39,6 +39,12 @@ VInventory::VInventory(wxString const & title,
 //            wxEXPAND);
   hbox->Add(grid, 1, wxEXPAND);
   this->SetSizer(hbox);
+
+  Bind(wxEVT_CLOSE_WINDOW, [this](wxCloseEvent)
+  {
+    Show(false);
+  });
+
 }
 
 VInventory::~VInventory()
@@ -97,7 +103,10 @@ void VInventory::delObjInv(unsigned long long id)
 
 void VInventory::show(bool show)
 {
-  this->Show(show);
+  this->CallAfter([this, show]
+  {
+    Show(show);
+  });
 }
 
 //------------------------------------------------------------

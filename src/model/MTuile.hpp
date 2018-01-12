@@ -42,6 +42,7 @@ private:
   MCoordonnees position;
 
   MEntite* entite;
+
 //=======================>Constructors<=======================
 public:
   MTuile(MCoordonnees const& position, MPartieCouche const& couche);
@@ -77,6 +78,7 @@ public:
   MCoordonnees const & getPosition() const;
   void deletePartieCouche(MTypeCouche typeCouche);
   MEntite* getEntite();
+  MEntite const* getEntite() const;
   bool isEntitePresente() const;
   void placeEntite(MEntite* entite);
 

@@ -19,7 +19,7 @@
 #include "Tilemap.cpp"
 #include "wxSFMLCanevas.hpp"
 
-class MCoordonnees;
+#include "../model/MCoordonnees.hpp";
 
 class Canvas : public wxSfmlCanvas
 {
@@ -50,11 +50,12 @@ public:
   void fermer();
   bool setEvent();
   void addEntite(std::string name, std::string file);
-  void move(std::string entityName, MCoordonnees const& offset);
-  void setPositionOf(std::string entityName, MCoordonnees const& position);
+  void move(std::string entityName, MCoordonnees const& offset, Mouvement direction);
+  void setPositionOf(std::string entityName, MCoordonnees const& position,
+                     Mouvement direction);
+  void SetSize(int width, int height);
 
 private:
-
   void onResize(wxSizeEvent& event);
   void onCursor(wxMouseEvent& event);
   //=====================>Getters&Setters<======================

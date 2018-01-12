@@ -207,12 +207,14 @@ void CEditor::setProgramName(std::string programName, MRobot* robot)
 
   save.setFileName(programName);
 
-  std::string content;
-  save.load(content);
-
-  ihmEditor->getEdit()->Clear();
-  ihmEditor->SetLabel("Editeur : " + programName);
-  writeColoredMet(content);
+  ihmEditor->CallAfter([this, programName]
+  {
+    std::string content;
+    save.load(content);
+    ihmEditor->getEdit()->Clear();
+    ihmEditor->SetLabel("Editeur : " + programName);
+    writeColoredMet(content);
+  });
 }
 
 void CEditor::loadMethods(std::string method)
@@ -222,8 +224,13 @@ void CEditor::loadMethods(std::string method)
 
 void CEditor::showEditor(bool show)
 {
-  if (ihmEditor->GetLabel() != "Editeur")
-    ihmEditor->Show(show);
+  ihmEditor->CallAfter([this, show]
+  {
+    if (ihmEditor->GetLabel() != "Editeur")
+    {
+      ihmEditor->Show(show);
+    }
+  });
 }
 //------------------------------------------------------------
 //=====================>Getters&Setters<======================

@@ -128,6 +128,12 @@ bool MTuile::deplacerEntiteVers(MTuile& tuileDst)
  */
 void MTuile::interagirTuile(MEntite* entite)
 {
+  // ouverture inventaire
+  if (vItems)
+  {
+    vItems->show();
+  }
+
   for (int i = 0; i < (int)MTypeCouche::SIZE; ++i)
   {
     if (getPartieCouche((MTypeCouche)i))
@@ -136,11 +142,6 @@ void MTuile::interagirTuile(MEntite* entite)
     }
   }
 
-  // ouverture inventaire
-  if (vItems)
-  {
-    vItems->show();
-  }
 }
 
 void MTuile::addItem(MItem* item)
@@ -209,9 +210,13 @@ void MTuile::mine(MEntite* entite, int item)
   MPartieCouche* elem = getPartieCouche(MTypeCouche::ELEMENT);
   if (elem && elem->getMiningLevel() >= 0 && item >= elem->getMiningLevel())
   {
-    elem->mine(entite, item);
-    deletePartieCouche(MTypeCouche::ELEMENT);
+    elem->mine(entite, item, getPosition());
   }
+}
+
+MEntite const * MTuile::getEntite() const
+{
+  return entite;
 }
 
 bool MTuile::hasPartieCouche(MTypeCouche type) const
@@ -228,18 +233,28 @@ bool MTuile::hasPartieCouche(MTypeCouche type) const
  */
 void MTuile::setPartieCouche(MPartieCouche const& couche)
 {
-  if (couches.at((int)couche.getType()))
+  if (!couches.at((int)couche.getType()))
   {
-    delete couches.at((int)couche.getType());
-  }
-  if (couche.isTypeOf(MTypeCouche::ELEMENT))
-  {
-    couches[(int)couche.getType()] = new MPartieCoucheElement(
-        dynamic_cast<MPartieCoucheElement const&>(couche));
+    if (couche.isTypeOf(MTypeCouche::ELEMENT))
+    {
+      couches[(int)couche.getType()] = new MPartieCoucheElement(
+          dynamic_cast<MPartieCoucheElement const&>(couche));
+    }
+    else
+    {
+      couches[(int)couche.getType()] = new MPartieCouche(couche);
+    }
   }
   else
   {
-    couches[(int)couche.getType()] = new MPartieCouche(couche);
+    if (couche.isTypeOf(MTypeCouche::ELEMENT))
+    {
+      *couches[(int)couche.getType()] = (dynamic_cast<MPartieCoucheElement const&>(couche));
+    }
+    else
+    {
+      *couches[(int)couche.getType()] = couche;
+    }
   }
 }
 

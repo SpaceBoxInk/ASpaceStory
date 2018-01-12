@@ -10,11 +10,12 @@
  */
 
 #include "MEntite.hpp"
-#include "MAssException.hpp"
 #include "MEvents.hpp"
 #include "MItem.hpp"
+#include "MThreads.hpp"
 #include "MTerrain.hpp"
 #include "MTuile.hpp"
+
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -26,10 +27,8 @@
 
 MEntite::MEntite(std::string const& nom, std::string const& texture, MTuile* tuile,
                  float taille) :
-    MObjetTexture(texture), nom(nom), tuile(nullptr), direction(Mouvement::DROITE),
-    taille(0),
-    inventaire(70),
-    actionDefense(nullptr), actionInteraction(nullptr)
+    MObjetTexture(texture), nom(nom), tuile(nullptr), direction(Mouvement::DROITE), taille(0),
+    inventaire(70), actionDefense(nullptr), actionInteraction(nullptr)
 {
   setTaille(taille);
   setTuile(tuile);
@@ -57,7 +56,9 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
   using MouvementT::operator *;
 
   // on set la direction peut importe si on peut aller sur la case
+  auto depOld = getDirection();
   setDirection(deplacement);
+
   try
   {
     // on prend la position de la tuile, puis on ajoute le deplacement
@@ -71,10 +72,16 @@ void MEntite::deplacer(MTerrain& terrain, Mouvement const & deplacement)
       if (tuile->deplacerEntiteVers(tuileDst))
       {
         tuile = &terrain(tuile->getPosition() + *deplacement);
-        setChanged();
-        notifyObservers(MModelEvents::ENTITY_MOVED, *this);
       }
+      setChanged();
     }
+    else if (depOld != deplacement)
+    {
+      setChanged();
+    }
+
+    notifyObservers(MModelEvents::ENTITY_MOVED, *this);
+
   }
   catch (MExceptionOutOfTerrain& e)
   {
@@ -86,7 +93,7 @@ void MEntite::seDefendre(MEntite& attaquant, int degats)
   this->competences.enleveVie(degats - defenseTotale());
   if (actionDefense)
   {
-    actionDefense(attaquant.getNom(), degats);
+    MThreads::parallelize(actionDefense, attaquant.getNom(), degats);
   }
 }
 
@@ -113,7 +120,10 @@ try
   MEntite* entite = terrain(getTuile()->getPosition() + *direction).getEntite();
   if (entite && entite->actionInteraction)
   {
-    entite->actionInteraction(*this);
+    MThreads::parallelize([this, entite]
+    {
+      entite->actionInteraction(*this);
+    });
   }
 }
 catch (MExceptionOutOfTerrain& e)
@@ -190,17 +200,30 @@ MCompetence const& MEntite::getCompetences() const
   return this->competences;
 }
 
+void MEntite::setDirection(Mouvement direction)
+{
+  if (this->direction != direction)
+  {
+    setChanged();
+  }
+  this->direction = direction;
+  notifyObservers(MModelEvents::ENTITY_MOVED, *this);
+}
+
 void MEntite::setTuile(MTuile* tuile)
 {
   if (this->tuile && tuile)
   {
-    this->tuile->deplacerEntiteVers(*tuile);
+    if (this->tuile->deplacerEntiteVers(*tuile))
+    {
+      this->tuile = tuile;
+    }
   }
   else if (tuile)
   {
     tuile->placeEntite(this);
+    this->tuile = tuile;
   }
-  this->tuile = tuile;
 }
 
 MInventaire& MEntite::getInventaire()

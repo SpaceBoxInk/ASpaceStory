@@ -40,7 +40,7 @@ void Observer::addAction(EventName eventName, SingleEventAction actionMethod)
 
 
 template<class EventName, class Content>
-void Observer::doEventActions(EventName eventName, Content content,
+void Observer::doEventActions(EventName eventName, Content const& content,
     Observed const& observed) const
 {
   using namespace std;
