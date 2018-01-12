@@ -89,6 +89,7 @@ AppFrame::AppFrame(wxString const & title, wxPoint const & pos, wxSize const & s
 
   _panel2->SetSizer(hbox2);
   this->SetSizer(hbox);
+
 //  Connect(this->GetId(), wxEVT_CHAR_HOOK, wxKeyEventHandler(AppFrame::onKey));
   this->Bind(wxEVT_CHAR_HOOK, &AppFrame::onKey, this);
   okButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &AppFrame::onNext, this);
