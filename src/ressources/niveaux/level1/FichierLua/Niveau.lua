@@ -78,7 +78,7 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
   elseif nbPieceRobotGet == 2 then
     cppParler(pngPersoParl, "Avec une pièce de plus je devrais pouvoir construire un robot !")
   end
- 
+
   return cppNewItem("pieceRobot","leak skvsf",  cppGetResourcesPath() .. "pictures/epee_niv1.png")
 end
 
@@ -97,6 +97,7 @@ nouvellesCouches = function()
   niveauSuivant = function ()
     cppLoadCouche("../../level2/level2_data/level2-FIN.nbg",0)
     cppLoadCouche("../../level2/level2_data/level2-FIN.nvc",1)
+    loadfile("../../level2/Niveau.lua")()
   end
 
   cppAddActionPassage(51,0,0,niveauSuivant)
