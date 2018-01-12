@@ -18,6 +18,7 @@ class wxImagePanel : public wxPanel
 public:
   wxImagePanel(wxFrame* parent, wxString file, wxBitmapType format);
 
+  wxSize getPictureSize();
   void paintEvent(wxPaintEvent & evt);
   void paintNow();
   void OnSize(wxSizeEvent& event);

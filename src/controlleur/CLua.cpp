@@ -576,15 +576,14 @@ int CLua::cppAfficherEnigme(lua_State* l)
 }
 
 /**
- * cppParler(string entityName, string msg)
+ * cppParler(string texture, string msg)
  */
 int CLua::cppParler(lua_State* l)
 {
-  testArgs(1, 2);
-  std::string entiteName;
-  MEntite* entite = getEntite(entiteName, 1);
+  testArgs(2);
+  std::string texture = lua_tostring(l, 1);
   std::string msg = lua_tostring(l, getTop());
-  cJeu->vuePrincipale->parler(entite->getTexture(), msg);
+  cJeu->vuePrincipale->parler(texture, msg);
   return 0;
 }
 

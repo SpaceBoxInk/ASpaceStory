@@ -25,7 +25,7 @@ using namespace AssEditor;
  */
 Editor::Editor(wxString const & title) :
     wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(830, 600),
-            wxSTAY_ON_TOP | wxDEFAULT_FRAME_STYLE)
+    wxSTAY_ON_TOP | wxDEFAULT_FRAME_STYLE)
 {
   this->SetMinSize(wxSize(500, 300)); //la taille minimum
 
@@ -60,8 +60,9 @@ Editor::Editor(wxString const & title) :
 
   //les boutons
   hbox3->Add(new wxButton(bouttons, wxID_ADD, wxT("Executer"), wxPoint(-1, -1)), 1, wxEXPAND);
-  hbox3->Add(new wxButton(bouttons, wxID_CANCEL, wxT("Arreter/Recommencer"), wxPoint(-1, -1)),
-             1, wxEXPAND);
+  hbox3->Add(
+      new wxButton(bouttons, wxID_CANCEL, wxT("Arreter/Reinitialiser"), wxPoint(-1, -1)), 1,
+      wxEXPAND);
   hbox3->Add(new wxButton(bouttons, wxID_EXIT, wxT("Fermer"), wxPoint(-1, -1)), 1, wxEXPAND);
 
   Connect(wxID_EXIT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Editor::OnQuit));
