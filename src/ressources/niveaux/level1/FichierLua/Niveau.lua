@@ -67,12 +67,12 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
     cppParler("Il est magnifique...")
     cppParler("Peut-être que je devrais essayer de jeter un coup d'oeil à cette tombe grâce à mon nouveau robot, le passage semble vraiment étroit !")
     cppParler("Je crois que pour l'utiliser il faudrait que j'apprenne à comprendre son langage...")
-    cppParler("Pour le programmager je peux utiliser " .. cppGetKeyFor("interactEntityKey") .. " !")
     cppParler("Pour demander au robot d'avancer j'écris avancer() ")
     cppParler("Pour demander au robot d'intéragir avec un objet(comme une tombe) j'écris activer() ")
     cppParler("Pour demander au robot de tourner j'écris tournerDe(angle) ")
     cppParler("L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180")
     cppParler("Je peux utiliser les raccourcis présents dans le menu à gauche de ma tablette de programmation. Ils me seront très utiles ! ")
+    cppParler("Pour le programmager je peux utiliser " .. cppGetKeyFor("interactEntityKey") .. " !")
   elseif nbPieceRobotGet == 2 then
     cppParler("Avec une pièce de plus je devrais pouvoir construire un robot !")
   end
