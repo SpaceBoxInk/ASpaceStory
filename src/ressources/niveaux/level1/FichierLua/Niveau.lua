@@ -64,7 +64,6 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
 
   if nbPieceRobotGet == 3 then
     cppNewRobot("robot1", cppGetResourcesPath() .. "sprites/robot_face_32.png", x, y, 0.4)
-    cppAddActionPassage(16,11,0, indice1)
     cppParler(pngPersoParl, "Oh le robot se met à bouger !")
     cppParler(pngPersoParl, "Il est magnifique...")
     cppParler(pngPersoParl, "Peut-être que je devrais essayer de jeter un coup d'oeil à cette tombe grâce à mon nouveau robot, le passage semble vraiment étroit !")
@@ -75,6 +74,7 @@ getPiece = function(entite, item, x, y) -- on créée une fonction qui renvoie l
     cppParler(pngPersoParl, "L'angle peut prendre les valeurs suivantes : 90, -90, 180 et -180")
     cppParler(pngPersoParl, "Je peux utiliser les raccourcis présents dans le menu à gauche de ma tablette de programmation. Ils me seront très utiles ! ")
     cppParler(pngPersoParl, "Pour le programmager je peux utiliser " .. cppGetKeyFor("interactEntityKey") .. " !")
+    cppAddActionPassage(16,11,0, indice1)
   elseif nbPieceRobotGet == 2 then
     cppParler(pngPersoParl, "Avec une pièce de plus je devrais pouvoir construire un robot !")
   end

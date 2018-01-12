@@ -82,6 +82,7 @@ private:
 //=====================>Getters&Setters<======================
 public:
   int getId() const;
+  void setId(int id);
 
   MTypeCouche const& getType() const;
   std::string const& getName() const;
@@ -130,6 +131,11 @@ inline void MPartieCouche::setActionPassage(
 inline void MPartieCouche::unSetActionDeclenchement()
 {
   actionDeclenchement = nullptr;
+}
+
+inline void MPartieCouche::setId(int id)
+{
+  this->id = id;
 }
 
 inline void MPartieCouche::unSetActionPassage()

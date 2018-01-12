@@ -12,7 +12,10 @@
 #include "MPartieCoucheElement.hpp"
 #include "MCoordonnees.hpp"
 #include "MInventaire.hpp"
+#include "MTerrain.hpp"
 #include "MThreads.hpp"
+
+#include <unordered_map>
 
 //------------------------------------------------------------
 //========================>Constants<=========================
@@ -54,9 +57,22 @@ MPartieCoucheElement::~MPartieCoucheElement()
 //------------------------------------------------------------
 void MPartieCoucheElement::mine(MEntite* entite, int item, MCoordonnees minedCoords)
 {
+  MPartieCoucheElement* vide = dynamic_cast<MPartieCoucheElement*>(MTerrain::getTypeList(
+      getType())[0]);
+  this->setFichierImg(vide->getFichierImg());
+  setId(vide->getId());
+
   if (*actionMining)
   {
-    MThreads::parallelize(*actionMining, entite, item, minedCoords.getX(), minedCoords.getY());
+    MThreads::parallelize([=]
+    {
+      (*actionMining)(entite, item, minedCoords.getX(), minedCoords.getY());
+      *this = *vide;
+    });
+  }
+  else
+  {
+    *this = *vide;
   }
 }
 

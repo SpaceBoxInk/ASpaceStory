@@ -115,7 +115,7 @@ void CPersonnage::addRobot(std::string const & nom, std::string const & texture,
     currentPerso->getRobot(nom).addObserver(this);
 
     currentPerso->getRobot(nom).setActionInteraction(
-        [&, nom](MEntite const& entite)
+        [this, nom](MEntite const& entite)
         {
           editor.setProgramName(currentPerso->getNom() + "-" + nom + ".lua", &currentPerso->getRobot(nom));
           editor.showEditor();
