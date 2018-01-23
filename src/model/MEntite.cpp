@@ -139,7 +139,7 @@ try
 {
   using namespace MouvementT;
   MTuile& tuileInt = terrain(tuile->getPosition() + *direction);
-  tuileInt.mine(this, getMiningPower());
+  tuileInt.mine(this, getMiningPower(), terrain);
 }
 catch (MExceptionOutOfTerrain& e)
 {

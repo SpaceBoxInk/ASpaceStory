@@ -78,7 +78,8 @@ void MPartieCouche::declenchementDe(MEntite* entite)
   }
 }
 
-void MPartieCouche::mine(MEntite* entite, int item, MCoordonnees minedCoords)
+void MPartieCouche::mine(MEntite* entite, int item, MCoordonnees minedCoords,
+                         MTerrain& terrain)
 {
   throw std::logic_error("Cannot call mine on couche isn't ELEMENT !");
 }

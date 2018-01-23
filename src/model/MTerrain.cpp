@@ -65,6 +65,12 @@ MCoordonnees MTerrain::toCoords(int index) const
   return MCoordonnees(index % taille.getX(), index / taille.getX());
 }
 
+void MTerrain::update(MTypeCouche const & type)
+{
+  setChanged();
+  notifyObservers(MModelEvents::COUCHE_LOADED, type);
+}
+
 void MTerrain::loadSpecificPath(std::string fichier, MTypeCouche const& type)
 {
   std::ifstream fichierType;

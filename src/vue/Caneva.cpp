@@ -55,6 +55,7 @@ Canvas::~Canvas()
 
 void Canvas::onUpdate()
 {
+  std::scoped_lock { lockDraw };
   this->drawAll();
 }
 
@@ -101,6 +102,7 @@ void Canvas::onResize(wxSizeEvent& event)
 //  this->setwxWindowSize( { newCanvasWidth, newCanvasHeight });
 //  this->setRenderWindowSize( { (unsigned int)newCanvasWidth, (unsigned int)newCanvasHeight });
 
+  std::scoped_lock { lockDraw };
 //communication entre SFML et WxWidget
   sf::Vector2u si(GetSize().x, GetSize().y);
   sf::RenderWindow::setSize(si);
@@ -111,6 +113,7 @@ void Canvas::loadFileIntoGround(int const* idList, std::string texture, int leve
                                 int tailleTexture)
 {
   //TODO : c'est un tableau
+  std::scoped_lock { lockDraw };
 
   if (level == 0)
     ground.load(texture, sf::Vector2u(tailleTexture, tailleTexture), idList, x / tailleTexture,
@@ -170,6 +173,8 @@ bool Canvas::setEvent()
 
 void Canvas::addEntite(std::string name, std::string file)
 {
+  std::scoped_lock { lockDraw };
+
   setTexture(file);
   auto pair = sprites.try_emplace(name);
   if (pair.second)
@@ -181,6 +186,8 @@ void Canvas::addEntite(std::string name, std::string file)
 void Canvas::move(std::string entityName, MCoordonnees const& offset, Mouvement direction)
 try
 {
+  std::scoped_lock { lockDraw };
+
   int textMoove = (int)direction;
   sf::Sprite& sp = getSprites().at(entityName);
 //  wxPoint topLeft = wxPoint((textMoove - 1) * getTailleTexture(), 0);
@@ -201,6 +208,7 @@ void Canvas::setPositionOf(std::string entityName, MCoordonnees const& position,
                            Mouvement direction)
 try
 {
+  std::scoped_lock { lockDraw };
   int textMoove = (int)direction;
   sf::Sprite& sp = getSprites().at(entityName);
   sf::Rect<int> rect = sf::Rect<int>((textMoove) * getTailleTexture(), 0,
@@ -226,6 +234,8 @@ int Canvas::getTailleTexture()
 
 void Canvas::SetSize(int width, int height)
 {
+  std::scoped_lock { lockDraw };
+
   wxPanel::SetSize(width, height);
   sf::Vector2u si(GetSize().x, GetSize().y);
   sf::RenderWindow::setSize(si);

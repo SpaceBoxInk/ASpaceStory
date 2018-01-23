@@ -205,12 +205,12 @@ void MTuile::deletePartieCouche(MTypeCouche typeCouche)
  * @param entite entité qui mine
  * @param item item qui mine
  */
-void MTuile::mine(MEntite* entite, int item)
+void MTuile::mine(MEntite* entite, int item, MTerrain& terrain)
 {
   MPartieCouche* elem = getPartieCouche(MTypeCouche::ELEMENT);
   if (elem && elem->getMiningLevel() >= 0 && item >= elem->getMiningLevel())
   {
-    elem->mine(entite, item, getPosition());
+    elem->mine(entite, item, getPosition(), terrain);
   }
 }
 

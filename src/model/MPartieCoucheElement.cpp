@@ -55,19 +55,21 @@ MPartieCoucheElement::~MPartieCoucheElement()
 //------------------------------------------------------------
 //=========================>Methods<==========================
 //------------------------------------------------------------
-void MPartieCoucheElement::mine(MEntite* entite, int item, MCoordonnees minedCoords)
+void MPartieCoucheElement::mine(MEntite* entite, int item, MCoordonnees minedCoords,
+                                MTerrain& terrain)
 {
   MPartieCoucheElement* vide = dynamic_cast<MPartieCoucheElement*>(MTerrain::getTypeList(
       getType())[0]);
-  this->setFichierImg(vide->getFichierImg());
-  setId(vide->getId());
 
   if (*actionMining)
   {
+    auto tmpAction = actionMining;
+    *this = *vide;
+    terrain.update(getType());
+
     MThreads::parallelize([=]
     {
-      (*actionMining)(entite, item, minedCoords.getX(), minedCoords.getY());
-      *this = *vide;
+      (*tmpAction)(entite, item, minedCoords.getX(), minedCoords.getY());
     });
   }
   else

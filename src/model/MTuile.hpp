@@ -67,7 +67,7 @@ public:
   bool deplacerEntiteVers(MTuile& tuileDst);
 
   void interagirTuile(MEntite* entite);
-  void mine(MEntite* entite, int item); // replace By item
+  void mine(MEntite* entite, int item, MTerrain& terrain); // replace By item
   void addItem(MItem* item);
   void addInventaire(MCoordonnees taille);
 private:

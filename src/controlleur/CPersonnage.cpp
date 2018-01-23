@@ -72,9 +72,6 @@ void CPersonnage::setEventMethods()
             break;
             case MActionsKey::MINE:
             currentPerso->mine(*terrain); // FIXME move in model (notify)*//
-
-            vuePrincipale->loadFileIntoGround(&terrain->getImagesList(MTypeCouche::ELEMENT)[0], MParameters::getTextureFor(MTypeCouche::ELEMENT),
-                MTypeCouche::ELEMENT, MParameters::getTailleTuile());
             break;
             currentPerso->attaquer(*terrain);
             break;

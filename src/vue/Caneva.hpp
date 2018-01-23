@@ -7,19 +7,20 @@
 
 #pragma once
 
+#include "Tilemap.cpp"
+#include "wxSFMLCanevas.hpp"
+
+#include "../model/MCoordonnees.hpp"
+
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <wx/event.h>
 #include <wx/gdicmn.h>
 #include <wx/windowid.h>
 #include <map>
+#include <mutex>
 #include <string>
 #include <vector>
-
-#include "Tilemap.cpp"
-#include "wxSFMLCanevas.hpp"
-
-#include "../model/MCoordonnees.hpp";
 
 class Canvas : public wxSfmlCanvas
 {
@@ -33,6 +34,8 @@ private:
   std::vector<sf::Texture*> textures;
   std::map<std::string, sf::Sprite> sprites;
   int tailleTexture;
+
+  std::mutex lockDraw;
   //=======================>Constructors<=======================
 public:
   Canvas(wxWindow* parent, wxWindowID id, wxPoint position, wxSize size, long style = 0,

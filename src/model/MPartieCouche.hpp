@@ -74,7 +74,8 @@ public:
   void passageDe(MEntite* entite);
   void declenchementDe(MEntite* entite);
 
-  virtual void mine(MEntite* entite, int item, MCoordonnees minedCoords);
+  virtual void mine(MEntite* entite, int item, MCoordonnees minedCoords,
+                    MTerrain& terrain);
 
   bool isNull() const;
 private:

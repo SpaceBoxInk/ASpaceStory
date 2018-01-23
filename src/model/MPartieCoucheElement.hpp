@@ -42,7 +42,8 @@ private:
 
 //=========================>Methods<==========================
 public:
-  void mine(MEntite* entite, int item, MCoordonnees minedCoords) override;
+  void mine(MEntite* entite, int item, MCoordonnees minedCoords, MTerrain& terrain)
+      override;
 private:
 
 //=====================>Getters&Setters<======================
