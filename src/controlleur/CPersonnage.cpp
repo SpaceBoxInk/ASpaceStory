@@ -71,7 +71,7 @@ void CPersonnage::setEventMethods()
             currentPerso->interagirEntite(*terrain);
             break;
             case MActionsKey::MINE:
-            currentPerso->mine(*terrain); // FIXME move in model (notify)*//
+            currentPerso->mine(*terrain);
             break;
             currentPerso->attaquer(*terrain);
             break;

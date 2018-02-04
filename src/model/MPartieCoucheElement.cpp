@@ -75,6 +75,7 @@ void MPartieCoucheElement::mine(MEntite* entite, int item, MCoordonnees minedCoo
   else
   {
     *this = *vide;
+    terrain.update(getType());
   }
 }
 
